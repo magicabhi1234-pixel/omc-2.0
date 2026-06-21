@@ -6,14 +6,12 @@ import Comparison from "@/components/home/comparison";
 import Blogs from "@/components/home/blogs";
 import FAQ from "@/components/home/faq";
 import CTA from "@/components/home/cta";
-import LeadPopup from "@/components/common/lead-popup";
 import Testimonials from "@/components/home/testimonials";
 import AIMatchFinder from "@/components/home/ai-match-finder";
 
 export default function HomePage() {
   return (
     <>
-      <LeadPopup />
       <Hero />
       <AIMatchFinder />
       <TrustedUniversities />
