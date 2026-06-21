@@ -1,59 +1,28 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function LeadPopup() {
   const [open, setOpen] = useState(false);
-  const popupTriggered = useRef(false);
+  const [hasOpened, setHasOpened] = useState(false);
 
   useEffect(() => {
     const showPopup = () => {
-      if (popupTriggered.current) return;
+      if (hasOpened) return;
 
-      popupTriggered.current = true;
+      setHasOpened(true);
       setOpen(true);
     };
 
-    // 2 Second Delay
+    // Auto Popup After 2 Seconds
     const timer = setTimeout(() => {
       showPopup();
     }, 2000);
 
-    // 50% Scroll Trigger
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-
-      const docHeight =
-        document.documentElement.scrollHeight -
-        window.innerHeight;
-
-      const scrollPercent =
-        (scrollTop / docHeight) * 100;
-
-      if (scrollPercent >= 50) {
-        showPopup();
-      }
-    };
-
-    // Exit Intent Trigger
-    const handleExitIntent = (e: MouseEvent) => {
-      if (e.clientY <= 0) {
-        showPopup();
-      }
-    };
-
-    // CTA Trigger
+    // CTA Popup Trigger
     const openPopupHandler = () => {
-      popupTriggered.current = true;
       setOpen(true);
     };
-
-    window.addEventListener("scroll", handleScroll);
-
-    document.addEventListener(
-      "mouseleave",
-      handleExitIntent
-    );
 
     window.addEventListener(
       "openLeadPopup",
@@ -64,21 +33,11 @@ export default function LeadPopup() {
       clearTimeout(timer);
 
       window.removeEventListener(
-        "scroll",
-        handleScroll
-      );
-
-      document.removeEventListener(
-        "mouseleave",
-        handleExitIntent
-      );
-
-      window.removeEventListener(
         "openLeadPopup",
         openPopupHandler
       );
     };
-  }, []);
+  }, [hasOpened]);
 
   const closePopup = () => {
     setOpen(false);
