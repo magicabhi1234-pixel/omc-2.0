@@ -1,10 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 export default function LeadPopup() {
+  const pathname = usePathname();
+
   const [open, setOpen] = useState(false);
   const [hasOpened, setHasOpened] = useState(false);
+
+  // Reset popup when route changes
+  useEffect(() => {
+    setOpen(false);
+    setHasOpened(false);
+  }, [pathname]);
 
   useEffect(() => {
     const showPopup = () => {
@@ -37,7 +46,7 @@ export default function LeadPopup() {
         openPopupHandler
       );
     };
-  }, [hasOpened]);
+  }, [hasOpened, pathname]);
 
   const closePopup = () => {
     setOpen(false);
