@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import LeadForm from "@/components/common/lead-form";
 
 export default function HeroForm() {
   return (
@@ -22,44 +23,8 @@ export default function HeroForm() {
         </p>
       </div>
 
-      {/* Form */}
-      <form className="space-y-4">
-
-        <input
-          type="text"
-          placeholder="Full Name *"
-          className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[#0B3B68]"
-        />
-
-        <input
-          type="tel"
-          placeholder="Phone Number *"
-          className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[#0B3B68]"
-        />
-
-        <input
-          type="email"
-          placeholder="Email Address"
-          className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[#0B3B68]"
-        />
-
-        <select className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[#0B3B68]">
-          <option>Select Program</option>
-          <option>Online MBA</option>
-          <option>Executive MBA</option>
-          <option>Online MCA</option>
-          <option>Online BBA</option>
-          <option>Online BCA</option>
-        </select>
-
-        <button
-          type="submit"
-          className="w-full cursor-pointer rounded-xl bg-[#F47C45] py-3 font-semibold text-white transition hover:opacity-90"
-        >
-          Get Free Counselling
-        </button>
-
-      </form>
+      {/* Common Form */}
+      <LeadForm />
 
       {/* Trust Line */}
       <div className="mt-4 text-center text-xs text-slate-500">
