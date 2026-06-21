@@ -1,19 +1,23 @@
-import { ReactNode } from "react";
 import Header from "./header/header";
 import Footer from "./footer/footer";
-
-type LayoutProps = {
-  children: ReactNode;
-};
+import StickyCTA from "@/components/common/sticky-cta";
+import LeadPopup from "@/components/common/lead-popup";
 
 export default function Layout({
   children,
-}: LayoutProps) {
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <>
       <Header />
+
       <main>{children}</main>
+
+      <StickyCTA />
+
       <Footer />
+      <LeadPopup />
     </>
   );
 }

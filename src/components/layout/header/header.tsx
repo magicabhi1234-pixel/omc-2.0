@@ -1,21 +1,30 @@
+"use client";
+
+import Image from "next/image";
 import Link from "next/link";
 import Container from "@/components/common/container";
 import { navigationLinks } from "@/constants/navigation";
 
 export default function Header() {
+  const openPopup = () => {
+    window.dispatchEvent(new Event("openLeadPopup"));
+  };
+
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
       <Container>
         <div className="flex h-20 items-center justify-between">
-          
+
           {/* Logo */}
-          <Link href="/" className="flex flex-col">
-            <span className="text-xl font-bold text-[#0B3B68]">
-              Online MBA
-            </span>
-            <span className="text-xs font-medium text-slate-500">
-              Colleges
-            </span>
+          <Link href="/" className="flex items-center gap-3">
+            <Image
+              src="/universities/omc_logo.avif"
+              alt="Online MBA Colleges"
+              width={220}
+              height={80}
+              className="h-16 w-auto object-contain"
+              priority
+            />
           </Link>
 
           {/* Navigation */}
@@ -32,9 +41,13 @@ export default function Header() {
           </nav>
 
           {/* CTA */}
-          <button className="rounded-xl bg-[#F47C45] px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90">
+          <button
+            onClick={openPopup}
+            className="cursor-pointer rounded-xl bg-[#F47C45] px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
+          >
             Free Counseling
           </button>
+
         </div>
       </Container>
     </header>
