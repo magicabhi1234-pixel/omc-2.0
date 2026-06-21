@@ -1,52 +1,111 @@
 import Link from "next/link";
 import Container from "@/components/common/container";
 
+import {
+  Mail,
+  Phone,
+  Clock3,
+  GraduationCap,
+} from "lucide-react";
+
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaLinkedinIn,
+} from "react-icons/fa";
+
 export default function Footer() {
   return (
     <footer className="bg-[#0F172A] text-white">
       <Container>
         <div className="grid gap-10 py-16 md:grid-cols-2 lg:grid-cols-4">
-          
-          {/* Logo & About */}
+
+          {/* About */}
           <div>
             <h3 className="text-2xl font-bold">
               Online MBA Colleges
             </h3>
 
-            <p className="mt-4 text-slate-400">
+            <p className="mt-4 leading-7 text-slate-400">
               India's AI-powered platform to compare online MBA
               universities, fees, rankings, placements and
               specializations.
             </p>
 
-            <div className="mt-6 flex gap-3">
-              <div className="h-10 w-10 rounded-full bg-white/10" />
-              <div className="h-10 w-10 rounded-full bg-white/10" />
-              <div className="h-10 w-10 rounded-full bg-white/10" />
+            <div className="mt-6 flex gap-4">
+              <a
+                href="#"
+                className="rounded-full bg-white/10 p-3 transition duration-300 hover:bg-[#F47C45]"
+              >
+                <FaFacebookF size={18} />
+              </a>
+
+              <a
+                href="#"
+                className="rounded-full bg-white/10 p-3 transition duration-300 hover:bg-[#F47C45]"
+              >
+                <FaInstagram size={18} />
+              </a>
+
+              <a
+                href="#"
+                className="rounded-full bg-white/10 p-3 transition duration-300 hover:bg-[#F47C45]"
+              >
+                <FaLinkedinIn size={18} />
+              </a>
             </div>
           </div>
 
-          {/* Company */}
+          {/* Quick Links */}
           <div>
             <h4 className="text-lg font-semibold">
-              Company
+              Quick Links
             </h4>
 
             <ul className="mt-4 space-y-3 text-slate-400">
               <li>
-                <Link href="/about-us">About Us</Link>
+                <Link
+                  href="/about-us"
+                  className="transition hover:text-[#F47C45]"
+                >
+                  About Us
+                </Link>
               </li>
 
               <li>
-                <Link href="/contact-us">Contact Us</Link>
+                <Link
+                  href="/contact"
+                  className="transition hover:text-[#F47C45]"
+                >
+                  Contact Us
+                </Link>
               </li>
 
               <li>
-                <Link href="/blog">Blog</Link>
+                <Link
+                  href="/blog"
+                  className="transition hover:text-[#F47C45]"
+                >
+                  Blog
+                </Link>
               </li>
 
               <li>
-                <Link href="/privacy-policy">Privacy Policy</Link>
+                <Link
+                  href="/privacy-policy"
+                  className="transition hover:text-[#F47C45]"
+                >
+                  Privacy Policy
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  href="/terms-and-conditions"
+                  className="transition hover:text-[#F47C45]"
+                >
+                  Terms & Conditions
+                </Link>
               </li>
             </ul>
           </div>
@@ -58,24 +117,76 @@ export default function Footer() {
             </h4>
 
             <ul className="mt-4 space-y-3 text-slate-400">
-              <li>Amity University Online</li>
-              <li>Manipal University Jaipur</li>
-              <li>Jain University</li>
-              <li>LPU Online</li>
+              <li className="flex items-center gap-2">
+                <GraduationCap size={16} />
+                Amity University Online
+              </li>
+
+              <li className="flex items-center gap-2">
+                <GraduationCap size={16} />
+                Manipal University Jaipur
+              </li>
+
+              <li className="flex items-center gap-2">
+                <GraduationCap size={16} />
+                Jain University
+              </li>
+
+              <li className="flex items-center gap-2">
+                <GraduationCap size={16} />
+                LPU Online
+              </li>
             </ul>
           </div>
 
           {/* Contact */}
           <div>
             <h4 className="text-lg font-semibold">
-              Contact
+              Contact Information
             </h4>
 
-            <ul className="mt-4 space-y-3 text-slate-400">
-              <li>magicabhi1234@gmail.com</li>
-              <li>8421903846</li>
-              <li>Free MBA Counselling</li>
-              <li>Mon - Sat | 9 AM - 7 PM</li>
+            <ul className="mt-4 space-y-4 text-slate-400">
+
+              <li className="flex items-center gap-3">
+                <Mail
+                  size={18}
+                  className="text-[#F47C45]"
+                />
+                <span>
+                  info@onlinembacolleges.com
+                </span>
+              </li>
+
+              <li className="flex items-center gap-3">
+                <Phone
+                  size={18}
+                  className="text-[#F47C45]"
+                />
+                <span>
+                  +91 8421903846
+                </span>
+              </li>
+
+              <li className="flex items-center gap-3">
+                <GraduationCap
+                  size={18}
+                  className="text-[#F47C45]"
+                />
+                <span>
+                  Free MBA Counselling
+                </span>
+              </li>
+
+              <li className="flex items-center gap-3">
+                <Clock3
+                  size={18}
+                  className="text-[#F47C45]"
+                />
+                <span>
+                  Mon - Sat | 9:00 AM - 7:00 PM
+                </span>
+              </li>
+
             </ul>
           </div>
 
