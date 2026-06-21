@@ -75,11 +75,11 @@ export default function LeadForm() {
   </select>
 
   <button
-    type="submit"
-    className="w-full rounded-xl bg-[#F47C45] py-3 font-semibold text-white transition hover:opacity-90"
-  >
-    Get Free Counselling
-  </button>
+  type="submit"
+  className="w-full cursor-pointer rounded-xl bg-[#F47C45] py-3 font-semibold text-white transition hover:opacity-90"
+>
+  Get Free Counselling
+</button>
 
   <p className="text-center text-xs text-slate-500">
     By submitting this form, you agree to receive
