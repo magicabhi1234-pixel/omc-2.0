@@ -1,3 +1,7 @@
+"use client";
+
+import LeadForm from "@/components/common/lead-form";
+
 {/* Right Form */}
 <div className="rounded-3xl bg-white p-8 shadow-xl">
 
