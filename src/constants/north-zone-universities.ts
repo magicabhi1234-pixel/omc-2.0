@@ -3,13 +3,13 @@ export const northZoneUniversities = [
       name: "Amity University Online",
       grade: "NAAC A+",
       fees: "₹1,99,000",
-      logo: "/universities/amity.png",
+      logo: "/universities/amity_university.png",
     },
     {
-      name: "Chandigarh University",
+      name: "Symbiosis University",
       grade: "NAAC A+",
       fees: "₹1,58,000",
-      logo: "/universities/cu.png",
+      logo: "/universities/symbiosis.png",
     },
     {
       name: "UPES Online",
@@ -24,10 +24,10 @@ export const northZoneUniversities = [
       logo: "/universities/lpu.png",
     },
     {
-      name: "Sharda University",
+      name: "Sastra University",
       grade: "NAAC A+",
       fees: "₹1,25,000",
-      logo: "/universities/sharda.png",
+      logo: "/universities/sastra.png",
     },
     {
       name: "Uttaranchal University",
@@ -57,18 +57,18 @@ export const northZoneUniversities = [
       name: "DY Patil University",
       grade: "NAAC A++",
       fees: "₹1,69,000",
-      logo: "/universities/dypatil.png",
+      logo: "/universities/dpu.png",
     },
     {
       name: "Shoolini University",
       grade: "NAAC A+",
       fees: "₹1,20,000",
-      logo: "/universities/shoolini.png",
+      logo: "/universities/shoolini_university.png",
     },
     {
-      name: "VGU Online",
+      name: "Shubharti Online",
       grade: "NAAC A+",
       fees: "₹1,15,000",
-      logo: "/universities/vgu.png",
+      logo: "/universities/subharti.png",
     },
   ];
