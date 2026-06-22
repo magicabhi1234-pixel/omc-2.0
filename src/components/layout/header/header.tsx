@@ -2,12 +2,20 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import Container from "@/components/common/container";
 import { navigationLinks } from "@/constants/navigation";
 
 export default function Header() {
+  const pathname = usePathname();
+
+  const isThankYouPage =
+    pathname === "/thank-you";
+
   const openPopup = () => {
-    window.dispatchEvent(new Event("openLeadPopup"));
+    window.dispatchEvent(
+      new Event("openLeadPopup")
+    );
   };
 
   return (
@@ -16,7 +24,10 @@ export default function Header() {
         <div className="flex h-20 items-center justify-between">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3">
+          <Link
+            href="/"
+            className="flex items-center gap-3"
+          >
             <Image
               src="/universities/omc_logo.avif"
               alt="Online MBA Colleges"
@@ -28,25 +39,36 @@ export default function Header() {
           </Link>
 
           {/* Navigation */}
-          <nav className="hidden md:flex items-center gap-8">
-            {navigationLinks.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="text-sm font-medium text-slate-700 transition hover:text-[#0B3B68]"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
+          {!isThankYouPage && (
+            <nav className="hidden items-center gap-8 md:flex">
+              {navigationLinks.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="text-sm font-medium text-slate-700 transition hover:text-[#0B3B68]"
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+          )}
 
           {/* CTA */}
-          <button
-            onClick={openPopup}
-            className="cursor-pointer rounded-xl bg-[#F47C45] px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
-          >
-            Free Counseling
-          </button>
+          {!isThankYouPage ? (
+            <button
+              onClick={openPopup}
+              className="cursor-pointer rounded-xl bg-[#F47C45] px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
+            >
+              Free Counseling
+            </button>
+          ) : (
+            <Link
+              href="/"
+              className="rounded-xl bg-[#0B3B68] px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
+            >
+              Back To Home
+            </Link>
+          )}
 
         </div>
       </Container>
