@@ -9,13 +9,13 @@ export default function LeadPopup() {
 
   const [open, setOpen] = useState(false);
 
-  // Thank You page var popup show karaycha nahi
-  if (!open || pathname === "/thank-you") {
-    return null;
-  }
-
   // Route change zali ki popup reset
   useEffect(() => {
+    // Thank You page var popup nahi
+    if (pathname === "/thank-you") {
+      return;
+    }
+
     setOpen(false);
 
     const timer = setTimeout(() => {
@@ -48,7 +48,15 @@ export default function LeadPopup() {
     setOpen(false);
   };
 
-  if (!open) return null;
+  // Thank You page var popup hide
+  if (pathname === "/thank-you") {
+    return null;
+  }
+
+  // Popup closed asel tar render nako
+  if (!open) {
+    return null;
+  }
 
   return (
     <div
@@ -79,7 +87,7 @@ export default function LeadPopup() {
           </h2>
         </div>
 
-        {/* Common Form */}
+        {/* Form */}
         <LeadForm />
       </div>
     </div>
