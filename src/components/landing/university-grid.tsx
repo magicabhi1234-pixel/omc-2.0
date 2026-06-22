@@ -1,7 +1,15 @@
+"use client";
+
 import Image from "next/image";
 import { northZoneUniversities } from "@/constants/north-zone-universities";
 
 export default function UniversityGrid() {
+  const openPopup = () => {
+    window.dispatchEvent(
+      new Event("openLeadPopup")
+    );
+  };
+
   return (
     <section className="bg-slate-50 py-20">
       <div className="mx-auto max-w-7xl px-4">
@@ -123,11 +131,17 @@ export default function UniversityGrid() {
 
                 <div className="mt-6 grid gap-3">
 
-                  <button className="w-full cursor-pointer rounded-xl bg-[#F47C45] py-3 font-semibold text-white transition hover:opacity-90">
+                  <button
+                    onClick={openPopup}
+                    className="w-full cursor-pointer rounded-xl bg-[#F47C45] py-3 font-semibold text-white transition hover:opacity-90"
+                  >
                     Apply Now
                   </button>
 
-                  <button className="w-full cursor-pointer rounded-xl border border-slate-300 py-3 font-semibold transition hover:bg-slate-50">
+                  <button
+                    onClick={openPopup}
+                    className="w-full cursor-pointer rounded-xl border border-slate-300 py-3 font-semibold transition hover:bg-slate-50"
+                  >
                     Download Brochure
                   </button>
 

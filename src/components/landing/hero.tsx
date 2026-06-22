@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { northZoneUniversities } from "@/constants/north-zone-universities";
 
@@ -15,7 +17,7 @@ export default function UniversityGrid() {
           {northZoneUniversities.map((item) => (
             <div
               key={item.name}
-              className="rounded-3xl border bg-white p-6 shadow-sm"
+              className="rounded-3xl border bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl"
             >
               <Image
                 src={item.logo}
@@ -37,7 +39,14 @@ export default function UniversityGrid() {
                 {item.fees}
               </p>
 
-              <button className="mt-5 w-full rounded-xl bg-[#F47C45] py-3 text-white">
+              <button
+                onClick={() =>
+                  window.dispatchEvent(
+                    new Event("openLeadPopup")
+                  )
+                }
+                className="mt-5 w-full rounded-xl bg-[#F47C45] py-3 font-medium text-white transition hover:bg-[#e56c34]"
+              >
                 Apply Now
               </button>
             </div>
