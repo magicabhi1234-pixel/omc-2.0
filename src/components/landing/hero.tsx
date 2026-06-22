@@ -1,7 +1,5 @@
 "use client";
 
-import LeadForm from "@/components/common/lead-form";
-
 export default function Hero() {
   const openPopup = () => {
     window.dispatchEvent(
@@ -10,7 +8,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-[#0B3B68] via-[#123f6d] to-[#0F172A] py-16 text-white">
+    <section className="relative overflow-hidden bg-gradient-to-br from-[#0B3B68] via-[#123f6d] to-[#0F172A] py-20 text-white">
 
       {/* Background Effects */}
       <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-[#F47C45]/20 blur-3xl" />
@@ -18,7 +16,7 @@ export default function Hero() {
 
       <div className="relative mx-auto max-w-7xl px-4">
 
-        <div className="grid items-center gap-12 lg:grid-cols-2">
+        <div className="grid items-center gap-14 lg:grid-cols-2">
 
           {/* Left Content */}
           <div>
@@ -36,12 +34,11 @@ export default function Hero() {
             </h1>
 
             <p className="mt-6 max-w-2xl text-lg text-slate-300">
-              Compare fees, NAAC grades, placements,
-              scholarships and admission process from
+              Compare fees, rankings, scholarships,
+              placements and admission process from
               India's leading UGC-approved MBA universities.
             </p>
 
-            {/* Highlights */}
             <div className="mt-8 flex flex-wrap gap-3">
 
               <div className="rounded-full bg-white/10 px-4 py-2 backdrop-blur">
@@ -58,7 +55,6 @@ export default function Hero() {
 
             </div>
 
-            {/* CTA Buttons */}
             <div className="mt-10 flex flex-wrap gap-4">
 
               <button
@@ -77,50 +73,106 @@ export default function Hero() {
 
             </div>
 
-            {/* Stats */}
-            <div className="mt-12 grid grid-cols-3 gap-6">
-
-              <div>
-                <h3 className="text-3xl font-bold">
-                  50+
-                </h3>
-                <p className="text-slate-300">
-                  Universities
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-3xl font-bold">
-                  100+
-                </h3>
-                <p className="text-slate-300">
-                  MBA Programs
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-3xl font-bold">
-                  10K+
-                </h3>
-                <p className="text-slate-300">
-                  Students Guided
-                </p>
-              </div>
-
-            </div>
-
           </div>
 
-          {/* Right Form */}
+          {/* Right Dashboard Card */}
           <div>
 
-            <div className="rounded-3xl bg-white p-8 shadow-2xl">
+            <div className="rounded-3xl border border-white/10 bg-white/10 p-6 backdrop-blur-xl shadow-2xl">
 
-              <h3 className="mb-6 text-center text-2xl font-bold text-slate-900">
-                Get Free MBA Counselling
+              <h3 className="mb-6 text-center text-2xl font-bold">
+                Top MBA Universities
               </h3>
 
-              <LeadForm />
+              <div className="space-y-4">
+
+                <div className="flex items-center justify-between rounded-xl bg-white/10 p-4">
+                  <span>Amity University</span>
+                  <span className="font-semibold">
+                    ₹1.99L | A+
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between rounded-xl bg-white/10 p-4">
+                  <span>LPU Online</span>
+                  <span className="font-semibold">
+                    ₹1.80L | A++
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between rounded-xl bg-white/10 p-4">
+                  <span>Chandigarh University</span>
+                  <span className="font-semibold">
+                    ₹1.58L | A+
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between rounded-xl bg-white/10 p-4">
+                  <span>UPES Online</span>
+                  <span className="font-semibold">
+                    ₹1.50L | A
+                  </span>
+                </div>
+
+              </div>
+
+              {/* Scholarship */}
+              <div className="mt-6 rounded-2xl bg-[#F47C45] p-5 text-center">
+
+                <p className="text-sm uppercase tracking-wider">
+                  Scholarship Available
+                </p>
+
+                <h4 className="mt-2 text-4xl font-bold">
+                  ₹30,000
+                </h4>
+
+                <p className="mt-2 text-sm">
+                  Limited Time Admission Benefit
+                </p>
+
+              </div>
+
+              {/* Stats */}
+              <div className="mt-6 grid grid-cols-2 gap-4">
+
+                <div className="rounded-xl bg-white/10 p-4 text-center">
+                  <h4 className="text-2xl font-bold">
+                    50+
+                  </h4>
+                  <p className="text-sm text-slate-300">
+                    Universities
+                  </p>
+                </div>
+
+                <div className="rounded-xl bg-white/10 p-4 text-center">
+                  <h4 className="text-2xl font-bold">
+                    100+
+                  </h4>
+                  <p className="text-sm text-slate-300">
+                    MBA Programs
+                  </p>
+                </div>
+
+                <div className="rounded-xl bg-white/10 p-4 text-center">
+                  <h4 className="text-2xl font-bold">
+                    10K+
+                  </h4>
+                  <p className="text-sm text-slate-300">
+                    Students Guided
+                  </p>
+                </div>
+
+                <div className="rounded-xl bg-white/10 p-4 text-center">
+                  <h4 className="text-2xl font-bold">
+                    98%
+                  </h4>
+                  <p className="text-sm text-slate-300">
+                    Satisfaction
+                  </p>
+                </div>
+
+              </div>
 
             </div>
 
