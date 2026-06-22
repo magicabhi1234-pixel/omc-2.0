@@ -63,13 +63,6 @@ export default function ThankYouPage() {
 
         </div>
 
-        <Link
-          href="/"
-          className="mt-8 inline-flex items-center rounded-xl bg-[#0B3B68] px-8 py-4 font-semibold text-white transition hover:opacity-90"
-        >
-          Back To Home
-        </Link>
-
       </div>
     </section>
   );

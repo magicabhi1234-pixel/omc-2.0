@@ -10,7 +10,7 @@ export default function LeadPopup() {
   const [open, setOpen] = useState(false);
 
   // Thank You page var popup show karaycha nahi
-  if (pathname === "/thank-you") {
+  if (!open || pathname === "/thank-you") {
     return null;
   }
 
