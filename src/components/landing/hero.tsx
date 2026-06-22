@@ -10,7 +10,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-[#0B3B68] via-[#123f6d] to-[#0F172A] py-20 text-white">
+    <section className="relative overflow-hidden bg-gradient-to-br from-[#0B3B68] via-[#123f6d] to-[#0F172A] py-16 text-white">
 
       {/* Background Effects */}
       <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-[#F47C45]/20 blur-3xl" />
@@ -27,7 +27,7 @@ export default function Hero() {
               🎓 Admissions Open 2026
             </span>
 
-            <h1 className="mt-6 text-5xl font-bold leading-tight md:text-6xl">
+            <h1 className="mt-6 text-4xl font-bold leading-tight md:text-5xl">
               Top Distance MBA
               <span className="block text-[#F47C45]">
                 Colleges & Universities
@@ -63,14 +63,14 @@ export default function Hero() {
 
               <button
                 onClick={openPopup}
-                className="rounded-xl bg-[#F47C45] px-8 py-4 font-semibold text-white transition hover:scale-105"
+                className="cursor-pointer rounded-xl bg-[#F47C45] px-8 py-4 font-semibold text-white transition hover:scale-105"
               >
                 Apply Now
               </button>
 
               <button
                 onClick={openPopup}
-                className="rounded-xl border border-white px-8 py-4 font-semibold text-white transition hover:bg-white hover:text-[#0B3B68]"
+                className="cursor-pointer rounded-xl border border-white px-8 py-4 font-semibold text-white transition hover:bg-white hover:text-[#0B3B68]"
               >
                 Free Counselling
               </button>
@@ -84,7 +84,6 @@ export default function Hero() {
                 <h3 className="text-3xl font-bold">
                   50+
                 </h3>
-
                 <p className="text-slate-300">
                   Universities
                 </p>
@@ -94,7 +93,6 @@ export default function Hero() {
                 <h3 className="text-3xl font-bold">
                   100+
                 </h3>
-
                 <p className="text-slate-300">
                   MBA Programs
                 </p>
@@ -104,7 +102,6 @@ export default function Hero() {
                 <h3 className="text-3xl font-bold">
                   10K+
                 </h3>
-
                 <p className="text-slate-300">
                   Students Guided
                 </p>
@@ -118,11 +115,13 @@ export default function Hero() {
           <div>
 
             <div className="rounded-3xl bg-white p-8 shadow-2xl">
+
               <h3 className="mb-6 text-center text-2xl font-bold text-slate-900">
                 Get Free MBA Counselling
               </h3>
 
               <LeadForm />
+
             </div>
 
           </div>
