@@ -1,3 +1,7 @@
+export const metadata = {
+  title: "Blog",
+};
+
 import BlogHero from "@/components/blog/hero";
 import FeaturedBlog from "@/components/blog/featured-blog";
 

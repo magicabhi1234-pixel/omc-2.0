@@ -1,3 +1,7 @@
+export const metadata = {
+  title: "Privacy Policy",
+};
+
 export default function PrivacyPolicyPage() {
     return (
       <section className="bg-white py-16">

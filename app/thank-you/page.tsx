@@ -1,3 +1,7 @@
+export const metadata = {
+  title: "Thank You",
+};
+
 export default function ThankYouPage() {
     return (
       <section className="flex min-h-screen items-center justify-center bg-slate-50 px-4">

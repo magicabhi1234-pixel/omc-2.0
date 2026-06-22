@@ -1,3 +1,7 @@
+export const metadata = {
+  title: "Terms & Conditions",
+};
+
 export default function TermsAndConditionsPage() {
     return (
       <section className="bg-white py-16">
