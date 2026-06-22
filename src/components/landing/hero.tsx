@@ -133,47 +133,6 @@ export default function Hero() {
 
               </div>
 
-              {/* Stats */}
-              <div className="mt-6 grid grid-cols-2 gap-4">
-
-                <div className="rounded-xl bg-white/10 p-4 text-center">
-                  <h4 className="text-2xl font-bold">
-                    50+
-                  </h4>
-                  <p className="text-sm text-slate-300">
-                    Universities
-                  </p>
-                </div>
-
-                <div className="rounded-xl bg-white/10 p-4 text-center">
-                  <h4 className="text-2xl font-bold">
-                    100+
-                  </h4>
-                  <p className="text-sm text-slate-300">
-                    MBA Programs
-                  </p>
-                </div>
-
-                <div className="rounded-xl bg-white/10 p-4 text-center">
-                  <h4 className="text-2xl font-bold">
-                    10K+
-                  </h4>
-                  <p className="text-sm text-slate-300">
-                    Students Guided
-                  </p>
-                </div>
-
-                <div className="rounded-xl bg-white/10 p-4 text-center">
-                  <h4 className="text-2xl font-bold">
-                    98%
-                  </h4>
-                  <p className="text-sm text-slate-300">
-                    Satisfaction
-                  </p>
-                </div>
-
-              </div>
-
             </div>
 
           </div>
