@@ -17,15 +17,68 @@ export default function LeadForm() {
     specialization: "",
   });
 
+  const [errors, setErrors] = useState({
+    name: "",
+    mobile: "",
+    specialization: "",
+  });
+
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement
     >
   ) => {
+    const { name, value } = e.target;
+
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+
+    setErrors({
+      ...errors,
+      [name]: "",
+    });
+  };
+
+  const validateForm = () => {
+    const newErrors = {
+      name: "",
+      mobile: "",
+      specialization: "",
+    };
+
+    let isValid = true;
+
+    if (
+      !/^[A-Za-z\s]+$/.test(
+        formData.name.trim()
+      )
+    ) {
+      newErrors.name =
+        "Please enter a valid name";
+      isValid = false;
+    }
+
+    if (
+      !/^[1-9][0-9]{9}$/.test(
+        formData.mobile
+      )
+    ) {
+      newErrors.mobile =
+        "Please enter a valid 10-digit mobile number";
+      isValid = false;
+    }
+
+    if (!formData.specialization) {
+      newErrors.specialization =
+        "Please select a specialization";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+
+    return isValid;
   };
 
   const handleSubmit = async (
@@ -33,9 +86,12 @@ export default function LeadForm() {
   ) => {
     e.preventDefault();
 
+    if (!validateForm()) {
+      return;
+    }
+
     setLoading(true);
 
-    // Save Lead To Supabase
     const { error } = await supabase
       .from("leads")
       .insert([
@@ -67,7 +123,6 @@ export default function LeadForm() {
     }
 
     try {
-      // Send Email
       await fetch("/api/send-email", {
         method: "POST",
         headers: {
@@ -101,90 +156,131 @@ export default function LeadForm() {
       onSubmit={handleSubmit}
       className="space-y-4"
     >
-      <input
-        type="text"
-        name="name"
-        placeholder="Full Name *"
-        value={formData.name}
-        onChange={handleChange}
-        className="w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-[#0B3B68]"
-        required
-      />
+      {/* Name */}
+      <div>
+        <input
+          type="text"
+          name="name"
+          placeholder="Full Name *"
+          value={formData.name}
+          onChange={handleChange}
+          className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 outline-none focus:border-[#0B3B68]"
+        />
 
-      <input
-        type="tel"
-        name="mobile"
-        placeholder="Mobile Number *"
-        value={formData.mobile}
-        onChange={handleChange}
-        maxLength={10}
-        className="w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-[#0B3B68]"
-        required
-      />
+        {errors.name && (
+          <p className="mt-1 text-sm text-red-500">
+            {errors.name}
+          </p>
+        )}
+      </div>
 
+      {/* Mobile */}
+      <div>
+        <input
+          type="tel"
+          name="mobile"
+          placeholder="Mobile Number *"
+          value={formData.mobile}
+          onChange={(e) => {
+            const value =
+              e.target.value.replace(
+                /\D/g,
+                ""
+              );
+
+            setFormData({
+              ...formData,
+              mobile: value,
+            });
+
+            setErrors({
+              ...errors,
+              mobile: "",
+            });
+          }}
+          maxLength={10}
+          className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 outline-none focus:border-[#0B3B68]"
+        />
+
+        {errors.mobile && (
+          <p className="mt-1 text-sm text-red-500">
+            {errors.mobile}
+          </p>
+        )}
+      </div>
+
+      {/* Email */}
       <input
         type="email"
         name="email"
         placeholder="Email Address *"
         value={formData.email}
         onChange={handleChange}
-        className="w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-[#0B3B68]"
+        className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 outline-none focus:border-[#0B3B68]"
         required
       />
 
+      {/* City Optional */}
       <input
         type="text"
         name="city"
-        placeholder="City *"
+        placeholder="City (Optional)"
         value={formData.city}
         onChange={handleChange}
-        className="w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-[#0B3B68]"
-        required
+        className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 outline-none focus:border-[#0B3B68]"
       />
 
-      <select
-        name="specialization"
-        value={formData.specialization}
-        onChange={handleChange}
-        className="w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-[#0B3B68]"
-        required
-      >
-        <option value="">
-          Select Specialization
-        </option>
+      {/* Specialization */}
+      <div>
+        <select
+          name="specialization"
+          value={formData.specialization}
+          onChange={handleChange}
+          className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 outline-none focus:border-[#0B3B68]"
+        >
+          <option value="">
+            Select Specialization *
+          </option>
 
-        <option value="Finance Management">
-          Finance Management
-        </option>
+          <option value="Finance Management">
+            Finance Management
+          </option>
 
-        <option value="Marketing Management">
-          Marketing Management
-        </option>
+          <option value="Marketing Management">
+            Marketing Management
+          </option>
 
-        <option value="Operations Management">
-          Operations Management
-        </option>
+          <option value="Operations Management">
+            Operations Management
+          </option>
 
-        <option value="Information Technology and System Management">
-          Information Technology and System Management
-        </option>
+          <option value="Information Technology and System Management">
+            Information Technology and System Management
+          </option>
 
-        <option value="Supply Chain Management">
-          Supply Chain Management
-        </option>
+          <option value="Supply Chain Management">
+            Supply Chain Management
+          </option>
 
-        <option value="Human Resource Management">
-          Human Resource Management
-        </option>
+          <option value="Human Resource Management">
+            Human Resource Management
+          </option>
 
-        <option value="International Business Management">
-          International Business Management
-        </option>
+          <option value="International Business Management">
+            International Business Management
+          </option>
 
-        <option value="Retail Management">
-          Retail Management
-        </option>
-      </select>
+          <option value="Retail Management">
+            Retail Management
+          </option>
+        </select>
+
+        {errors.specialization && (
+          <p className="mt-1 text-sm text-red-500">
+            {errors.specialization}
+          </p>
+        )}
+      </div>
 
       <button
         type="submit"
