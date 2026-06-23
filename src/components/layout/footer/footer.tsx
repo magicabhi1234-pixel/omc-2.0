@@ -136,6 +136,18 @@ export default function Footer() {
                 <GraduationCap size={16} />
                 LPU Online
               </li>
+
+              <li>
+  <a
+    href="https://omc-2-0.vercel.app/top-colleges-university-in-north-zone"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="flex items-center gap-2 transition hover:text-[#F47C45]"
+  >
+    <GraduationCap size={16} />
+    North Landing Page
+  </a>
+</li>
             </ul>
           </div>
 
