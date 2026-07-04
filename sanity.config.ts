@@ -1,15 +1,21 @@
-'use client'
+import { defineConfig } from "sanity";
+import { structureTool } from "sanity/structure";
 
-import { defineConfig } from 'sanity'
-import { structureTool } from 'sanity/structure'
-
-import { dataset, projectId } from './sanityStudio/env'
-import { schema } from './sanityStudio/schemaTypes'
+import { dataset, projectId } from "./sanityStudio/env";
+import { schema } from "./sanityStudio/schemaTypes";
 
 export default defineConfig({
-  basePath: '/studio',
+  name: "default",
+  title: "OMC Studio",
+
   projectId,
   dataset,
+
+  basePath: "/studio",
+
+  plugins: [
+    structureTool(),
+  ],
+
   schema,
-  plugins: [structureTool()],
-})
+});

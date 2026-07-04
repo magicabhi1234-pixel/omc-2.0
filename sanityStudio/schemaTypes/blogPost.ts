@@ -15,7 +15,11 @@ export const blogPost = defineType({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: { source: 'title', maxLength: 96 },
+      options: {
+        source: 'title',
+        maxLength: 96,
+        isUnique: () => true,
+      },
       validation: (Rule) => Rule.required(),
     }),
     defineField({
