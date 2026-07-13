@@ -11,67 +11,67 @@ import CTASection from "@/components/landing/mba/CTASection";
 const query = groq`
 *[_type=="landingPage" && slug.current==$slug][0]{
 
-title,
+  title,
 
-hero{
-  badge,
-  heading,
-  description,
+  hero{
+    badge,
+    heading,
+    description,
 
-  image{
-    asset->{
-      url
+    image{
+      asset->{
+        url
+      }
+    },
+
+    primaryButtonText,
+    secondaryButtonText,
+
+    stat1Value,
+    stat1Label,
+
+    stat2Value,
+    stat2Label,
+
+    stat3Value,
+    stat3Label
+  },
+
+  universitySection{
+    badge,
+    heading,
+    description
+  },
+
+  universities[]->{
+    _id,
+    name,
+    slug,
+
+    studyMode,
+    duration,
+    approvals,
+    startingFee,
+    eligibility,
+
+    logo{
+      asset->{
+        url
+      }
     }
   },
 
-  primaryButtonText,
-  secondaryButtonText,
+  contentHeading,
+  contentDescription,
 
-  stat1Value,
-  stat1Label,
+  cta{
+    badge,
+    heading,
+    description,
 
-  stat2Value,
-  stat2Label,
-
-  stat3Value,
-  stat3Label
-},
-
-universitySection{
-  badge,
-  heading,
-  description
-},
-
-universities[]->{
-  _id,
-  name,
-  slug,
-
-  studyMode,
-  duration,
-  approvals,
-  startingFee,
-  eligibility,
-
-  logo{
-    asset->{
-      url
-    }
+    primaryButtonText,
+    secondaryButtonText
   }
-},
-
-contentHeading,
-contentDescription,
-
-cta{
-  badge,
-  heading,
-  description,
-
-  primaryButtonText,
-  secondaryButtonText
-}
 }
 `;
 
@@ -104,13 +104,9 @@ export default async function LandingPage({
         stat3Value={page.hero?.stat3Value}
         stat3Label={page.hero?.stat3Label}
       />
-      
-      <UniversityCards
-  section={page.universitySection}
-  universities={page.universities || []}
-/>
 
       <UniversityCards
+        section={page.universitySection}
         universities={page.universities || []}
       />
 

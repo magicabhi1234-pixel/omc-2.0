@@ -1,21 +1,4 @@
-import { defineConfig } from "sanity";
-import { structureTool } from "sanity/structure";
-
-import { dataset, projectId } from "./sanityStudio/env";
-import { schema } from "./sanityStudio/schemaTypes";
-
-export default defineConfig({
-  name: "default",
-  title: "OMC Studio",
-
-  projectId,
-  dataset,
-
-  basePath: "/studio",
-
-  plugins: [
-    structureTool(),
-  ],
-
-  schema,
-});
+// The Studio configuration and schemas live in omc-test.
+// Keeping this re-export preserves the existing embedded /studio route while
+// ensuring omc-test is the single source of truth.
+export { default } from "../omc-test/sanity.config";
