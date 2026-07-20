@@ -133,7 +133,7 @@ export default function Footer() {
                   className="flex items-center gap-2 transition hover:text-[#F47C45]"
                 >
                   <GraduationCap size={16} />
-                  Top 10 Online MBA Universities & Colleges – North Zone
+                  Online North
                 </Link>
               </li>
 
@@ -143,7 +143,7 @@ export default function Footer() {
                   className="flex items-center gap-2 transition hover:text-[#F47C45]"
                 >
                   <GraduationCap size={16} />
-                  Top 10 Distance MBA Universities & Colleges – North Zone
+                  Distance North
                 </Link>
               </li>
 

@@ -77,9 +77,6 @@ export default function Hero({
           </div>
 
           <div className="relative mx-auto w-full max-w-[460px] pt-5 lg:pt-0">
-            <div className="absolute -top-1 right-4 z-20 hidden rounded-full bg-white px-5 py-2 shadow-xl lg:block">
-              <span className="text-sm font-semibold text-[#0B3B68]">⭐ 50,000+ Students Guided</span>
-            </div>
             {heroImage && (
               <div className="absolute -right-2 -top-7 z-10 block rounded-2xl border border-white/20 bg-white p-2 shadow-2xl sm:p-3">
                 <Image src={heroImage.src} alt={heroImage.alt} width={92} height={92} priority className="h-[92px] w-[92px] object-contain" />
