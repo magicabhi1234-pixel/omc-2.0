@@ -1,0 +1,2 @@
+export { default as top10OnlineMBANorthZone } from "./top-10-online-mba-universities-colleges-north-zone";
+export { default as top10DistanceMBANorthZone } from "./top-10-distance-mba-universities-colleges-north-zone";

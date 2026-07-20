@@ -127,14 +127,24 @@ export default function Footer() {
                 Manipal University Jaipur
               </li>
 
-              <li className="flex items-center gap-2">
-                <GraduationCap size={16} />
-                Jain University
+              <li>
+                <Link
+                  href="/top-10-online-mba-universities-colleges-north-zone"
+                  className="flex items-center gap-2 transition hover:text-[#F47C45]"
+                >
+                  <GraduationCap size={16} />
+                  Top 10 Online MBA Universities & Colleges – North Zone
+                </Link>
               </li>
 
-              <li className="flex items-center gap-2">
-                <GraduationCap size={16} />
-                LPU Online
+              <li>
+                <Link
+                  href="/top-10-distance-mba-universities-colleges-north-zone"
+                  className="flex items-center gap-2 transition hover:text-[#F47C45]"
+                >
+                  <GraduationCap size={16} />
+                  Top 10 Distance MBA Universities & Colleges – North Zone
+                </Link>
               </li>
 
               <li>
