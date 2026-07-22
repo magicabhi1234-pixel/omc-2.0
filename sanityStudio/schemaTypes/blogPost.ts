@@ -18,7 +18,6 @@ export const blogPost = defineType({
       options: {
         source: 'title',
         maxLength: 96,
-        isUnique: () => true,
       },
       validation: (Rule) => Rule.required(),
     }),

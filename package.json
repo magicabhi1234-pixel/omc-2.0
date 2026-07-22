@@ -6,7 +6,9 @@
     "dev": "next dev --webpack",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "migrate:landing-page": "node scripts/landing-page-migration.mjs",
+    "verify:landing-page": "node scripts/verify-landing-page-migration.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",

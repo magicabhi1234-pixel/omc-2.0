@@ -18,7 +18,6 @@ export const university = defineType({
       options: {
         source: 'name',
         maxLength: 96,
-        isUnique: () => true,
       },
       validation: (Rule) => Rule.required(),
     }),
