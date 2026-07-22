@@ -1,14 +1,26 @@
 "use client";
 
 import Image from "next/image";
+import { UniversitySection } from "@/types/landing";
 import { northZoneUniversities } from "@/constants/north-zone-universities";
 
-export default function UniversityGrid() {
+type Props = Partial<UniversitySection>;
+
+export default function UniversityGrid(props: Props) {
+  const {
+    badge = "Top Universities",
+    heading = "Top Distance MBA Universities",
+    description = "Compare NAAC grades, fees, approvals, placements and admission process from India's leading distance MBA universities.",
+    universities,
+  } = props;
+
   const openPopup = () => {
     window.dispatchEvent(
       new Event("openLeadPopup")
     );
   };
+
+  const defaultUniversities = northZoneUniversities;
 
   return (
     <section className="bg-slate-50 py-20">
@@ -17,27 +29,22 @@ export default function UniversityGrid() {
         <div className="mb-14 text-center">
 
           <span className="rounded-full bg-orange-100 px-4 py-2 text-sm font-medium text-[#F47C45]">
-            Top Universities
+            {badge}
           </span>
 
           <h2 className="mt-5 text-4xl font-bold text-slate-900 md:text-5xl">
-            Top Distance MBA Universities
-            <span className="block text-[#0B3B68]">
-              in North India
-            </span>
+            {heading}
           </h2>
 
           <p className="mx-auto mt-5 max-w-3xl text-lg text-slate-600">
-            Compare NAAC grades, fees, approvals,
-            placements and admission process from
-            India's leading distance MBA universities.
+            {description}
           </p>
 
         </div>
 
         <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-4">
 
-          {northZoneUniversities.map((item) => (
+          {defaultUniversities.map((item) => (
             <div
               key={item.name}
               className="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
@@ -158,3 +165,4 @@ export default function UniversityGrid() {
     </section>
   );
 }
+

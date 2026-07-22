@@ -1,6 +1,18 @@
 "use client";
 
-export default function Hero() {
+import { HeroSection } from "@/types/landing";
+
+type Props = Partial<HeroSection>;
+
+export default function Hero(props: Props) {
+  const {
+    badge = "🎓 Admissions Open 2026",
+    heading = "Top Distance MBA",
+    description = "Compare fees, rankings, scholarships, placements and admission process from India's leading UGC-approved MBA universities.",
+    primaryButton = { label: "Apply Now", variant: "primary" },
+    secondaryButton = { label: "Free Counselling", variant: "outline" },
+  } = props;
+
   const openPopup = () => {
     window.dispatchEvent(
       new Event("openLeadPopup")
@@ -22,21 +34,15 @@ export default function Hero() {
           <div>
 
             <span className="rounded-full bg-white/10 px-4 py-2 text-sm backdrop-blur">
-              🎓 Admissions Open 2026
+              {badge}
             </span>
 
             <h1 className="mt-6 text-4xl font-bold leading-tight md:text-5xl">
-              Top Distance MBA
-              <span className="block text-[#F47C45]">
-                Colleges & Universities
-              </span>
-              in North India
+              {heading}
             </h1>
 
             <p className="mt-6 max-w-2xl text-lg text-slate-300">
-              Compare fees, rankings, scholarships,
-              placements and admission process from
-              India's leading UGC-approved MBA universities.
+              {description}
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
@@ -61,15 +67,17 @@ export default function Hero() {
                 onClick={openPopup}
                 className="cursor-pointer rounded-xl bg-[#F47C45] px-8 py-4 font-semibold text-white transition hover:scale-105"
               >
-                Apply Now
+                {primaryButton.label}
               </button>
 
-              <button
-                onClick={openPopup}
-                className="cursor-pointer rounded-xl border border-white px-8 py-4 font-semibold text-white transition hover:bg-white hover:text-[#0B3B68]"
-              >
-                Free Counselling
-              </button>
+              {secondaryButton && (
+                <button
+                  onClick={openPopup}
+                  className="cursor-pointer rounded-xl border border-white px-8 py-4 font-semibold text-white transition hover:bg-white hover:text-[#0B3B68]"
+                >
+                  {secondaryButton.label}
+                </button>
+              )}
 
             </div>
 
@@ -144,3 +152,4 @@ export default function Hero() {
     </section>
   );
 }
+

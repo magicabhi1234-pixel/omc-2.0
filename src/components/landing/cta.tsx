@@ -1,6 +1,17 @@
 "use client";
 
-export default function CTA() {
+import { CTASection } from "@/types/landing";
+
+type Props = Partial<CTASection>;
+
+export default function CTA(props: Props) {
+  const {
+    badge = "🎓 Admissions Open 2026",
+    heading = "Still Confused About Choosing the Right MBA?",
+    description = "Get personalized guidance from our MBA experts. Compare universities, fees, placements and specializations before taking admission.",
+    primaryButton = { label: "Apply Now", variant: "primary" },
+    secondaryButton = { label: "Get Free Counselling", variant: "outline" },
+  } = props;
 
   const openPopup = () => {
     window.dispatchEvent(
@@ -17,22 +28,21 @@ export default function CTA() {
 
       <div className="relative mx-auto max-w-5xl px-4 text-center">
 
-        <span className="rounded-full bg-white/10 px-5 py-2 text-sm backdrop-blur">
-          🎓 Admissions Open 2026
-        </span>
+        {badge && (
+          <span className="rounded-full bg-white/10 px-5 py-2 text-sm backdrop-blur">
+            {badge}
+          </span>
+        )}
 
         <h2 className="mt-8 text-4xl font-bold leading-tight md:text-6xl">
-          Still Confused About
-          <span className="block text-[#F47C45]">
-            Choosing the Right MBA?
-          </span>
+          {heading}
         </h2>
 
-        <p className="mx-auto mt-6 max-w-3xl text-lg text-slate-300">
-          Get personalized guidance from our MBA experts.
-          Compare universities, fees, placements and
-          specializations before taking admission.
-        </p>
+        {description && (
+          <p className="mx-auto mt-6 max-w-3xl text-lg text-slate-300">
+            {description}
+          </p>
+        )}
 
         {/* Benefits */}
         <div className="mt-10 flex flex-wrap justify-center gap-4">
@@ -62,15 +72,17 @@ export default function CTA() {
             onClick={openPopup}
             className="cursor-pointer rounded-xl bg-[#F47C45] px-10 py-4 text-lg font-semibold text-white transition hover:scale-105"
           >
-            Apply Now
+            {primaryButton.label}
           </button>
 
-          <button
-            onClick={openPopup}
-            className="cursor-pointer rounded-xl border border-white px-10 py-4 text-lg font-semibold text-white transition hover:bg-white hover:text-[#0B3B68]"
-          >
-            Get Free Counselling
-          </button>
+          {secondaryButton && (
+            <button
+              onClick={openPopup}
+              className="cursor-pointer rounded-xl border border-white px-10 py-4 text-lg font-semibold text-white transition hover:bg-white hover:text-[#0B3B68]"
+            >
+              {secondaryButton.label}
+            </button>
+          )}
 
         </div>
 
@@ -104,3 +116,4 @@ export default function CTA() {
     </section>
   );
 }
+

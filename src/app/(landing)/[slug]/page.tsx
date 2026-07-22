@@ -1,15 +1,15 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import Hero from "@/components/landing/mba/hero/hero";
-import StatsSection from "@/components/landing/mba/stats/stats";
-import UniversityGrid from "@/components/landing/mba/university-grid/university-grid";
-import WhyChooseSection from "@/components/landing/mba/why-choose/why-choose";
-import CompareCollege from "@/components/landing/mba/compare-college/compare-college";
-import Specializations from "@/components/landing/mba/specializations/specializations";
-import ScholarshipBanner from "@/components/landing/mba/scholarship-banner/scholarship-banner";
-import Testimonials from "@/components/landing/mba/testimonials/testimonials";
-import FAQ from "@/components/landing/mba/faq/faq";
-import CTASection from "@/components/landing/mba/cta/cta";
+import Hero from "@/components/landing/hero";
+import Stats from "@/components/landing/stats";
+import WhyChoose from "@/components/landing/why-choose";
+import UniversityGrid from "@/components/landing/university-grid";
+import CompareUniversities from "@/components/landing/compare-universities";
+import Specializations from "@/components/landing/specializations";
+import ScholarshipBanner from "@/components/landing/scholarship-banner";
+import Testimonials from "@/components/landing/testimonials";
+import FAQ from "@/components/landing/faq";
+import CTA from "@/components/landing/cta";
 
 import {
   top10OnlineMBANorthZone,
@@ -146,48 +146,25 @@ export default async function LandingPage({
 
   return (
     <main>
-      {/* Keep existing Hero Section - page-specific */}
       <Hero {...page.hero} />
 
-      {/* Stats Section */}
-      {page.stats && <StatsSection {...page.stats} />}
+      {page.stats && <Stats stats={page.stats.stats} />}
 
-      {/* University Grid Section */}
-      {page.universitySection && (
-        <UniversityGrid
-          {...page.universitySection}
-          category={page.category}
-        />
-      )}
+      {page.whyChoose && <WhyChoose heading={page.whyChoose.heading} description={page.whyChoose.description} items={page.whyChoose.items} />}
 
-      {/* Why Choose Section */}
-      {page.whyChoose && <WhyChooseSection {...page.whyChoose} />}
+      {page.universitySection && <UniversityGrid {...page.universitySection} />}
 
-      {/* Compare Section */}
-      {page.compareSection && (
-        <CompareCollege
-          {...page.compareSection}
-          universityIds={page.universitySection?.universities || []}
-        />
-      )}
+      {page.compareSection && <CompareUniversities {...page.compareSection} />}
 
-      {/* Specializations Section */}
       {page.specializations && <Specializations {...page.specializations} />}
 
-      {/* Scholarship Banner */}
-      {page.scholarshipBanner && (
-        <ScholarshipBanner {...page.scholarshipBanner} />
-      )}
+      {page.scholarshipBanner && <ScholarshipBanner {...page.scholarshipBanner} />}
 
-      {/* Testimonials Section */}
       {page.testimonials && <Testimonials {...page.testimonials} />}
 
-      {/* FAQ Section */}
       {page.faq && <FAQ {...page.faq} />}
 
-      {/* CTA Section */}
-      <CTASection {...page.cta} />
+      <CTA {...page.cta} />
     </main>
   );
 }
-

@@ -1,6 +1,58 @@
 "use client";
 
-export default function Specializations() {
+import { SpecializationSection } from "@/types/landing";
+
+type Props = Partial<SpecializationSection>;
+
+const defaultSpecializations = [
+  {
+    icon: "📈",
+    title: "Marketing Management",
+    desc: "Digital Marketing, Brand Management & Sales Strategy",
+  },
+  {
+    icon: "💰",
+    title: "Finance Management",
+    desc: "Investment, Banking, Financial Planning & Risk Management",
+  },
+  {
+    icon: "👥",
+    title: "Human Resource Management",
+    desc: "Talent Acquisition, HR Analytics & Employee Relations",
+  },
+  {
+    icon: "⚙️",
+    title: "Operations Management",
+    desc: "Supply Chain, Logistics & Process Optimization",
+  },
+  {
+    icon: "📊",
+    title: "Business Analytics",
+    desc: "Data Analysis, Business Intelligence & Decision Making",
+  },
+  {
+    icon: "💻",
+    title: "Information Technology",
+    desc: "IT Strategy, Technology Management & Digital Transformation",
+  },
+  {
+    icon: "🌍",
+    title: "International Business",
+    desc: "Global Trade, Export-Import & International Markets",
+  },
+  {
+    icon: "🚚",
+    title: "Supply Chain Management",
+    desc: "Procurement, Logistics & Inventory Management",
+  },
+];
+
+export default function Specializations(props: Props) {
+  const {
+    heading = "Popular MBA Specializations",
+    description = "Choose from industry-demand MBA specializations and build a successful career in your preferred domain.",
+    items,
+  } = props;
 
   const openPopup = () => {
     window.dispatchEvent(
@@ -8,48 +60,13 @@ export default function Specializations() {
     );
   };
 
-  const specializations = [
-    {
-      icon: "📈",
-      title: "Marketing Management",
-      desc: "Digital Marketing, Brand Management & Sales Strategy",
-    },
-    {
-      icon: "💰",
-      title: "Finance Management",
-      desc: "Investment, Banking, Financial Planning & Risk Management",
-    },
-    {
-      icon: "👥",
-      title: "Human Resource Management",
-      desc: "Talent Acquisition, HR Analytics & Employee Relations",
-    },
-    {
-      icon: "⚙️",
-      title: "Operations Management",
-      desc: "Supply Chain, Logistics & Process Optimization",
-    },
-    {
-      icon: "📊",
-      title: "Business Analytics",
-      desc: "Data Analysis, Business Intelligence & Decision Making",
-    },
-    {
-      icon: "💻",
-      title: "Information Technology",
-      desc: "IT Strategy, Technology Management & Digital Transformation",
-    },
-    {
-      icon: "🌍",
-      title: "International Business",
-      desc: "Global Trade, Export-Import & International Markets",
-    },
-    {
-      icon: "🚚",
-      title: "Supply Chain Management",
-      desc: "Procurement, Logistics & Inventory Management",
-    },
-  ];
+  const specializations = items && items.length > 0
+    ? items.map(item => ({
+        icon: item.icon || "",
+        title: item.title,
+        desc: "",
+      }))
+    : defaultSpecializations;
 
   return (
     <section className="bg-slate-50 py-20">
@@ -62,12 +79,11 @@ export default function Specializations() {
           </span>
 
           <h2 className="mt-5 text-4xl font-bold text-slate-900 md:text-5xl">
-            Popular MBA Specializations
+            {heading}
           </h2>
 
           <p className="mx-auto mt-5 max-w-3xl text-lg text-slate-600">
-            Choose from industry-demand MBA specializations
-            and build a successful career in your preferred domain.
+            {description}
           </p>
 
         </div>
@@ -103,7 +119,6 @@ export default function Specializations() {
           ))}
 
         </div>
-
       </div>
     </section>
   );

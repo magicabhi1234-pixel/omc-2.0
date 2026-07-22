@@ -1,60 +1,55 @@
 "use client";
 
 import { useState } from "react";
+import { FAQSection } from "@/types/landing";
 
-export default function FAQ() {
+type Props = Partial<FAQSection>;
+
+const defaultFaqs = [
+  {
+    question: "Which is the best Distance MBA University in North India?",
+    answer: "Amity University, Chandigarh University, LPU, NMIMS and UPES are among the most popular Distance MBA universities.",
+  },
+  {
+    question: "Is a Distance MBA degree valid in India?",
+    answer: "Yes. A UGC-approved Distance MBA degree is valid for jobs, higher education and government opportunities.",
+  },
+  {
+    question: "Can working professionals pursue a Distance MBA?",
+    answer: "Yes. Distance MBA programs are specially designed for working professionals and business owners.",
+  },
+  {
+    question: "What is the average fee for a Distance MBA?",
+    answer: "The average fee ranges from ₹60,000 to ₹2,00,000 depending on the university and specialization.",
+  },
+  {
+    question: "Are EMI options available?",
+    answer: "Yes. Most universities provide easy EMI and scholarship options.",
+  },
+  {
+    question: "Do universities provide placement assistance?",
+    answer: "Many universities offer placement support, career guidance, resume building and interview preparation.",
+  },
+  {
+    question: "What is the duration of a Distance MBA?",
+    answer: "The standard duration is 2 years, which can be extended as per university regulations.",
+  },
+  {
+    question: "Can I pursue a Distance MBA while doing a job?",
+    answer: "Absolutely. Distance MBA offers flexibility so you can study alongside your job.",
+  },
+];
+
+export default function FAQ(props: Props) {
+  const {
+    heading = "Frequently Asked Questions",
+    description = "Get answers to the most common questions about Distance MBA admissions.",
+    faqs,
+  } = props;
+
   const [open, setOpen] = useState<number | null>(0);
 
-  const faqs = [
-    {
-      question:
-        "Which is the best Distance MBA University in North India?",
-      answer:
-        "Amity University, Chandigarh University, LPU, NMIMS and UPES are among the most popular Distance MBA universities.",
-    },
-    {
-      question:
-        "Is a Distance MBA degree valid in India?",
-      answer:
-        "Yes. A UGC-approved Distance MBA degree is valid for jobs, higher education and government opportunities.",
-    },
-    {
-      question:
-        "Can working professionals pursue a Distance MBA?",
-      answer:
-        "Yes. Distance MBA programs are specially designed for working professionals and business owners.",
-    },
-    {
-      question:
-        "What is the average fee for a Distance MBA?",
-      answer:
-        "The average fee ranges from ₹60,000 to ₹2,00,000 depending on the university and specialization.",
-    },
-    {
-      question:
-        "Are EMI options available?",
-      answer:
-        "Yes. Most universities provide easy EMI and scholarship options.",
-    },
-    {
-      question:
-        "Do universities provide placement assistance?",
-      answer:
-        "Many universities offer placement support, career guidance, resume building and interview preparation.",
-    },
-    {
-      question:
-        "What is the duration of a Distance MBA?",
-      answer:
-        "The standard duration is 2 years, which can be extended as per university regulations.",
-    },
-    {
-      question:
-        "Can I pursue a Distance MBA while doing a job?",
-      answer:
-        "Absolutely. Distance MBA offers flexibility so you can study alongside your job.",
-    },
-  ];
+  const items = faqs && faqs.length > 0 ? faqs : defaultFaqs;
 
   return (
     <section className="bg-slate-50 py-20">
@@ -67,19 +62,20 @@ export default function FAQ() {
           </span>
 
           <h2 className="mt-5 text-4xl font-bold text-slate-900 md:text-5xl">
-            Frequently Asked Questions
+            {heading}
           </h2>
 
-          <p className="mt-5 text-lg text-slate-600">
-            Get answers to the most common questions
-            about Distance MBA admissions.
-          </p>
+          {description && (
+            <p className="mt-5 text-lg text-slate-600">
+              {description}
+            </p>
+          )}
 
         </div>
 
         <div className="space-y-4">
 
-          {faqs.map((faq, index) => (
+          {items.map((faq, index) => (
             <div
               key={index}
               className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
@@ -119,3 +115,4 @@ export default function FAQ() {
     </section>
   );
 }
+

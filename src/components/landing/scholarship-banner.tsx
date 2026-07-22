@@ -1,6 +1,15 @@
 "use client";
 
-export default function ScholarshipBanner() {
+import { ScholarshipBanner as ScholarshipBannerType } from "@/types/landing";
+
+type Props = Partial<ScholarshipBannerType>;
+
+export default function ScholarshipBanner(props: Props) {
+  const {
+    heading = "Get Scholarship Up To ₹30,000",
+    description = "Apply through Online MBA Colleges and get exclusive scholarship benefits, EMI options and admission assistance.",
+    button = { label: "Apply For Scholarship", variant: "primary" },
+  } = props;
 
   const openPopup = () => {
     window.dispatchEvent(
@@ -28,17 +37,14 @@ export default function ScholarshipBanner() {
               </span>
 
               <h2 className="mt-6 text-4xl font-bold md:text-5xl">
-                Get Scholarship Up To
-                <span className="block text-[#F47C45]">
-                  ₹30,000
-                </span>
+                {heading}
               </h2>
 
-              <p className="mt-5 text-lg text-slate-300">
-                Apply through Online MBA Colleges and
-                get exclusive scholarship benefits,
-                EMI options and admission assistance.
-              </p>
+              {description && (
+                <p className="mt-5 text-lg text-slate-300">
+                  {description}
+                </p>
+              )}
 
               <div className="mt-8 flex flex-wrap gap-4">
 
@@ -75,7 +81,7 @@ export default function ScholarshipBanner() {
                   onClick={openPopup}
                   className="mt-6 cursor-pointer rounded-xl bg-[#F47C45] px-8 py-4 font-semibold text-white transition hover:scale-105"
                 >
-                  Apply For Scholarship
+                  {button.label}
                 </button>
 
               </div>
@@ -90,3 +96,4 @@ export default function ScholarshipBanner() {
     </section>
   );
 }
+

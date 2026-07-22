@@ -2,12 +2,21 @@
 
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
+import { CompareSection } from "@/types/landing";
 import { northZoneUniversities } from "@/constants/north-zone-universities";
 
 type University = (typeof northZoneUniversities)[number];
+
+type Props = Partial<CompareSection>;
+
 const comparisonRows = [["Total fees", "fees"], ["Accreditation", "grade"], ["Duration", "2 years"], ["Study mode", "Online / Distance"], ["Placement support", "Available"]] as const;
 
-export default function CompareUniversities() {
+export default function CompareUniversities(props: Props) {
+  const {
+    heading = "Compare universities with confidence",
+    description = "Shortlist up to three universities and compare fees, accreditation, and study support side by side.",
+  } = props;
+
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<University[]>([]);
@@ -35,8 +44,8 @@ export default function CompareUniversities() {
       <div className="mx-auto max-w-7xl px-4">
         <div className="overflow-hidden rounded-3xl bg-[#0B3B68] px-6 py-10 text-center text-white shadow-xl sm:px-10 md:py-14">
           <span className="rounded-full bg-white/10 px-4 py-2 text-sm font-medium">Find your best fit</span>
-          <h2 className="mx-auto mt-5 max-w-3xl text-3xl font-bold md:text-5xl">Compare universities with confidence</h2>
-          <p className="mx-auto mt-4 max-w-2xl text-slate-200">Shortlist up to three universities and compare fees, accreditation, and study support side by side.</p>
+          <h2 className="mx-auto mt-5 max-w-3xl text-3xl font-bold md:text-5xl">{heading}</h2>
+          <p className="mx-auto mt-4 max-w-2xl text-slate-200">{description}</p>
           <button type="button" onClick={() => setIsOpen(true)} className="mt-7 cursor-pointer rounded-xl bg-[#F47C45] px-7 py-3 font-semibold text-white transition hover:bg-[#e06c35] focus:outline-none focus:ring-2 focus:ring-white">
             Compare Universities {selected.length > 0 && `(${selected.length})`}
           </button>
@@ -72,3 +81,4 @@ export default function CompareUniversities() {
     </section>
   );
 }
+
