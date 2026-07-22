@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import Hero from "@/components/landing/mba/hero/hero";
 
 import {
@@ -90,11 +91,34 @@ const landingPages: Record<string, LandingPageData> = {
     topOnlineDistanceMCABCABBAWest,
 };
 
+const allSlugs = Object.keys(landingPages);
+
 type PageProps = {
   params: Promise<{
     slug: string;
   }>;
 };
+
+export async function generateStaticParams() {
+  return allSlugs.map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const page = landingPages[slug];
+
+  if (!page) {
+    return {};
+  }
+
+  return {
+    title: page.seo.title,
+    description: page.seo.description,
+    keywords: page.seo.keywords,
+  };
+}
 
 export default async function LandingPage({
   params,
@@ -102,7 +126,7 @@ export default async function LandingPage({
   const { slug } = await params;
 
   console.log("Slug:", slug);
-  console.log("Available Pages:", Object.keys(landingPages));
+  console.log("Available Pages:", allSlugs);
 
   const page = landingPages[slug];
 

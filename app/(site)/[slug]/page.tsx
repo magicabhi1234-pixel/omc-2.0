@@ -1,39 +1,129 @@
 import { notFound } from "next/navigation";
-import { groq } from "next-sanity";
 import type { Metadata } from "next";
+import Hero from "@/components/landing/mba/hero/hero";
 
-import { sanity } from "../../../lib/sanity";
-
-import Hero from "@/components/landing/mba/Hero";
-import StaticLandingHero from "@/components/landing/mba/hero/hero";
-import UniversityCards from "@/components/landing/mba/UniversityCards";
-import ContentSection from "@/components/landing/mba/ContentSection";
-import CTASection from "@/components/landing/mba/CTASection";
-import UniversityGrid from "@/components/landing/university-grid";
-import WhyChoose from "@/components/landing/why-choose";
-import CompareUniversities from "@/components/landing/compare-universities";
-import Specializations from "@/components/landing/specializations";
-import Stats from "@/components/landing/stats";
-import FAQ from "@/components/landing/faq";
-import CTA from "@/components/landing/cta";
 import {
-  top10DistanceMBANorthZone,
   top10OnlineMBANorthZone,
+  top10OnlineMBAWestZone,
+  top10OnlineMBASouthZone,
+  top10OnlineMBAEastZone,
+  top10DistanceMBANorthZone,
+  top10DistanceMBAWestZone,
+  top10DistanceMBASouthZone,
+  top10DistanceMBAEastZone,
+  topDistanceMBAInBusinessManagement,
+  bestDistanceMBAInMarketing,
+  topDistanceMBAInBankingAndFinance,
+  topDistanceMBAInOperationsManagement,
+  topDistanceMBAInITAndProjectManagement,
+  topDistanceMBAInExecutiveMBAIIM,
+  topDistanceMBAInHRManagement,
+  topDistanceMBAInHealthcareManagement,
+  topDistanceMBAInFinanceManagement,
+  topDistanceMBAInExecutiveManagement,
+  topDistanceMBAInDigitalMarketing,
+  topDistanceMBAInSupplyChainManagement,
+  symbiosisSCDL,
+  symbiosisSSODL,
+  iimOnlineDistanceLearnings,
+  topOnlineDistanceMCABCABBANorth,
+  topOnlineDistanceMCABCABBASouth,
+  topOnlineDistanceMCABCABBAEast,
+  topOnlineDistanceMCABCABBAWest,
 } from "@/data/landing-pages";
 
-const staticLandingPages = {
+import { LandingPageData } from "@/types/landing";
+
+/**
+ * Documented landing page URL slugs mapped to their data objects.
+ *
+ * The keys are the publicly served URLs (source of truth).
+ * The values are the corresponding LandingPageData exports.
+ */
+const landingPages: Record<string, LandingPageData> = {
+  // --- Online MBA — Zone-based pages ---
+  "top-10-online-mba-universities-colleges-north-zone":
+    top10OnlineMBANorthZone,
+  "top-10-online-mba-universities-colleges-west-zone":
+    top10OnlineMBAWestZone,
+  "top-10-online-mba-universities-colleges-south-zone":
+    top10OnlineMBASouthZone,
+  "top-10-online-mba-universities-colleges-east-zone":
+    top10OnlineMBAEastZone,
+
+  // Documented alias for west-zone (matching the requested URL)
+  "top-online-mba-colleges-university-in-west-zone":
+    top10OnlineMBAWestZone,
+
+  // --- Distance MBA — Zone-based pages ---
   "top-10-distance-mba-universities-colleges-north-zone":
     top10DistanceMBANorthZone,
-  "top-10-online-mba-universities-colleges-north-zone": top10OnlineMBANorthZone,
+  "top-10-distance-mba-universities-colleges-west-zone":
+    top10DistanceMBAWestZone,
+  "top-10-distance-mba-universities-colleges-south-zone":
+    top10DistanceMBASouthZone,
+  "top-10-distance-mba-universities-colleges-east-zone":
+    top10DistanceMBAEastZone,
+
+  // --- Specialization-based pages ---
+  "top-distance-mba-in-business-management":
+    topDistanceMBAInBusinessManagement,
+  "best-universities-for-distance-education-mba-marketing-in-india":
+    bestDistanceMBAInMarketing,
+  "top-distance-mba-in-banking-and-finance-management":
+    topDistanceMBAInBankingAndFinance,
+  "top-distance-mba-in-operations-management":
+    topDistanceMBAInOperationsManagement,
+  "top-distance-mba-in-information-technology-and-project-management":
+    topDistanceMBAInITAndProjectManagement,
+  "top-distance-mba-in-top-executive-mba-iim-programs":
+    topDistanceMBAInExecutiveMBAIIM,
+  "top-distance-mba-in-human-resource-management":
+    topDistanceMBAInHRManagement,
+  "top-distance-mba-in-healthcare-management":
+    topDistanceMBAInHealthcareManagement,
+  "top-distance-mba-in-finance-management":
+    topDistanceMBAInFinanceManagement,
+  "top-distance-mba-in-executive-management":
+    topDistanceMBAInExecutiveManagement,
+  "top-distance-mba-in-digital-marketing":
+    topDistanceMBAInDigitalMarketing,
+  "top-distance-mba-in-supply-chain-management":
+    topDistanceMBAInSupplyChainManagement,
+
+  // --- University-specific pages ---
+  "symbiosis-center-for-distance-learning": symbiosisSCDL,
+  "symbiosis-center-for-online-learning": symbiosisSSODL,
+  "iim-online-distance-learnings": iimOnlineDistanceLearnings,
+
+  // --- Bachelor-level pages ---
+  "top-online-distance-mca-bca-bba-colleges-university-bachelor-north":
+    topOnlineDistanceMCABCABBANorth,
+  "top-online-distance-mca-bca-bba-colleges-university-bachelor-south":
+    topOnlineDistanceMCABCABBASouth,
+  "top-online-distance-mca-bca-bba-colleges-university-bachelor-east":
+    topOnlineDistanceMCABCABBAEast,
+  "top-online-distance-mca-bca-bba-colleges-university-bachelor-west":
+    topOnlineDistanceMCABCABBAWest,
 };
+
+const allSlugs = Object.keys(landingPages);
+
+type PageProps = {
+  params: Promise<{
+    slug: string;
+  }>;
+};
+
+export async function generateStaticParams() {
+  return allSlugs.map((slug) => ({ slug }));
+}
 
 export async function generateMetadata({
   params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
+}: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const page = staticLandingPages[slug as keyof typeof staticLandingPages];
+  const page = landingPages[slug];
 
   if (!page) return {};
 
@@ -49,139 +139,17 @@ export async function generateMetadata({
   };
 }
 
-const query = groq`
-*[_type=="landingPage" && slug.current==$slug][0]{
-
-  title,
-
-  hero{
-    badge,
-    heading,
-    description,
-
-    image{
-      asset->{
-        url
-      }
-    },
-
-    primaryButtonText,
-    secondaryButtonText,
-
-    stat1Value,
-    stat1Label,
-
-    stat2Value,
-    stat2Label,
-
-    stat3Value,
-    stat3Label
-  },
-
-  universitySection{
-    badge,
-    heading,
-    description
-  },
-
-  universities[]->{
-    _id,
-    name,
-    slug,
-
-    studyMode,
-    duration,
-    approvals,
-    startingFee,
-    eligibility,
-
-    logo{
-      asset->{
-        url
-      }
-    }
-  },
-
-  contentHeading,
-  contentDescription,
-
-  cta{
-    badge,
-    heading,
-    description,
-
-    primaryButtonText,
-    secondaryButtonText
-  }
-}
-`;
-
-export default async function LandingPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export default async function LandingPage({ params }: PageProps) {
   const { slug } = await params;
-
-  const staticPage = staticLandingPages[
-    slug as keyof typeof staticLandingPages
-  ];
-
-  if (staticPage) {
-    return (
-      <>
-        <StaticLandingHero {...staticPage.hero} />
-        <Stats />
-        <UniversityGrid />
-        <WhyChoose />
-        <Specializations />
-        <CompareUniversities />
-        <CTA />
-        <FAQ />
-      </>
-    );
-  }
-
-  const page = await sanity.fetch(query, { slug });
+  const page = landingPages[slug];
 
   if (!page) {
     notFound();
   }
 
   return (
-    <>
-      <Hero
-        badge={page.hero?.badge}
-        heading={page.hero?.heading}
-        description={page.hero?.description}
-        image={page.hero?.image?.asset?.url}
-        primaryButtonText={page.hero?.primaryButtonText}
-        secondaryButtonText={page.hero?.secondaryButtonText}
-        stat1Value={page.hero?.stat1Value}
-        stat1Label={page.hero?.stat1Label}
-        stat2Value={page.hero?.stat2Value}
-        stat2Label={page.hero?.stat2Label}
-        stat3Value={page.hero?.stat3Value}
-        stat3Label={page.hero?.stat3Label}
-      />
-
-      <UniversityCards
-        section={page.universitySection}
-        universities={page.universities || []}
-      />
-
-      <ContentSection
-        heading={page.contentHeading}
-        description={page.contentDescription}
-      />
-
-      <CTASection
-        badge={page.cta?.badge}
-        heading={page.cta?.heading}
-        description={page.cta?.description}
-        primaryButtonText={page.cta?.primaryButtonText}
-        secondaryButtonText={page.cta?.secondaryButtonText}
-      />
-    </>
+    <main>
+      <Hero {...page.hero} />
+    </main>
   );
 }
