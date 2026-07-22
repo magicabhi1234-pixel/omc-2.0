@@ -3,6 +3,8 @@ import { LandingPageData } from "@/types/landing";
 export const topOnlineDistanceMCABCABBAWest: LandingPageData = {
   slug: "top-online-distance-mca-bca-bba-colleges-university-bachelor-west",
 
+  category: "Bachelor Programs",
+
   seo: {
     title: "Top Online & Distance MCA, BCA, BBA Colleges in West Zone (2026)",
     description: "Compare the best online and distance MCA, BCA, BBA programs in West India. Compare fees, approvals, rankings, and eligibility.",

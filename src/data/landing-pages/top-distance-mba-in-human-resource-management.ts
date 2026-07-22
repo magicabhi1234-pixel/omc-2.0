@@ -3,6 +3,8 @@ import { LandingPageData } from "@/types/landing";
 export const topDistanceMBAInHRManagement: LandingPageData = {
   slug: "top-distance-mba-in-human-resource-management",
 
+  category: "MBA Specializations",
+
   seo: {
     title: "Top Distance MBA in Human Resource Management in India (2026)",
     description: "Compare the best Distance MBA in HR Management universities based on fees, approvals, rankings, and eligibility.",

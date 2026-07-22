@@ -3,6 +3,8 @@ import { LandingPageData } from "@/types/landing";
 export const top10DistanceMBAEastZone: LandingPageData = {
   slug: "top-10-distance-mba-universities-colleges-east-zone",
 
+  category: "Distance MBA",
+
   seo: {
     title: "Top 10 Distance MBA Universities & Colleges in East Zone (2026)",
     description: "Compare the best Distance MBA universities in East India based on fees, approvals, rankings, placement support and eligibility.",

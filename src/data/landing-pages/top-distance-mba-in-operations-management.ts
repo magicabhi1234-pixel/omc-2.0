@@ -3,6 +3,8 @@ import { LandingPageData } from "@/types/landing";
 export const topDistanceMBAInOperationsManagement: LandingPageData = {
   slug: "top-distance-mba-in-operations-management",
 
+  category: "MBA Specializations",
+
   seo: {
     title: "Top Distance MBA in Operations Management in India (2026)",
     description: "Compare the best Distance MBA in Operations Management universities based on fees, approvals, rankings, and eligibility.",

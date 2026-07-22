@@ -3,6 +3,8 @@ import { LandingPageData } from "@/types/landing";
 export const topDistanceMBAInFinanceManagement: LandingPageData = {
   slug: "top-distance-mba-in-finance-management",
 
+  category: "MBA Specializations",
+
   seo: {
     title: "Top Distance MBA in Finance Management in India (2026)",
     description: "Compare the best Distance MBA in Finance Management universities based on fees, approvals, rankings, and eligibility.",

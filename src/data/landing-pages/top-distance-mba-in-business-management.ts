@@ -3,6 +3,8 @@ import { LandingPageData } from "@/types/landing";
 export const topDistanceMBAInBusinessManagement: LandingPageData = {
   slug: "top-distance-mba-in-business-management",
 
+  category: "MBA Specializations",
+
   seo: {
     title: "Top Distance MBA in Business Management in India (2026)",
     description: "Compare the best Distance MBA in Business Management universities based on fees, approvals, rankings, and eligibility.",

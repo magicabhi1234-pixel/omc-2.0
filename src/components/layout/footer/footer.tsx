@@ -107,6 +107,15 @@ export default function Footer() {
                   Terms & Conditions
                 </Link>
               </li>
+
+              <li>
+                <Link
+                  href="/landing-pages"
+                  className="transition hover:text-[#F47C45]"
+                >
+                  All Landing Pages
+                </Link>
+              </li>
             </ul>
           </div>
 

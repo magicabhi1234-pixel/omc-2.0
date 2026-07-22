@@ -3,6 +3,8 @@ import { LandingPageData } from "@/types/landing";
 export const symbiosisSCDL: LandingPageData = {
   slug: "symbiosis-center-for-distance-learning",
 
+  category: "University Pages",
+
   seo: {
     title: "Symbiosis Centre for Distance Learning (SCDL) – Distance MBA (2026)",
     description: "Explore Symbiosis SCDL Distance MBA programs. Compare fees, approvals, duration, and placement support for working professionals.",

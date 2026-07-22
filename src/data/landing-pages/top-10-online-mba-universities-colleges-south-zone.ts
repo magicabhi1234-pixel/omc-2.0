@@ -3,6 +3,8 @@ import { LandingPageData } from "@/types/landing";
 export const top10OnlineMBASouthZone: LandingPageData = {
   slug: "top-10-online-mba-universities-colleges-south-zone",
 
+  category: "Online MBA",
+
   seo: {
     title: "Top 10 Online MBA Universities & Colleges in South Zone (2026)",
     description: "Compare the best Online MBA universities in South India based on fees, approvals, rankings, placement support and eligibility.",

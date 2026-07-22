@@ -3,6 +3,8 @@ import { LandingPageData } from "@/types/landing";
 export const topDistanceMBAInSupplyChainManagement: LandingPageData = {
   slug: "top-distance-mba-in-supply-chain-management",
 
+  category: "MBA Specializations",
+
   seo: {
     title: "Top Distance MBA in Supply Chain Management in India (2026)",
     description: "Compare the best Distance MBA in Supply Chain Management universities based on fees, approvals, rankings, and eligibility.",

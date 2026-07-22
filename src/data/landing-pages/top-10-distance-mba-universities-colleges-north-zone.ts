@@ -3,6 +3,8 @@ import { LandingPageData } from "@/types/landing";
 export const top10DistanceMBANorthZone: LandingPageData = {
   slug: "top-10-distance-mba-universities-colleges-north-zone",
 
+  category: "Distance MBA",
+
   // =============================================
   // SEO
   // =============================================

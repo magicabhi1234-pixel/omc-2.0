@@ -3,6 +3,8 @@ import { LandingPageData } from "@/types/landing";
 export const top10OnlineMBAWestZone: LandingPageData = {
   slug: "top-10-online-mba-universities-colleges-west-zone",
 
+  category: "Online MBA",
+
   // =============================================
   // SEO
   // =============================================

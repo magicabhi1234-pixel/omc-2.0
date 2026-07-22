@@ -3,6 +3,8 @@ import { LandingPageData } from "@/types/landing";
 export const topDistanceMBAInITAndProjectManagement: LandingPageData = {
   slug: "top-distance-mba-in-information-technology-and-project-management",
 
+  category: "MBA Specializations",
+
   seo: {
     title: "Top Distance MBA in IT & Project Management in India (2026)",
     description: "Compare the best Distance MBA in Information Technology and Project Management universities based on fees, approvals, rankings, and eligibility.",

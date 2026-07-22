@@ -3,6 +3,8 @@ import { LandingPageData } from "@/types/landing";
 export const bestDistanceMBAInMarketing: LandingPageData = {
   slug: "best-universities-for-distance-education-mba-marketing-in-india",
 
+  category: "MBA Specializations",
+
   seo: {
     title: "Best Universities for Distance MBA in Marketing in India (2026)",
     description: "Compare top UGC-approved Distance MBA in Marketing universities based on fees, rankings, placement support, and eligibility.",

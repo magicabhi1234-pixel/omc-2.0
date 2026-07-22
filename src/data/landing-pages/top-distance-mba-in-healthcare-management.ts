@@ -3,6 +3,8 @@ import { LandingPageData } from "@/types/landing";
 export const topDistanceMBAInHealthcareManagement: LandingPageData = {
   slug: "top-distance-mba-in-healthcare-management",
 
+  category: "MBA Specializations",
+
   seo: {
     title: "Top Distance MBA in Healthcare Management in India (2026)",
     description: "Compare the best Distance MBA in Healthcare Management universities based on fees, approvals, rankings, and eligibility.",

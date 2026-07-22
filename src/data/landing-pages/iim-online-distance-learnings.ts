@@ -3,6 +3,8 @@ import { LandingPageData } from "@/types/landing";
 export const iimOnlineDistanceLearnings: LandingPageData = {
   slug: "iim-online-distance-learnings",
 
+  category: "University Pages",
+
   seo: {
     title: "IIM Online & Distance Learning Programs (2026)",
     description: "Explore online and distance learning programs from India's top IIMs. Compare executive MBA, management programs, fees, and eligibility.",

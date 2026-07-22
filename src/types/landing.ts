@@ -270,6 +270,8 @@ export interface CTASection {
 export interface LandingPageData {
   slug: string;
 
+  category: string;
+
   seo: SEOData;
 
   hero: HeroSection;
