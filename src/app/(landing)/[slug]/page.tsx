@@ -1,6 +1,15 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Hero from "@/components/landing/mba/hero/hero";
+import StatsSection from "@/components/landing/mba/stats/stats";
+import UniversityGrid from "@/components/landing/mba/university-grid/university-grid";
+import WhyChooseSection from "@/components/landing/mba/why-choose/why-choose";
+import CompareCollege from "@/components/landing/mba/compare-college/compare-college";
+import Specializations from "@/components/landing/mba/specializations/specializations";
+import ScholarshipBanner from "@/components/landing/mba/scholarship-banner/scholarship-banner";
+import Testimonials from "@/components/landing/mba/testimonials/testimonials";
+import FAQ from "@/components/landing/mba/faq/faq";
+import CTASection from "@/components/landing/mba/cta/cta";
 
 import {
   top10OnlineMBANorthZone,
@@ -137,7 +146,48 @@ export default async function LandingPage({
 
   return (
     <main>
+      {/* Keep existing Hero Section - page-specific */}
       <Hero {...page.hero} />
+
+      {/* Stats Section */}
+      {page.stats && <StatsSection {...page.stats} />}
+
+      {/* University Grid Section */}
+      {page.universitySection && (
+        <UniversityGrid
+          {...page.universitySection}
+          category={page.category}
+        />
+      )}
+
+      {/* Why Choose Section */}
+      {page.whyChoose && <WhyChooseSection {...page.whyChoose} />}
+
+      {/* Compare Section */}
+      {page.compareSection && (
+        <CompareCollege
+          {...page.compareSection}
+          universityIds={page.universitySection?.universities || []}
+        />
+      )}
+
+      {/* Specializations Section */}
+      {page.specializations && <Specializations {...page.specializations} />}
+
+      {/* Scholarship Banner */}
+      {page.scholarshipBanner && (
+        <ScholarshipBanner {...page.scholarshipBanner} />
+      )}
+
+      {/* Testimonials Section */}
+      {page.testimonials && <Testimonials {...page.testimonials} />}
+
+      {/* FAQ Section */}
+      {page.faq && <FAQ {...page.faq} />}
+
+      {/* CTA Section */}
+      <CTASection {...page.cta} />
     </main>
   );
 }
+
