@@ -1,7 +1,7 @@
 import { LandingPageData } from "@/types/landing";
 
-export const top10OnlineMBANorthZone: LandingPageData = {
-  slug: "top-10-online-mba-universities-colleges-north-zone",
+export const top10OnlineMBAWestZone: LandingPageData = {
+  slug: "top-10-online-mba-universities-colleges-west-zone",
 
   // =============================================
   // SEO
@@ -9,13 +9,13 @@ export const top10OnlineMBANorthZone: LandingPageData = {
 
   seo: {
     title:
-      "Top 10 Online MBA Universities & Colleges in North Zone (2026)",
+      "Top 10 Online MBA Universities & Colleges in West Zone (2026)",
 
     description:
-      "Compare the best Online MBA universities in North India based on fees, approvals, rankings, placement support and eligibility.",
+      "Compare the best Online MBA universities in West India based on fees, approvals, rankings, placement support and eligibility.",
 
     keywords: [
-      "Online MBA North India",
+      "Online MBA West India",
       "Top Online MBA",
       "Distance MBA",
       "UGC Approved MBA",
@@ -30,10 +30,11 @@ export const top10OnlineMBANorthZone: LandingPageData = {
   hero: {
     badge: "Admissions Open 2026",
 
-    heading: "Top 10 Online MBA Universities & Colleges in North Zone",
+    heading:
+      "Top 10 Online MBA Universities & Colleges in West Zone",
 
     description:
-      "Compare India's best UGC-approved Online MBA universities across North India. Compare fees, placements, rankings, approvals and choose the best university for your career.",
+      "Compare India's best UGC-approved Online MBA universities across West India. Compare fees, placements, rankings, approvals and choose the best university for your career.",
 
     heroImage: {
       src: "/universities/omc_logo.avif",
@@ -79,16 +80,13 @@ export const top10OnlineMBANorthZone: LandingPageData = {
       "Select the best university based on fees, rankings, approvals and placements.",
 
     universities: [
-      "amity-online",
-      "lpu-online",
-      "symbiosis-online",
       "nmims-online",
-      "jain-online",
-      "manipal-jaipur-online",
-      "upes-online",
-      "chandigarh-university-online",
-      "dypatil-online",
-      "shoolini-online",
+      "symbiosis-online",
+      "icfai-online",
+      "parul-online",
+      "gla-online",
+
+      // TODO: Add more West Zone university IDs
     ],
   },
 
@@ -237,4 +235,5 @@ export const top10OnlineMBANorthZone: LandingPageData = {
   },
 };
 
-export default top10OnlineMBANorthZone;
+export default top10OnlineMBAWestZone;
+

@@ -81,11 +81,14 @@ export const top10DistanceMBANorthZone: LandingPageData = {
     universities: [
       "amity-online",
       "lpu-online",
-
-      // Add more IDs later
-      // "jain-online",
-      // "nmims-online",
-      // "manipal-online",
+      "symbiosis-online",
+      "nmims-online",
+      "jain-online",
+      "manipal-jaipur-online",
+      "upes-online",
+      "chandigarh-university-online",
+      "dypatil-online",
+      "shoolini-online",
     ],
   },
 
