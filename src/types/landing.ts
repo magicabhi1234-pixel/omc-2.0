@@ -191,6 +191,10 @@ export interface Specialization {
   slug: string;
 
   icon?: string;
+
+  desc?: string;
+
+  description?: string;
 }
 
 export interface SpecializationSection {
