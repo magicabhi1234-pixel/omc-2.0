@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 
 type ContainerProps = {
   children: ReactNode;
@@ -17,4 +17,3 @@ export default function Container({
     </div>
   );
 }
-
