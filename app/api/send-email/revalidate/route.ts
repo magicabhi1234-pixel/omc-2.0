@@ -22,12 +22,12 @@ export async function POST(req: NextRequest) {
     console.log("Sanity Webhook:", body);
 
     // Revalidate tags
-    revalidateTag("landing-page");
-    revalidateTag("universities");
-    revalidateTag("blog");
-    revalidateTag("seo");
-    revalidateTag("header");
-    revalidateTag("footer");
+revalidateTag("landing-page", "max");
+revalidateTag("universities", "max");
+revalidateTag("blog", "max");
+revalidateTag("seo", "max");
+revalidateTag("header", "max");
+revalidateTag("footer", "max");
 
     return NextResponse.json({
       success: true,
