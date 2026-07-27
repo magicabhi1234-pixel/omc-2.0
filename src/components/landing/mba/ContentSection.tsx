@@ -1,8 +1,8 @@
-import { PortableText } from "@portabletext/react";
+import { PortableText, type PortableTextBlock } from "@portabletext/react";
 
 type Props = {
   heading?: string;
-  description?: any;
+  description?: PortableTextBlock | PortableTextBlock[];
 };
 
 export default function ContentSection({

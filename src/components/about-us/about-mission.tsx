@@ -25,7 +25,7 @@ export default function AboutMission() {
             </h3>
 
             <p className="mt-4 text-slate-600">
-              To become India's most trusted platform for
+              To become India&apos;s most trusted platform for
               online higher education discovery and career
               growth guidance.
             </p>

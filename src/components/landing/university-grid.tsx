@@ -11,7 +11,6 @@ export default function UniversityGrid(props: Props) {
     badge = "Top Universities",
     heading = "Top Distance MBA Universities",
     description = "Compare NAAC grades, fees, approvals, placements and admission process from India's leading distance MBA universities.",
-    universities,
   } = props;
 
   const openPopup = () => {
@@ -165,4 +164,3 @@ export default function UniversityGrid(props: Props) {
     </section>
   );
 }
-

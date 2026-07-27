@@ -8,12 +8,6 @@ import {
   GraduationCap,
 } from "lucide-react";
 
-import {
-  FaFacebookF,
-  FaInstagram,
-  FaLinkedinIn,
-} from "react-icons/fa";
-
 export default function Footer() {
   return (
     <footer className="bg-[#0F172A] text-white">
@@ -27,33 +21,11 @@ export default function Footer() {
             </h3>
 
             <p className="mt-4 leading-7 text-slate-400">
-              India's AI-powered platform to compare online MBA
+              India&apos;s AI-powered platform to compare online MBA
               universities, fees, rankings, placements and
               specializations.
             </p>
 
-            <div className="mt-6 flex gap-4">
-              <a
-                href="#"
-                className="rounded-full bg-white/10 p-3 transition duration-300 hover:bg-[#F47C45]"
-              >
-                <FaFacebookF size={18} />
-              </a>
-
-              <a
-                href="#"
-                className="rounded-full bg-white/10 p-3 transition duration-300 hover:bg-[#F47C45]"
-              >
-                <FaInstagram size={18} />
-              </a>
-
-              <a
-                href="#"
-                className="rounded-full bg-white/10 p-3 transition duration-300 hover:bg-[#F47C45]"
-              >
-                <FaLinkedinIn size={18} />
-              </a>
-            </div>
           </div>
 
           {/* Quick Links */}
@@ -157,16 +129,14 @@ export default function Footer() {
               </li>
 
               <li>
-  <a
-    href="https://omc-2-0.vercel.app/top-colleges-university-in-north-zone"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="flex items-center gap-2 transition hover:text-[#F47C45]"
-  >
-    <GraduationCap size={16} />
-    North Landing Page
-  </a>
-</li>
+                <Link
+                  href="/top-colleges-university-in-north-zone"
+                  className="flex items-center gap-2 transition hover:text-[#F47C45]"
+                >
+                  <GraduationCap size={16} />
+                  North Landing Page
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -183,9 +153,7 @@ export default function Footer() {
                   size={18}
                   className="text-[#F47C45]"
                 />
-                <span>
-                  info@onlinembacolleges.com
-                </span>
+                <a href="mailto:info@onlinembacolleges.com" className="transition hover:text-white">info@onlinembacolleges.com</a>
               </li>
 
               <li className="flex items-center gap-3">
@@ -193,9 +161,7 @@ export default function Footer() {
                   size={18}
                   className="text-[#F47C45]"
                 />
-                <span>
-                  +91 8421903846
-                </span>
+                <a href="tel:+918421903846" className="transition hover:text-white">+91 8421903846</a>
               </li>
 
               <li className="flex items-center gap-3">

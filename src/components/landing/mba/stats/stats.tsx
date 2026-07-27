@@ -2,7 +2,6 @@ import Container from "@/components/landing/common/container";
 import { StatsSection as StatsSectionType } from "@/types/landing";
 
 export default function StatsSection({
-  heading,
   stats,
 }: StatsSectionType) {
   if (!stats || stats.length === 0) return null;
@@ -27,4 +26,3 @@ export default function StatsSection({
     </section>
   );
 }
-

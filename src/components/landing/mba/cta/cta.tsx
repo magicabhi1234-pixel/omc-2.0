@@ -1,6 +1,5 @@
 "use client";
 
-import Container from "@/components/landing/common/container";
 import { CTASection as CTASectionType } from "@/types/landing";
 
 export default function CTASection({
@@ -95,4 +94,3 @@ export default function CTASection({
     </section>
   );
 }
-

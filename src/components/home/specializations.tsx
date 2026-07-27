@@ -1,6 +1,7 @@
 "use client";
 
 import Container from "@/components/common/container";
+import FeatureIcon from "@/components/common/feature-icon";
 
 const specializations = [
   {
@@ -74,8 +75,8 @@ export default function Specializations() {
               "
             >
               {/* Icon */}
-              <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-100 text-2xl transition-all duration-300 group-hover:bg-[#F47C45]">
-                {item.icon}
+              <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-100 text-[#F47C45] transition-all duration-300 group-hover:scale-105 group-hover:bg-[#F47C45] group-hover:text-white">
+                <FeatureIcon icon={item.icon} title={item.title} />
               </div>
 
               {/* Title */}

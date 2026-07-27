@@ -54,7 +54,7 @@ export default function Testimonials() {
               </div>
 
               <p className="leading-7 text-slate-600">
-                "{item.review}"
+                &ldquo;{item.review}&rdquo;
               </p>
 
               <div className="mt-6 border-t border-slate-100 pt-5">

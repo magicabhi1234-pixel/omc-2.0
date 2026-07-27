@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
-const plusJakartaSans = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
-  title: "OnlineMBAColleges 2.0",
-  description: "Modern Online MBA Discovery Platform",
+  metadataBase: new URL("https://onlinembacolleges.in"),
+  title: {
+    default: "Online MBA Colleges | Compare Top Online MBA Programs",
+    template: "%s | Online MBA Colleges",
+  },
+  description: "Compare accredited online MBA programs, fees, specializations and admissions guidance in India.",
+  applicationName: "Online MBA Colleges",
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({
@@ -18,7 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={plusJakartaSans.className}>
+      <body>
         {children}
       </body>
     </html>

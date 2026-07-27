@@ -2,12 +2,12 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
 
 export default function LeadForm() {
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const [formData, setFormData] = useState({
     name: "",
@@ -91,39 +91,10 @@ export default function LeadForm() {
     }
 
     setLoading(true);
-
-    const { error } = await supabase
-      .from("leads")
-      .insert([
-        {
-          name: formData.name,
-          mobile: formData.mobile,
-          email: formData.email,
-          city: formData.city,
-          specialization:
-            formData.specialization,
-        },
-      ]);
-
-    if (error) {
-      setLoading(false);
-
-      console.log(
-        "SUPABASE ERROR:",
-        error
-      );
-
-      alert(
-        `${error.message}\n\n${
-          error.details || ""
-        }`
-      );
-
-      return;
-    }
+    setSubmitError("");
 
     try {
-      await fetch("/api/send-email", {
+      const response = await fetch("/api/leads", {
         method: "POST",
         headers: {
           "Content-Type":
@@ -132,22 +103,19 @@ export default function LeadForm() {
         body: JSON.stringify(formData),
       });
 
-      setLoading(false);
+      const result = await response.json() as { success?: boolean; message?: string; traceId?: string };
+      if (!response.ok || !result.success) {
+        console.error("Lead submission failed", { traceId: result.traceId, message: result.message });
+        throw new Error(result.message ?? "We couldn't submit your enquiry. Please try again.");
+      }
 
       router.push("/thank-you");
-    } catch (emailError) {
-      console.error(
-        "EMAIL ERROR:",
-        emailError
+    } catch (error) {
+      console.error("Lead submission request failed", error);
+      setSubmitError(
+        "We couldn't submit your enquiry right now. Please try again or call us directly."
       );
-
       setLoading(false);
-
-      alert(
-        "Lead saved successfully but email sending failed."
-      );
-
-      router.push("/thank-you");
     }
   };
 
@@ -158,17 +126,22 @@ export default function LeadForm() {
     >
       {/* Name */}
       <div>
+        <label className="sr-only" htmlFor="lead-name">Full name</label>
         <input
+          id="lead-name"
           type="text"
           name="name"
           placeholder="Full Name *"
           value={formData.name}
           onChange={handleChange}
+          autoComplete="name"
+          aria-invalid={Boolean(errors.name)}
+          aria-describedby={errors.name ? "lead-name-error" : undefined}
           className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 outline-none focus:border-[#0B3B68]"
         />
 
         {errors.name && (
-          <p className="mt-1 text-sm text-red-500">
+          <p id="lead-name-error" className="mt-1 text-sm text-red-600" role="alert">
             {errors.name}
           </p>
         )}
@@ -176,7 +149,9 @@ export default function LeadForm() {
 
       {/* Mobile */}
       <div>
+        <label className="sr-only" htmlFor="lead-mobile">Mobile number</label>
         <input
+          id="lead-mobile"
           type="tel"
           name="mobile"
           placeholder="Mobile Number *"
@@ -199,43 +174,42 @@ export default function LeadForm() {
             });
           }}
           maxLength={10}
+          inputMode="numeric"
+          autoComplete="tel-national"
+          aria-invalid={Boolean(errors.mobile)}
+          aria-describedby={errors.mobile ? "lead-mobile-error" : undefined}
           className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 outline-none focus:border-[#0B3B68]"
         />
 
         {errors.mobile && (
-          <p className="mt-1 text-sm text-red-500">
+          <p id="lead-mobile-error" className="mt-1 text-sm text-red-600" role="alert">
             {errors.mobile}
           </p>
         )}
       </div>
 
       {/* Email */}
-      <input
-        type="email"
-        name="email"
-        placeholder="Email Address *"
-        value={formData.email}
-        onChange={handleChange}
-        className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 outline-none focus:border-[#0B3B68]"
-        required
-      />
+      <div>
+        <label className="sr-only" htmlFor="lead-email">Email address</label>
+        <input id="lead-email" type="email" name="email" placeholder="Email Address *" value={formData.email} onChange={handleChange} autoComplete="email" className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 outline-none focus:border-[#0B3B68]" required />
+      </div>
 
       {/* City Optional */}
-      <input
-        type="text"
-        name="city"
-        placeholder="City (Optional)"
-        value={formData.city}
-        onChange={handleChange}
-        className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 outline-none focus:border-[#0B3B68]"
-      />
+      <div>
+        <label className="sr-only" htmlFor="lead-city">City</label>
+        <input id="lead-city" type="text" name="city" placeholder="City (Optional)" value={formData.city} onChange={handleChange} autoComplete="address-level2" className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 outline-none focus:border-[#0B3B68]" />
+      </div>
 
       {/* Specialization */}
       <div>
+        <label className="sr-only" htmlFor="lead-specialization">Specialization</label>
         <select
+          id="lead-specialization"
           name="specialization"
           value={formData.specialization}
           onChange={handleChange}
+          aria-invalid={Boolean(errors.specialization)}
+          aria-describedby={errors.specialization ? "lead-specialization-error" : undefined}
           className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 outline-none focus:border-[#0B3B68]"
         >
           <option value="">
@@ -276,7 +250,7 @@ export default function LeadForm() {
         </select>
 
         {errors.specialization && (
-          <p className="mt-1 text-sm text-red-500">
+          <p id="lead-specialization-error" className="mt-1 text-sm text-red-600" role="alert">
             {errors.specialization}
           </p>
         )}
@@ -291,6 +265,10 @@ export default function LeadForm() {
           ? "Submitting..."
           : "Get Free Counselling"}
       </button>
+
+      {submitError && (
+        <p className="text-center text-sm text-red-600" role="alert">{submitError}</p>
+      )}
 
       <p className="text-center text-xs text-slate-500">
         By submitting this form, you agree to

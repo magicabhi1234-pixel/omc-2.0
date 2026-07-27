@@ -35,12 +35,12 @@ export default function TrustedUniversities() {
           </span>
 
           <h2 className="mt-3 text-4xl font-bold text-slate-900">
-            Learn From India's Top Universities
+            Learn From India&apos;s Top Universities
           </h2>
 
           <p className="mx-auto mt-4 max-w-2xl text-slate-600">
             Compare fees, rankings, approvals and placements from
-            India's most trusted online universities.
+            India&apos;s most trusted online universities.
           </p>
         </div>
 

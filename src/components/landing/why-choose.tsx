@@ -1,35 +1,36 @@
 import { WhyChooseSection as WhyChooseSectionType } from "@/types/landing";
+import FeatureIcon from "@/components/common/feature-icon";
 
 type Props = Partial<WhyChooseSectionType>;
 
 const defaultFeatures = [
   {
-    icon: "&#127891;",
+    icon: "graduation",
     title: "UGC Approved Universities",
     description: "Choose from India's top recognized and accredited universities.",
   },
   {
-    icon: "&#9200;",
+    icon: "clock",
     title: "Flexible Learning",
     description: "Study anytime, anywhere without affecting your job or business.",
   },
   {
-    icon: "&#128176;",
+    icon: "wallet",
     title: "Affordable Fees",
     description: "Low-cost MBA programs with EMI and scholarship options.",
   },
   {
-    icon: "&#128200;",
+    icon: "trending-up",
     title: "Career Growth",
     description: "Boost promotions, salary hikes and leadership opportunities.",
   },
   {
-    icon: "&#128188;",
+    icon: "briefcase",
     title: "Placement Support",
     description: "Career assistance, resume building and interview preparation.",
   },
   {
-    icon: "&#128218;",
+    icon: "book",
     title: "Industry Curriculum",
     description: "Updated syllabus aligned with modern business requirements.",
   },
@@ -62,7 +63,9 @@ export default function WhyChoose({ heading, description, items }: Props) {
               key={item.title}
               className="group rounded-3xl border border-slate-200 bg-white p-8 shadow-sm transition duration-300 hover:-translate-y-2 hover:border-[#F47C45] hover:shadow-2xl"
             >
-              <div className="mb-5 text-5xl">{item.icon}</div>
+              <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-100 text-[#F47C45] transition duration-300 group-hover:scale-105 group-hover:bg-[#F47C45] group-hover:text-white">
+                <FeatureIcon icon={item.icon} title={item.title} />
+              </div>
               <h3 className="text-xl font-bold text-slate-900">{item.title}</h3>
               <p className="mt-4 leading-7 text-slate-600">{item.description}</p>
             </div>
@@ -72,4 +75,3 @@ export default function WhyChoose({ heading, description, items }: Props) {
     </section>
   );
 }
-

@@ -2,7 +2,6 @@ import type { MetadataRoute } from "next";
 import { SITE } from "@/constants/site";
 import {
   staticPages,
-  landingPages,
   allLandingSlugs,
 } from "@/data/registry";
 
@@ -62,4 +61,3 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return entries;
 }
-

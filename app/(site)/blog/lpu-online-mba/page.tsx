@@ -85,7 +85,7 @@ export default function LPUBlogPage() {
 
             <p className="mt-5 leading-8 text-slate-700">
               Lovely Professional University (LPU) is among
-              India's leading private universities offering
+              India&apos;s leading private universities offering
               UGC-entitled Online MBA programs. The program is
               designed for students and working professionals
               who want flexibility while pursuing management
@@ -166,7 +166,7 @@ export default function LPUBlogPage() {
             </h2>
 
             <p className="mt-5 leading-8 text-slate-700">
-              Candidates must possess a bachelor's degree from
+              Candidates must possess a bachelor&apos;s degree from
               a recognized university. Specific eligibility
               requirements may vary according to university
               guidelines and admission policies.
@@ -207,7 +207,7 @@ export default function LPUBlogPage() {
             </h2>
 
             <p className="mt-5 leading-8 text-slate-700">
-              LPU e-Connect is the university's digital
+              LPU e-Connect is the university&apos;s digital
               learning platform that allows students to access
               study materials, assignments, recorded lectures,
               examination updates and academic resources.

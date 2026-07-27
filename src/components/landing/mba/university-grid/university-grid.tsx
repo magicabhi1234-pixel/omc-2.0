@@ -13,7 +13,6 @@ export default function UniversityGrid({
   heading,
   description,
   universities: universityIds,
-  category,
 }: UniversityGridProps) {
   const universityList: University[] = universityIds
     .map((id) => universities.find((u) => u.id === id))
@@ -39,4 +38,3 @@ export default function UniversityGrid({
     </section>
   );
 }
-

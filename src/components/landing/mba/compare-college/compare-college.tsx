@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Container from "@/components/landing/common/container";
-import SectionHeading from "@/components/landing/common/section-heading";
 import { CompareSection, University } from "@/types/landing";
 import { universities } from "@/data/universities/universities";
 import CompareTable from "./compare-table";
@@ -203,4 +202,3 @@ export default function CompareCollege({
     </section>
   );
 }
-
