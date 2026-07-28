@@ -10,7 +10,7 @@ export default function AboutHero() {
             About Us
           </span>
 
-          <h1 className="mt-6 text-5xl font-bold text-slate-900">
+          <h1 className="mt-6 text-5xl font-bold leading-[1.3] text-slate-900">
             Helping Students to Find The
             <span className="block text-[#0B3B68]">
               Right Online/Distance MBA
