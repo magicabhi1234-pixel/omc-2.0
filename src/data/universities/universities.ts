@@ -4,1272 +4,1384 @@ import { University } from "@/types/landing";
 // Universities Master Data (Single Source of Truth)
 // =============================================
 // Referenced by landing page cards via `id`.
-// TODO: Replace placeholder data with actual values from reference website.
+// Sourced from docs/University_Data_Extraction_updated.xlsx.
+// Entries below marked "logo pending" reference a suggested filename
+// under /public/universities that does not exist yet - see implementation
+// report for the full missing-logo list. Dropping the file in with the
+// same name will make it appear with no further code changes.
 
 export const universities: University[] = [
   {
-    id: "amity-online",
-
-    slug: "amity-online",
-
-    name: "Amity University Online",
-
-    logo: "/universities/amity_university.png",
-
-    rating: 4.8,
-
-    reviewCount: 1254,
-
-    studyMode: "Online MBA",
-
-    duration: "2 Years",
-
-    eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-      {
-        id: "aicte",
-        label: "AICTE",
-      },
-      {
-        id: "naac",
-        label: "NAAC A+",
-      },
-    ],
-
-    rankings: [
-      {
-        source: "NIRF",
-        value: "#32",
-      },
-    ],
-
-    startingFee: "₹49,750/Sem",
-
-    emi: "₹8,292/Month",
-
-    placementSupport: "Yes",
-
-    brochureUrl: "#",
-
-    websiteUrl: "#",
-
-    featured: true,
-  },
-
-  {
-    id: "lpu-online",
-
-    slug: "lpu-online",
-
-    name: "LPU Online",
-
-    logo: "/universities/lpu.png",
-
-    rating: 4.7,
-
-    reviewCount: 982,
-
-    studyMode: "Online MBA",
-
-    duration: "2 Years",
-
-    eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-      {
-        id: "aicte",
-        label: "AICTE",
-      },
-    ],
-
-    rankings: [
-      {
-        source: "NIRF",
-        value: "#27",
-      },
-    ],
-
-    startingFee: "₹45,000/Sem",
-
-    emi: "₹7,500/Month",
-
-    placementSupport: "Yes",
-
-    brochureUrl: "#",
-
-    websiteUrl: "#",
-
-    featured: true,
-  },
-
-  // =============================================
-  // North Zone Universities
-  // =============================================
-
-  {
-    id: "symbiosis-online",
-
-    slug: "symbiosis-online",
-
-    name: "Symbiosis University",
-
-    logo: "/universities/symbiosis.png",
-
-    rating: 4.6,
-
-    reviewCount: 876,
-
-    studyMode: "Online & Distance MBA",
-
-    duration: "2 Years",
-
-    eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-      {
-        id: "aicte",
-        label: "AICTE",
-      },
-      {
-        id: "naac",
-        label: "NAAC A+",
-      },
-    ],
-
-    rankings: [
-      {
-        source: "NIRF",
-        value: "#37",
-      },
-    ],
-
-    startingFee: "₹79,000/Sem",
-
-    emi: "₹13,167/Month",
-
-    placementSupport: "Yes",
-
-    brochureUrl: "#",
-
-    websiteUrl: "#",
-
-    featured: false,
-  },
-
-  {
-    id: "upes-online",
-
-    slug: "upes-online",
-
-    name: "UPES Online",
-
-    logo: "/universities/upes.png",
-
-    rating: 4.5,
-
-    reviewCount: 654,
-
-    studyMode: "Online MBA",
-
-    duration: "2 Years",
-
-    eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-      {
-        id: "naac",
-        label: "NAAC A",
-      },
-    ],
-
-    startingFee: "₹75,000/Sem",
-
-    emi: "₹12,500/Month",
-
-    placementSupport: "Yes",
-
-    brochureUrl: "#",
-
-    websiteUrl: "#",
-
-    featured: false,
-  },
-
-  {
-    id: "chandigarh-university-online",
-
-    slug: "chandigarh-university-online",
-
-    name: "Chandigarh University Online",
-
-    logo: "/universities/chitkara-university.png",
-
-    rating: 4.5,
-
-    reviewCount: 712,
-
-    studyMode: "Online MBA",
-
-    duration: "2 Years",
-
-    eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-      {
-        id: "naac",
-        label: "NAAC A+",
-      },
-    ],
-
-    startingFee: "₹79,000/Sem",
-
-    emi: "₹13,167/Month",
-
-    placementSupport: "Yes",
-
-    brochureUrl: "#",
-
-    websiteUrl: "#",
-
-    featured: false,
-  },
-
-  {
-    id: "nmims-online",
-
-    slug: "nmims-online",
-
-    name: "NMIMS Global",
-
-    logo: "/universities/nmims.png",
-
-    rating: 4.7,
-
-    reviewCount: 1123,
-
-    studyMode: "Online MBA",
-
-    duration: "2 Years",
-
-    eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-      {
-        id: "aicte",
-        label: "AICTE",
-      },
-      {
-        id: "naac",
-        label: "NAAC A+",
-      },
-    ],
-
-    rankings: [
-      {
-        source: "NIRF",
-        value: "#41",
-      },
-    ],
-
-    startingFee: "₹1,05,000/Sem",
-
-    emi: "₹17,500/Month",
-
-    placementSupport: "Yes",
-
-    brochureUrl: "#",
-
-    websiteUrl: "#",
-
-    featured: false,
-  },
-
-  {
-    id: "jain-online",
-
-    slug: "jain-online",
-
-    name: "Jain University",
-
-    logo: "/universities/jain.png",
-
-    rating: 4.5,
-
-    reviewCount: 567,
-
-    studyMode: "Online MBA",
-
-    duration: "2 Years",
-
-    eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-      {
-        id: "naac",
-        label: "NAAC A++",
-      },
-    ],
-
-    startingFee: "₹80,000/Sem",
-
-    emi: "₹13,333/Month",
-
-    placementSupport: "Yes",
-
-    brochureUrl: "#",
-
-    websiteUrl: "#",
-
-    featured: false,
-  },
-
-  {
-    id: "manipal-jaipur-online",
-
-    slug: "manipal-jaipur-online",
-
-    name: "Manipal University Jaipur",
-
-    logo: "/universities/manipal.png",
-
-    rating: 4.6,
-
-    reviewCount: 834,
-
-    studyMode: "Online MBA",
-
-    duration: "2 Years",
-
-    eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-      {
-        id: "naac",
-        label: "NAAC A+",
-      },
-    ],
-
-    startingFee: "₹87,500/Sem",
-
-    emi: "₹14,583/Month",
-
-    placementSupport: "Yes",
-
-    brochureUrl: "#",
-
-    websiteUrl: "#",
-
-    featured: false,
-  },
-
-  {
-    id: "dypatil-online",
-
-    slug: "dypatil-online",
-
-    name: "DY Patil University",
-
-    logo: "/universities/dpu.png",
-
-    rating: 4.4,
-
-    reviewCount: 432,
-
-    studyMode: "Online MBA",
-
-    duration: "2 Years",
-
-    eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-      {
-        id: "naac",
-        label: "NAAC A++",
-      },
-    ],
-
-    startingFee: "₹84,500/Sem",
-
-    emi: "₹14,083/Month",
-
-    placementSupport: "Yes",
-
-    brochureUrl: "#",
-
-    websiteUrl: "#",
-
-    featured: false,
-  },
-
-  {
-    id: "shoolini-online",
-
-    slug: "shoolini-online",
-
-    name: "Shoolini University",
-
-    logo: "/universities/shoolini_university.png",
-
-    rating: 4.3,
-
-    reviewCount: 321,
-
-    studyMode: "Online MBA",
-
-    duration: "2 Years",
-
-    eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-      {
-        id: "naac",
-        label: "NAAC A+",
-      },
-    ],
-
-    startingFee: "₹60,000/Sem",
-
-    emi: "₹10,000/Month",
-
-    placementSupport: "Yes",
-
-    brochureUrl: "#",
-
-    websiteUrl: "#",
-
-    featured: false,
-  },
-
-  {
-    id: "subharti-online",
-
-    slug: "subharti-online",
-
-    name: "Shubharti Online",
-
-    logo: "/universities/subharti.png",
-
-    rating: 4.2,
-
-    reviewCount: 245,
-
-    studyMode: "Online MBA",
-
-    duration: "2 Years",
-
-    eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-      {
-        id: "naac",
-        label: "NAAC A+",
-      },
-    ],
-
-    startingFee: "₹57,500/Sem",
-
-    emi: "₹9,583/Month",
-
-    placementSupport: "Yes",
-
-    brochureUrl: "#",
-
-    websiteUrl: "#",
-
-    featured: false,
-  },
-
-  {
-    id: "sastra-online",
-
-    slug: "sastra-online",
-
-    name: "Sastra University",
-
-    logo: "/universities/sastra.png",
-
-    rating: 4.4,
-
-    reviewCount: 512,
-
-    studyMode: "Online MBA",
-
-    duration: "2 Years",
-
-    eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-      {
-        id: "naac",
-        label: "NAAC A+",
-      },
-    ],
-
-    startingFee: "₹62,500/Sem",
-
-    emi: "₹10,417/Month",
-
-    placementSupport: "Yes",
-
-    brochureUrl: "#",
-
-    websiteUrl: "#",
-
-    featured: false,
-  },
-
-  {
-    id: "uttaranchal-online",
-
-    slug: "uttaranchal-online",
-
-    name: "Uttaranchal University",
-
-    logo: "/universities/uttaranchal.png",
-
-    rating: 4.3,
-
-    reviewCount: 387,
-
-    studyMode: "Online MBA",
-
-    duration: "2 Years",
-
-    eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-      {
-        id: "naac",
-        label: "NAAC A+",
-      },
-    ],
-
-    startingFee: "₹47,500/Sem",
-
-    emi: "₹7,917/Month",
-
-    placementSupport: "Yes",
-
-    brochureUrl: "#",
-
-    websiteUrl: "#",
-
-    featured: false,
-  },
-
-  // =============================================
-  // Additional Universities (with logo assets)
-  // TODO: Replace placeholder data with actual values
-  // =============================================
-
-  {
     id: "acharya-online",
-
     slug: "acharya-online",
-
     name: "Acharya University",
-
     logo: "/universities/acharya_university.png",
-
     rating: 4.1,
-
-    studyMode: "Online & Distance MBA",
-
+    studyMode: "Online & Distance",
     duration: "2 Years",
-
     eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-    ],
-
+    approvals: [{ id: "ugc", label: "UGC" }],
     startingFee: "Contact for fee",
-
     placementSupport: "Yes",
-
     brochureUrl: "#",
-
     websiteUrl: "#",
-
     featured: false,
+  },
+
+  {
+    id: "alagappa-university",
+    slug: "alagappa-university",
+    name: "Alagappa University",
+    logo: "/universities/alagappa_university.jpg",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹80,300",
+  },
+
+  {
+    id: "amity-online",
+    slug: "amity-online",
+    name: "Amity University",
+    logo: "/universities/amity_university.png",
+    rating: 4.8,
+    reviewCount: 1254,
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    rankings: [{"source":"NIRF","value":"#32"}],
+    startingFee: "₹2,25,000",
+    emi: "₹8,292/Month",
+    placementSupport: "Yes",
+    brochureUrl: "#",
+    websiteUrl: "#",
+    featured: true,
   },
 
   {
     id: "amrita-online",
-
     slug: "amrita-online",
-
     name: "Amrita University",
-
     logo: "/universities/amrita.png",
-
     rating: 4.5,
-
-    studyMode: "Online & Distance MBA",
-
+    studyMode: "Online & Distance",
     duration: "2 Years",
-
     eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-      {
-        id: "naac",
-        label: "NAAC A++",
-      },
-    ],
-
+    approvals: [{ id: "ugc", label: "UGC" }, { id: "naac", label: "NAAC A++" }],
     startingFee: "Contact for fee",
-
     placementSupport: "Yes",
-
     brochureUrl: "#",
-
     websiteUrl: "#",
-
     featured: false,
   },
 
   {
     id: "andhra-online",
-
     slug: "andhra-online",
-
     name: "Andhra University",
-
     logo: "/universities/andhra_university.png",
-
     rating: 4.2,
-
-    studyMode: "Distance MBA",
-
-    duration: "2 Years",
-
-    eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-    ],
-
-    startingFee: "Contact for fee",
-
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹65,200",
     placementSupport: "Yes",
-
     brochureUrl: "#",
-
     websiteUrl: "#",
-
     featured: false,
   },
 
   {
+    id: "anna-university",
+    slug: "anna-university",
+    name: "Anna University",
+    logo: "/universities/anna_university.jpg",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹1,00,000",
+  },
+
+  {
+    id: "annamalai-university",
+    slug: "annamalai-university",
+    name: "Annamalai University",
+    logo: "/universities/nnamalai.png",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹35,000",
+  },
+
+  {
+    id: "assam-university",
+    slug: "assam-university",
+    name: "Assam University",
+    // TODO: logo pending - see implementation report (missing logo list)
+    logo: "/universities/assam_university.png",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹4,50,000",
+  },
+
+  {
     id: "bharathiar-online",
-
     slug: "bharathiar-online",
-
-    name: "Bharathiar University",
-
+    name: "Bharathiair University",
     logo: "/universities/bharathiair.png",
-
     rating: 4.3,
-
-    studyMode: "Distance MBA",
-
-    duration: "2 Years",
-
-    eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-      {
-        id: "naac",
-        label: "NAAC A+",
-      },
-    ],
-
-    startingFee: "Contact for fee",
-
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹70,000",
     placementSupport: "Yes",
-
     brochureUrl: "#",
-
     websiteUrl: "#",
+    featured: false,
+  },
 
+  {
+    id: "bharatidasan-university",
+    slug: "bharatidasan-university",
+    name: "Bharatidasan University",
+    logo: "/universities/bharatidasan_university.png",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹91,000",
+  },
+
+  {
+    id: "bits-pilani",
+    slug: "bits-pilani",
+    name: "BITS Pilani",
+    logo: "/universities/bits_pilani.webp",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹2,67,000",
+  },
+
+  {
+    id: "chandigarh-university-online",
+    slug: "chandigarh-university-online",
+    name: "Chandigarh University",
+    // TODO: logo pending - see implementation report (missing logo list)
+    logo: "/universities/chitkara-university.png",
+    rating: 4.5,
+    reviewCount: 712,
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹1,40,000",
+    emi: "₹13,167/Month",
+    placementSupport: "Yes",
+    brochureUrl: "#",
+    websiteUrl: "#",
     featured: false,
   },
 
   {
     id: "christ-online",
-
     slug: "christ-online",
-
-    name: "CHRIST University",
-
+    name: "Christ University",
     logo: "/universities/christ.png",
-
     rating: 4.5,
-
-    studyMode: "Online MBA",
-
-    duration: "2 Years",
-
-    eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-      {
-        id: "naac",
-        label: "NAAC A+",
-      },
-    ],
-
-    startingFee: "Contact for fee",
-
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹4,60,000",
     placementSupport: "Yes",
-
     brochureUrl: "#",
-
     websiteUrl: "#",
+    featured: false,
+  },
 
+  {
+    id: "d-y-patil-distance-mba",
+    slug: "d-y-patil-distance-mba",
+    name: "D.Y. Patil Distance MBA",
+    logo: "/universities/d_y_patil_distance_mba.webp",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹1,40,200",
+  },
+
+  {
+    id: "d-y-patil-online-mba",
+    slug: "d-y-patil-online-mba",
+    name: "D.Y. Patil Online MBA",
+    logo: "/universities/d_y_patil_online_mba.webp",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹1,40,200",
+  },
+
+  {
+    id: "d-y-patil-online-distance-mca-bca-bba",
+    slug: "d-y-patil-online-distance-mca-bca-bba",
+    name: "D.Y. Patil Online/Distance (MCA/BCA/BBA)",
+    logo: "/universities/d_y_patil_online_distance.webp",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "The Institute has been approved UGC , AICTE DY Patil University (DPU) Mumbai is inviting applications for…",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹1,40,200",
+  },
+
+  {
+    id: "dr-mgr-online",
+    slug: "dr-mgr-online",
+    name: "DR. MGR Online",
+    logo: "/universities/dr.-mgr-University.png",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹1,57,000",
+  },
+
+  {
+    id: "dypatil-online",
+    slug: "dypatil-online",
+    name: "DY Patil University",
+    logo: "/universities/dpu.png",
+    rating: 4.4,
+    reviewCount: 432,
+    studyMode: "Online & Distance",
+    duration: "2 Years",
+    eligibility: "Bachelor's Degree",
+    approvals: [{ id: "ugc", label: "UGC" }, { id: "naac", label: "NAAC A++" }],
+    startingFee: "₹84,500/Sem",
+    emi: "₹14,083/Month",
+    placementSupport: "Yes",
+    brochureUrl: "#",
+    websiteUrl: "#",
     featured: false,
   },
 
   {
     id: "gitam-online",
-
     slug: "gitam-online",
-
     name: "GITAM University",
-
     logo: "/universities/gitam.png",
-
     rating: 4.3,
-
-    studyMode: "Online MBA",
-
-    duration: "2 Years",
-
-    eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-      {
-        id: "naac",
-        label: "NAAC A+",
-      },
-    ],
-
-    startingFee: "Contact for fee",
-
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹56,000",
     placementSupport: "Yes",
-
     brochureUrl: "#",
-
     websiteUrl: "#",
-
     featured: false,
   },
 
   {
     id: "gla-online",
-
     slug: "gla-online",
-
     name: "GLA University",
-
     logo: "/universities/gla.png",
-
     rating: 4.2,
-
-    studyMode: "Online MBA",
-
-    duration: "2 Years",
-
-    eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-      {
-        id: "naac",
-        label: "NAAC A",
-      },
-    ],
-
-    startingFee: "Contact for fee",
-
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹68,000",
     placementSupport: "Yes",
-
     brochureUrl: "#",
-
     websiteUrl: "#",
-
     featured: false,
   },
 
   {
-    id: "icfai-online",
+    id: "great-lakes",
+    slug: "great-lakes",
+    name: "Great Lakes",
+    logo: "/universities/great_lakes.webp",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹3,50,000",
+  },
 
-    slug: "icfai-online",
-
-    name: "ICFAI University",
-
-    logo: "/universities/icfai.png",
-
-    rating: 4.3,
-
-    studyMode: "Online & Distance MBA",
-
+  {
+    id: "hindustan-online",
+    slug: "hindustan-online",
+    name: "Hindustan University",
+    logo: "/universities/hindustan..png",
+    rating: 4.1,
+    studyMode: "Online & Distance",
     duration: "2 Years",
-
     eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-      {
-        id: "naac",
-        label: "NAAC A+",
-      },
-    ],
-
+    approvals: [{ id: "ugc", label: "UGC" }],
     startingFee: "Contact for fee",
-
     placementSupport: "Yes",
-
     brochureUrl: "#",
-
     websiteUrl: "#",
+    featured: false,
+  },
 
+  {
+    id: "icfai-distance",
+    slug: "icfai-distance",
+    name: "ICFAI Distance",
+    logo: "/universities/icfai.png",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹1,80,000",
+  },
+
+  {
+    id: "icfai-online",
+    slug: "icfai-online",
+    name: "ICFAI Online",
+    logo: "/universities/icfai.png",
+    rating: 4.3,
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹1,80,000",
+    placementSupport: "Yes",
+    brochureUrl: "#",
+    websiteUrl: "#",
     featured: false,
   },
 
   {
     id: "ignou-distance",
-
     slug: "ignou-distance",
-
     name: "IGNOU",
-
     logo: "/universities/ignou.png",
-
     rating: 4.4,
-
-    studyMode: "Distance MBA",
-
+    studyMode: "Online & Distance",
     duration: "2 Years",
-
     eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-      {
-        id: "aicte",
-        label: "AICTE",
-      },
-    ],
-
+    approvals: [{ id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
     startingFee: "Contact for fee",
-
     placementSupport: "Yes",
-
     brochureUrl: "#",
-
     websiteUrl: "#",
-
     featured: false,
+  },
+
+  {
+    id: "iim-ahmedabad",
+    slug: "iim-ahmedabad",
+    name: "IIM Ahmedabad",
+    logo: "/universities/iim_ahmedabad.webp",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹20,00,000",
+  },
+
+  {
+    id: "iim-amritsar",
+    slug: "iim-amritsar",
+    name: "IIM Amritsar",
+    logo: "/universities/iim_amritsar.jpg",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹12,00,000",
+  },
+
+  {
+    id: "iim-banglore",
+    slug: "iim-banglore",
+    name: "IIM Banglore",
+    logo: "/universities/iim_bangalore.png",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Eligibility: Graduation in any discipline or equivalent from a recognized university with minimum 50% Marks.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹26,00,000",
+  },
+
+  {
+    id: "iim-bodh-gaya",
+    slug: "iim-bodh-gaya",
+    name: "IIM Bodh gaya",
+    logo: "/universities/iim_bodh_gaya.jpg",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹15,50,000",
+  },
+
+  {
+    id: "iim-calcutta",
+    slug: "iim-calcutta",
+    name: "IIM Calcutta",
+    logo: "/universities/iim_calcutta.jpg",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹13,00,000",
+  },
+
+  {
+    id: "iim-indore",
+    slug: "iim-indore",
+    name: "IIM Indore",
+    logo: "/universities/iim_indore.jpg",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹22,11,800",
+  },
+
+  {
+    id: "iim-jammu",
+    slug: "iim-jammu",
+    name: "IIM Jammu",
+    logo: "/universities/iim_jammu.jpg",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹9,92,250",
+  },
+
+  {
+    id: "iim-kashipur",
+    slug: "iim-kashipur",
+    name: "IIM Kashipur",
+    logo: "/universities/iim_kashipur.jpg",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹12,00,000",
+  },
+
+  {
+    id: "iim-kozhikode",
+    slug: "iim-kozhikode",
+    name: "IIM Kozhikode",
+    logo: "/universities/iim_kozhikode.png",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹14,70,000",
+  },
+
+  {
+    id: "iim-lucknow",
+    slug: "iim-lucknow",
+    name: "IIM Lucknow",
+    logo: "/universities/iim_lucknow.webp",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹11,15,000",
+  },
+
+  {
+    id: "iim-mumbai",
+    slug: "iim-mumbai",
+    name: "IIM Mumbai",
+    logo: "/universities/iim_mumbai.png",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Eligibility: Graduation in any discipline or equivalent from a recognized university with minimum 50% Marks.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹10,00,000",
+  },
+
+  {
+    id: "iim-nagpur",
+    slug: "iim-nagpur",
+    name: "IIM Nagpur",
+    logo: "/universities/iim_nagpur.jpg",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹18,90,000",
+  },
+
+  {
+    id: "iim-raipur",
+    slug: "iim-raipur",
+    name: "IIM Raipur",
+    logo: "/universities/iim_raipur.jpg",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹18,00,000",
+  },
+
+  {
+    id: "iim-ranchi",
+    slug: "iim-ranchi",
+    name: "IIM Ranchi",
+    logo: "/universities/iim_ranchi.jpg",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹12,50,000",
+  },
+
+  {
+    id: "iim-rohtak",
+    slug: "iim-rohtak",
+    name: "IIM Rohtak",
+    logo: "/universities/iim_rohtak.webp",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹6,95,000",
+  },
+
+  {
+    id: "iim-sambalpur",
+    slug: "iim-sambalpur",
+    name: "IIM Sambalpur",
+    logo: "/universities/iim_sambalpur.jpg",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }, { id: "amba", label: "AMBA" }],
+    startingFee: "₹12,00,000",
+  },
+
+  {
+    id: "iim-shillong",
+    slug: "iim-shillong",
+    name: "IIM Shillong",
+    logo: "/universities/iim_shillong.jpg",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹22,71,000",
+  },
+
+  {
+    id: "iim-sirmaur",
+    slug: "iim-sirmaur",
+    name: "IIM Sirmaur",
+    logo: "/universities/iim_sirmaur.jpg",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹16,00,000",
+  },
+
+  {
+    id: "iim-udaipur",
+    slug: "iim-udaipur",
+    name: "IIM Udaipur",
+    logo: "/universities/iim_udaipur.jpg",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹14,20,800",
+  },
+
+  {
+    id: "iim-vishakhapatnam",
+    slug: "iim-vishakhapatnam",
+    name: "IIM Vishakhapatnam",
+    logo: "/universities/iim_visakhapatnam.jpg",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹1,80,000",
+  },
+
+  {
+    id: "imt-centre-for-distance-learning",
+    slug: "imt-centre-for-distance-learning",
+    name: "IMT Centre for Distance Learning",
+    logo: "/universities/imt.png",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹10,10,500",
+  },
+
+  {
+    id: "imt-centre-for-online-learning",
+    slug: "imt-centre-for-online-learning",
+    name: "IMT Centre for Online Learning",
+    logo: "/universities/imt.png",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹1,10,500",
+  },
+
+  {
+    id: "indian-school-of-business",
+    slug: "indian-school-of-business",
+    name: "Indian School of Business",
+    logo: "/universities/indian_school_of_business.webp",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹2,00,000",
+  },
+
+  {
+    id: "jagsom-university",
+    slug: "jagsom-university",
+    name: "Jagsom University",
+    logo: "/universities/jagsom_university.webp",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹2,00,000",
+  },
+
+  {
+    id: "jain-online",
+    slug: "jain-online",
+    name: "Jain University Distance MBA",
+    logo: "/universities/jain.png",
+    rating: 4.5,
+    reviewCount: 567,
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹2,00,000",
+    emi: "₹13,333/Month",
+    placementSupport: "Yes",
+    brochureUrl: "#",
+    websiteUrl: "#",
+    featured: false,
+  },
+
+  {
+    id: "jain-university-online-mba",
+    slug: "jain-university-online-mba",
+    name: "Jain University Online MBA",
+    logo: "/universities/jain.png",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹2,00,000",
+  },
+
+  {
+    id: "jain-university-online-distance-mca-bca-bba",
+    slug: "jain-university-online-distance-mca-bca-bba",
+    name: "Jain University Online/Distance (MCA/BCA/BBA)",
+    logo: "/universities/jain.png",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Approved by UGC The Jain Online University functions under the wing of JAIN Group, an establis…",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹2,00,000",
+  },
+
+  {
+    id: "jaipur-national-university",
+    slug: "jaipur-national-university",
+    name: "Jaipur National University",
+    logo: "/universities/jaipur_national_university.webp",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹50,000",
+  },
+
+  {
+    id: "jecrc-university",
+    slug: "jecrc-university",
+    name: "JECRC University",
+    logo: "/universities/jecrc.png",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹52,500",
   },
 
   {
     id: "kl-university-online",
-
     slug: "kl-university-online",
-
     name: "KL University",
-
     logo: "/universities/kl_university.png",
-
     rating: 4.4,
-
-    studyMode: "Online MBA",
-
+    studyMode: "Online & Distance",
     duration: "2 Years",
-
     eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-      {
-        id: "naac",
-        label: "NAAC A++",
-      },
-    ],
-
+    approvals: [{ id: "ugc", label: "UGC" }, { id: "naac", label: "NAAC A++" }],
     startingFee: "Contact for fee",
-
     placementSupport: "Yes",
-
     brochureUrl: "#",
-
     websiteUrl: "#",
-
     featured: false,
+  },
+
+  {
+    id: "lpu-distance-mba",
+    slug: "lpu-distance-mba",
+    name: "LPU Distance MBA",
+    logo: "/universities/lpu.png",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹54,000",
+  },
+
+  {
+    id: "lpu-online",
+    slug: "lpu-online",
+    name: "LPU Online",
+    logo: "/universities/lpu.png",
+    rating: 4.7,
+    reviewCount: 982,
+    studyMode: "Online & Distance",
+    duration: "2 Years",
+    eligibility: "Bachelor's Degree",
+    approvals: [{ id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    rankings: [{"source":"NIRF","value":"#27"}],
+    startingFee: "₹45,000/Sem",
+    emi: "₹7,500/Month",
+    placementSupport: "Yes",
+    brochureUrl: "#",
+    websiteUrl: "#",
+    featured: true,
+  },
+
+  {
+    id: "lpu-online-mba",
+    slug: "lpu-online-mba",
+    name: "LPU Online MBA",
+    logo: "/universities/lpu.png",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹54,000",
+  },
+
+  {
+    id: "lpu-online-distance-mca-bca-bba",
+    slug: "lpu-online-distance-mca-bca-bba",
+    name: "LPU Online/Distance (MCA/BCA/BBA)",
+    logo: "/universities/lpu.png",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Recognized by UGC and is also a member of AIU. LPU Online Education has a dedicated placement cell …",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }, { id: "aiu", label: "AIU" }],
+    startingFee: "₹54,000",
+  },
+
+  {
+    id: "manipal-jaipur-online",
+    slug: "manipal-jaipur-online",
+    name: "Manipal University Jaipur",
+    logo: "/universities/manipal.png",
+    rating: 4.6,
+    reviewCount: 834,
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹1,66,000",
+    emi: "₹14,583/Month",
+    placementSupport: "Yes",
+    brochureUrl: "#",
+    websiteUrl: "#",
+    featured: false,
+  },
+
+  {
+    id: "mica-ahmedabad",
+    slug: "mica-ahmedabad",
+    name: "MICA Ahmedabad",
+    logo: "/universities/mica.png",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹1,25,000",
+  },
+
+  {
+    id: "mit-school-of-distance-education",
+    slug: "mit-school-of-distance-education",
+    name: "MIT School of Distance Education",
+    logo: "/universities/mit_school_of_distance_education.webp",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹2,50,000",
+  },
+
+  {
+    id: "mit-school-of-online-education",
+    slug: "mit-school-of-online-education",
+    name: "MIT School of Online Education",
+    logo: "/universities/mit_school_of_online_education.webp",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹65,000 to ₹2,50,000/-",
   },
 
   {
     id: "mit-online",
-
     slug: "mit-online",
-
     name: "MIT University",
-
     logo: "/universities/mit.png",
-
     rating: 4.3,
-
-    studyMode: "Online MBA",
-
+    studyMode: "Online & Distance",
     duration: "2 Years",
-
     eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-      {
-        id: "naac",
-        label: "NAAC A+",
-      },
-    ],
-
+    approvals: [{ id: "ugc", label: "UGC" }, { id: "naac", label: "NAAC A+" }],
     startingFee: "Contact for fee",
-
     placementSupport: "Yes",
-
     brochureUrl: "#",
-
     websiteUrl: "#",
-
     featured: false,
+  },
+
+  {
+    id: "nmims-online",
+    slug: "nmims-online",
+    name: "NMIMS-SCE",
+    logo: "/universities/nmims.png",
+    rating: 4.7,
+    reviewCount: 1123,
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    rankings: [{"source":"NIRF","value":"#41"}],
+    startingFee: "₹1,44,000",
+    emi: "₹17,500/Month",
+    placementSupport: "Yes",
+    brochureUrl: "#",
+    websiteUrl: "#",
+    featured: false,
+  },
+
+  {
+    id: "o-p-jindal-global-university",
+    slug: "o-p-jindal-global-university",
+    name: "O.P. Jindal Global University",
+    logo: "/universities/o_p_jindal_global_university.webp",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹1,75,000",
+  },
+
+  {
+    id: "panjab-university",
+    slug: "panjab-university",
+    name: "Panjab University",
+    logo: "/universities/panjab_university.webp",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹1,00,000",
   },
 
   {
     id: "parul-online",
-
     slug: "parul-online",
-
     name: "Parul University",
-
     logo: "/universities/parul_university.png",
-
     rating: 4.2,
-
-    studyMode: "Online MBA",
-
-    duration: "2 Years",
-
-    eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-      {
-        id: "naac",
-        label: "NAAC A+",
-      },
-    ],
-
-    startingFee: "Contact for fee",
-
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹90,000",
     placementSupport: "Yes",
-
     brochureUrl: "#",
-
     websiteUrl: "#",
-
     featured: false,
   },
 
   {
-    id: "vit-online",
-
-    slug: "vit-online",
-
-    name: "VIT University",
-
-    logo: "/universities/vit.png",
-
-    rating: 4.5,
-
-    studyMode: "Online MBA",
-
-    duration: "2 Years",
-
-    eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-      {
-        id: "naac",
-        label: "NAAC A+",
-      },
-    ],
-
-    rankings: [
-      {
-        source: "NIRF",
-        value: "#25",
-      },
-    ],
-
-    startingFee: "Contact for fee",
-
-    placementSupport: "Yes",
-
-    brochureUrl: "#",
-
-    websiteUrl: "#",
-
-    featured: false,
+    id: "pondicherry-university",
+    slug: "pondicherry-university",
+    name: "Pondicherry University",
+    logo: "/universities/pondicherry_university.png",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹75,000",
   },
 
   {
-    id: "srm-online",
-
-    slug: "srm-online",
-
-    name: "SRM University",
-
-    logo: "/universities/srm.png",
-
-    rating: 4.3,
-
-    studyMode: "Online MBA",
-
-    duration: "2 Years",
-
-    eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-      {
-        id: "naac",
-        label: "NAAC A++",
-      },
-    ],
-
-    startingFee: "Contact for fee",
-
-    placementSupport: "Yes",
-
-    brochureUrl: "#",
-
-    websiteUrl: "#",
-
-    featured: false,
+    id: "sambalpur-university",
+    slug: "sambalpur-university",
+    name: "Sambalpur University",
+    logo: "/universities/sambalpur_university.webp",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }, { id: "amba", label: "AMBA" }],
+    startingFee: "₹62,000",
   },
 
   {
-    id: "hindustan-online",
-
-    slug: "hindustan-online",
-
-    name: "Hindustan University",
-
-    logo: "/universities/hindustan..png",
-
-    rating: 4.1,
-
-    studyMode: "Online MBA",
-
+    id: "sastra-online",
+    slug: "sastra-online",
+    name: "Sastra University",
+    logo: "/universities/sastra.png",
+    rating: 4.4,
+    reviewCount: 512,
+    studyMode: "Online & Distance",
     duration: "2 Years",
-
     eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-    ],
-
-    startingFee: "Contact for fee",
-
+    approvals: [{ id: "ugc", label: "UGC" }, { id: "naac", label: "NAAC A+" }],
+    startingFee: "₹62,500/Sem",
+    emi: "₹10,417/Month",
     placementSupport: "Yes",
-
     brochureUrl: "#",
-
     websiteUrl: "#",
-
     featured: false,
   },
 
   {
     id: "sathyabama-online",
-
     slug: "sathyabama-online",
-
     name: "Sathyabama University",
-
     logo: "/universities/satyabama.png",
-
     rating: 4.2,
-
-    studyMode: "Online MBA",
-
+    studyMode: "Online & Distance",
     duration: "2 Years",
-
     eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-      {
-        id: "naac",
-        label: "NAAC A+",
-      },
-    ],
-
+    approvals: [{ id: "ugc", label: "UGC" }, { id: "naac", label: "NAAC A+" }],
     startingFee: "Contact for fee",
-
     placementSupport: "Yes",
-
     brochureUrl: "#",
-
     websiteUrl: "#",
-
     featured: false,
   },
 
   {
+    id: "savitribai-phule-pune-university",
+    slug: "savitribai-phule-pune-university",
+    name: "Savitribai Phule Pune University",
+    logo: "/universities/savitribai_phule_pune_university.webp",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹67,600",
+  },
+
+  {
+    id: "sharda-university",
+    slug: "sharda-university",
+    name: "Sharda University",
+    logo: "/universities/sharda_university.webp",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹1,00,000",
+  },
+
+  {
     id: "shivnadar-online",
-
     slug: "shivnadar-online",
-
     name: "Shiv Nadar University",
-
     logo: "/universities/shivnandar.png",
-
     rating: 4.3,
-
-    studyMode: "Online MBA",
-
-    duration: "2 Years",
-
-    eligibility: "Bachelor's Degree",
-
-    approvals: [
-      {
-        id: "ugc",
-        label: "UGC",
-      },
-      {
-        id: "naac",
-        label: "NAAC A",
-      },
-    ],
-
-    startingFee: "Contact for fee",
-
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹1,00,000",
     placementSupport: "Yes",
-
     brochureUrl: "#",
-
     websiteUrl: "#",
-
     featured: false,
   },
+
+  {
+    id: "shoolini-online",
+    slug: "shoolini-online",
+    name: "Shoolini University",
+    logo: "/universities/shoolini_university.png",
+    rating: 4.3,
+    reviewCount: 321,
+    studyMode: "Online & Distance",
+    duration: "2 Years",
+    eligibility: "Bachelor's Degree",
+    approvals: [{ id: "ugc", label: "UGC" }, { id: "naac", label: "NAAC A+" }],
+    startingFee: "₹60,000/Sem",
+    emi: "₹10,000/Month",
+    placementSupport: "Yes",
+    brochureUrl: "#",
+    websiteUrl: "#",
+    featured: false,
+  },
+
+  {
+    id: "sikkim-manipal-university",
+    slug: "sikkim-manipal-university",
+    name: "Sikkim Manipal University",
+    // TODO: logo pending - see implementation report (missing logo list)
+    logo: "/universities/sikkim_manipal_university.png",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹85,000",
+  },
+
+  {
+    id: "sp-jain-university",
+    slug: "sp-jain-university",
+    name: "SP Jain University",
+    logo: "/universities/sp_jain.png",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹15,00,000",
+  },
+
+  {
+    id: "srm-distance-education",
+    slug: "srm-distance-education",
+    name: "SRM Distance Education",
+    logo: "/universities/srm.png",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹1,89,000",
+  },
+
+  {
+    id: "srm-online-education",
+    slug: "srm-online-education",
+    name: "SRM Online Education",
+    logo: "/universities/srm.png",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹1,89,000",
+  },
+
+  {
+    id: "srm-online",
+    slug: "srm-online",
+    name: "SRM University",
+    logo: "/universities/srm.png",
+    rating: 4.3,
+    studyMode: "Online & Distance",
+    duration: "2 Years",
+    eligibility: "Bachelor's Degree",
+    approvals: [{ id: "ugc", label: "UGC" }, { id: "naac", label: "NAAC A++" }],
+    startingFee: "Contact for fee",
+    placementSupport: "Yes",
+    brochureUrl: "#",
+    websiteUrl: "#",
+    featured: false,
+  },
+
+  {
+    id: "subharti-online",
+    slug: "subharti-online",
+    name: "Subharti University",
+    logo: "/universities/subharti.png",
+    rating: 4.2,
+    reviewCount: 245,
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹53,000",
+    emi: "₹9,583/Month",
+    placementSupport: "Yes",
+    brochureUrl: "#",
+    websiteUrl: "#",
+    featured: false,
+  },
+
+  {
+    id: "suresh-gyaan-vihar-university",
+    slug: "suresh-gyaan-vihar-university",
+    name: "Suresh Gyaan Vihar University",
+    logo: "/universities/suresh_gyaan_vihar_university.webp",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹80,000",
+  },
+
+  {
+    id: "symbiosis-scdl",
+    slug: "symbiosis-scdl",
+    name: "Symbiosis (SCDL)",
+    logo: "/universities/symbiosis.png",
+    studyMode: "Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹58,000",
+  },
+
+  {
+    id: "symbiosis-ssodl",
+    slug: "symbiosis-ssodl",
+    name: "Symbiosis (SSODL)",
+    logo: "/universities/symbiosis.png",
+    studyMode: "Online",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹1,50,000",
+  },
+
+  {
+    id: "symbiosis-centre-for-distance-learning-scdl",
+    slug: "symbiosis-centre-for-distance-learning-scdl",
+    name: "Symbiosis Centre for Distance Learning (SCDL)",
+    logo: "/universities/symbiosis.png",
+    studyMode: "Distance",
+    duration: "2 years",
+    eligibility: "Eligibility: Graduation in any discipline or equivalent from a recognized university with minimum 50% Marks.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹58,000",
+  },
+
+  {
+    id: "symbiosis-centre-for-online-learning-ssodl",
+    slug: "symbiosis-centre-for-online-learning-ssodl",
+    name: "Symbiosis Centre for Online Learning (SSODL)",
+    logo: "/universities/symbiosis.png",
+    studyMode: "Online",
+    duration: "2 years",
+    eligibility: "Eligibility: Graduation in any discipline or equivalent from a recognized university with minimum 50% Marks.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹2,99,000",
+  },
+
+  {
+    id: "symbiosis-online",
+    slug: "symbiosis-online",
+    name: "Symbiosis University",
+    logo: "/universities/symbiosis.png",
+    rating: 4.6,
+    reviewCount: 876,
+    studyMode: "Online & Distance",
+    duration: "2 Years",
+    eligibility: "Bachelor's Degree",
+    approvals: [{ id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }, { id: "naac", label: "NAAC A+" }],
+    rankings: [{"source":"NIRF","value":"#37"}],
+    startingFee: "₹79,000/Sem",
+    emi: "₹13,167/Month",
+    placementSupport: "Yes",
+    brochureUrl: "#",
+    websiteUrl: "#",
+    featured: false,
+  },
+
+  {
+    id: "university-of-madras",
+    slug: "university-of-madras",
+    name: "University of Madras",
+    // TODO: logo pending - see implementation report (missing logo list)
+    logo: "/universities/university_of_madras.png",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹21,950",
+  },
+
+  {
+    id: "upes-online",
+    slug: "upes-online",
+    name: "UPES",
+    logo: "/universities/upes.png",
+    rating: 4.5,
+    reviewCount: 654,
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹1,35,000",
+    emi: "₹12,500/Month",
+    placementSupport: "Yes",
+    brochureUrl: "#",
+    websiteUrl: "#",
+    featured: false,
+  },
+
+  {
+    id: "utkal-university-ddce",
+    slug: "utkal-university-ddce",
+    name: "Utkal University DDCE",
+    logo: "/universities/utkal_university_ddce.jpg",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹73,000",
+  },
+
+  {
+    id: "uttaranchal-online",
+    slug: "uttaranchal-online",
+    name: "Uttaranchal University",
+    logo: "/universities/uttaranchal.png",
+    rating: 4.3,
+    reviewCount: 387,
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹92,000",
+    emi: "₹7,917/Month",
+    placementSupport: "Yes",
+    brochureUrl: "#",
+    websiteUrl: "#",
+    featured: false,
+  },
+
+  {
+    id: "vekanteshwara-university-distance",
+    slug: "vekanteshwara-university-distance",
+    name: "Vekanteshwara University Distance",
+    logo: "/universities/venkateshwara_university_distance.png",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹1,03,225",
+  },
+
+  {
+    id: "vekanteshwara-university-online",
+    slug: "vekanteshwara-university-online",
+    name: "Vekanteshwara University Online",
+    logo: "/universities/venkateshwara_university_online.png",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹1,03,225",
+  },
+
+  {
+    id: "vit-online",
+    slug: "vit-online",
+    name: "VIT University",
+    logo: "/universities/vit.png",
+    rating: 4.5,
+    studyMode: "Online & Distance",
+    duration: "2 Years",
+    eligibility: "Bachelor's Degree",
+    approvals: [{ id: "ugc", label: "UGC" }, { id: "naac", label: "NAAC A+" }],
+    rankings: [{"source":"NIRF","value":"#25"}],
+    startingFee: "Contact for fee",
+    placementSupport: "Yes",
+    brochureUrl: "#",
+    websiteUrl: "#",
+    featured: false,
+  },
+
+  {
+    id: "welingkar-distance-mba",
+    slug: "welingkar-distance-mba",
+    name: "Welingkar Distance MBA",
+    logo: "/universities/welingkar_distance_mba.png",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹1,10,000",
+  },
+
+  {
+    id: "welingkar-online-mba",
+    slug: "welingkar-online-mba",
+    name: "Welingkar Online MBA",
+    logo: "/universities/welingkar_online_mba.png",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹1,01,000",
+  },
+
+  {
+    id: "welingkar-online-distance-mca-bca-bba",
+    slug: "welingkar-online-distance-mca-bca-bba",
+    name: "Welingkar Online/Distance (MCA/BCA/BBA)",
+    logo: "/universities/welingkar_online_distance.png",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Recognized by the All India Council for Technical Education WeSchool Mumbai offers MMS,PGDM,P…",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹1,01,000",
+  },
+
+  {
+    id: "xlri-xavier-school-of-management",
+    slug: "xlri-xavier-school-of-management",
+    name: "XLRI - Xavier School of Management",
+    logo: "/universities/xlri.png",
+    studyMode: "Online & Distance",
+    duration: "2 years",
+    eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
+    approvals: [{ id: "naac-a", label: "NAAC A+" }, { id: "ugc", label: "UGC" }, { id: "aicte", label: "AICTE" }],
+    startingFee: "₹4,00,000",
+  },
+
 ];

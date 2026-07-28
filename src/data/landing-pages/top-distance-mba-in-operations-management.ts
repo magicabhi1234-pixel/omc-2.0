@@ -59,8 +59,10 @@ export const topDistanceMBAInOperationsManagement: LandingPageData = {
   faq: {
     heading: "Frequently Asked Questions",
     faqs: [
-      { question: "What is a Distance MBA in Operations Management?", answer: "It is a 2-year program focusing on supply chain, logistics, production, and quality management." },
-      { question: "What career options are available after an MBA in Operations?", answer: "Roles include Operations Manager, Supply Chain Manager, Logistics Manager, and Production Manager." },
+      { question: "Is Online MBA valid?", answer: "Yes, a Online MBA is a legitimate degree. The institute which is accepted by UGC-DEB is accredited to provide a valid Online education degree." },
+      { question: "Does Online learning help in career growth?", answer: "Online Learning Degree is the most in Demand skills for Working Professionals these days. Online learning aids in occupation development and opportunities. The majority of business urge their staff members the obtaining higher education to boost as well as improve their capability." },
+      { question: "Does MNC and government jobs do take into consideration a Online education?", answer: "Yes, UGC-DEB Approved Online course degree stands for private as well as govt. jobs." },
+      { question: "What is the difference in between Online learning as well as Online discovering?", answer: "In Online discovering the studies are one side. Course material is supplied by the institute and also self-learning is the primary purpose. Whereas Online learning is a kind of Online course, where Online Classes and Research is conducted between Teachers and Student by using the internet with the help of laptop computer, mobile, or tablet computer. A dedicated mentor is also assigned to the Students to help them through out their course duration." },
     ],
   },
 

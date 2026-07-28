@@ -25,7 +25,24 @@ export const topDistanceMBAInExecutiveMBAIIM: LandingPageData = {
     badge: "Top Programs",
     heading: "Compare Top Executive MBA & Distance MBA Programs",
     description: "Select the best program based on fees, rankings, approvals and placements.",
-    universities: ["amity-online", "lpu-online", "nmims-online", "symbiosis-online", "jain-online", "manipal-jaipur-online", "upes-online", "vit-online", "icfai-online", "ignou-distance"],
+    universities: [
+      "iim-kozhikode",
+      "iim-lucknow",
+      "iim-indore",
+      "iim-raipur",
+      "iim-rohtak",
+      "iim-udaipur",
+      "iim-kashipur",
+      "iim-ranchi",
+      "iim-shillong",
+      "iim-vishakhapatnam",
+      "iim-jammu",
+      "iim-nagpur",
+      "iim-amritsar",
+      "iim-bodh-gaya",
+      "iim-sambalpur",
+      "iim-sirmaur",
+    ],
   },
 
   compareSection: {
@@ -59,8 +76,10 @@ export const topDistanceMBAInExecutiveMBAIIM: LandingPageData = {
   faq: {
     heading: "Frequently Asked Questions",
     faqs: [
-      { question: "What is the difference between Executive MBA and Distance MBA?", answer: "Executive MBA is designed for senior professionals with work experience, while Distance MBA is open to all graduates." },
-      { question: "Are IIM Executive MBAs valid?", answer: "Yes, Executive MBAs from IIMs are highly recognized and valued in the corporate world." },
+      { question: "Is Online MBA valid?", answer: "Yes, a Online MBA is a legitimate degree. The institute which is accepted by UGC-DEB is accredited to provide a valid Online education degree." },
+      { question: "Does Online learning help in career growth?", answer: "Online Learning Degree is the most in Demand skills for Working Professionals these days. Online learning aids in occupation development and opportunities. The majority of business urge their staff members the obtaining higher education to boost as well as improve their capability." },
+      { question: "Does MNC and government jobs do take into consideration a Online education?", answer: "Yes, UGC-DEB Approved Online course degree stands for private as well as govt. jobs." },
+      { question: "What is the difference in between Online learning as well as Online discovering?", answer: "In Online discovering the studies are one side. Course material is supplied by the institute and also self-learning is the primary purpose. Whereas Online learning is a kind of Online course, where Online Classes and Research is conducted between Teachers and Student by using the internet with the help of laptop computer, mobile, or tablet computer. A dedicated mentor is also assigned to the Students to help them through out their course duration." },
     ],
   },
 
