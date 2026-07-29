@@ -1,5 +1,3 @@
-import type { Metadata } from "next";
-
 import Hero from "@/components/landing/hero";
 import Stats from "@/components/landing/stats";
 import UniversityGrid from "@/components/landing/university-grid";
@@ -9,13 +7,14 @@ import Specializations from "@/components/landing/specializations";
 import ScholarshipBanner from "@/components/landing/scholarship-banner";
 import FAQ from "@/components/landing/faq";
 import CTA from "@/components/landing/cta";
+import { buildMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
-  title:
-    "Top Distance MBA Colleges & Universities in North India 2026",
+export const metadata = buildMetadata({
+  title: "Top Distance MBA Colleges & Universities in North India 2026",
   description:
     "Compare top Distance MBA colleges and universities in North India. Check fees, NAAC grades, UGC approval, placements, scholarships and admission process for 2026.",
-};
+  path: "/top-colleges-university-in-north-zone",
+});
 
 export default function Page() {
   return (

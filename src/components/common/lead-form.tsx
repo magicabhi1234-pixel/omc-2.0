@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useId, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function LeadForm() {
   const router = useRouter();
+  const formId = useId();
+  const fieldId = (name: string) => `${formId}-${name}`;
 
   const [loading, setLoading] = useState(false);
   const [submitError, setSubmitError] = useState("");
@@ -20,6 +22,7 @@ export default function LeadForm() {
   const [errors, setErrors] = useState({
     name: "",
     mobile: "",
+    email: "",
     specialization: "",
   });
 
@@ -45,6 +48,7 @@ export default function LeadForm() {
     const newErrors = {
       name: "",
       mobile: "",
+      email: "",
       specialization: "",
     };
 
@@ -67,6 +71,11 @@ export default function LeadForm() {
     ) {
       newErrors.mobile =
         "Please enter a valid 10-digit mobile number";
+      isValid = false;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      newErrors.email = "Please enter a valid email address";
       isValid = false;
     }
 
@@ -126,9 +135,9 @@ export default function LeadForm() {
     >
       {/* Name */}
       <div>
-        <label className="sr-only" htmlFor="lead-name">Full name</label>
+        <label className="sr-only" htmlFor={fieldId("name")}>Full name</label>
         <input
-          id="lead-name"
+          id={fieldId("name")}
           type="text"
           name="name"
           placeholder="Full Name *"
@@ -136,12 +145,12 @@ export default function LeadForm() {
           onChange={handleChange}
           autoComplete="name"
           aria-invalid={Boolean(errors.name)}
-          aria-describedby={errors.name ? "lead-name-error" : undefined}
+          aria-describedby={errors.name ? fieldId("name-error") : undefined}
           className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 outline-none focus:border-[#0B3B68]"
         />
 
         {errors.name && (
-          <p id="lead-name-error" className="mt-1 text-sm text-red-600" role="alert">
+          <p id={fieldId("name-error")} className="mt-1 text-sm text-red-600" role="alert">
             {errors.name}
           </p>
         )}
@@ -149,9 +158,9 @@ export default function LeadForm() {
 
       {/* Mobile */}
       <div>
-        <label className="sr-only" htmlFor="lead-mobile">Mobile number</label>
+        <label className="sr-only" htmlFor={fieldId("mobile")}>Mobile number</label>
         <input
-          id="lead-mobile"
+          id={fieldId("mobile")}
           type="tel"
           name="mobile"
           placeholder="Mobile Number *"
@@ -177,12 +186,12 @@ export default function LeadForm() {
           inputMode="numeric"
           autoComplete="tel-national"
           aria-invalid={Boolean(errors.mobile)}
-          aria-describedby={errors.mobile ? "lead-mobile-error" : undefined}
+          aria-describedby={errors.mobile ? fieldId("mobile-error") : undefined}
           className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 outline-none focus:border-[#0B3B68]"
         />
 
         {errors.mobile && (
-          <p id="lead-mobile-error" className="mt-1 text-sm text-red-600" role="alert">
+          <p id={fieldId("mobile-error")} className="mt-1 text-sm text-red-600" role="alert">
             {errors.mobile}
           </p>
         )}
@@ -190,26 +199,44 @@ export default function LeadForm() {
 
       {/* Email */}
       <div>
-        <label className="sr-only" htmlFor="lead-email">Email address</label>
-        <input id="lead-email" type="email" name="email" placeholder="Email Address *" value={formData.email} onChange={handleChange} autoComplete="email" className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 outline-none focus:border-[#0B3B68]" required />
+        <label className="sr-only" htmlFor={fieldId("email")}>Email address</label>
+        <input
+          id={fieldId("email")}
+          type="email"
+          name="email"
+          placeholder="Email Address *"
+          value={formData.email}
+          onChange={handleChange}
+          autoComplete="email"
+          aria-invalid={Boolean(errors.email)}
+          aria-describedby={errors.email ? fieldId("email-error") : undefined}
+          className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 outline-none focus:border-[#0B3B68]"
+          required
+        />
+
+        {errors.email && (
+          <p id={fieldId("email-error")} className="mt-1 text-sm text-red-600" role="alert">
+            {errors.email}
+          </p>
+        )}
       </div>
 
       {/* City Optional */}
       <div>
-        <label className="sr-only" htmlFor="lead-city">City</label>
-        <input id="lead-city" type="text" name="city" placeholder="City (Optional)" value={formData.city} onChange={handleChange} autoComplete="address-level2" className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 outline-none focus:border-[#0B3B68]" />
+        <label className="sr-only" htmlFor={fieldId("city")}>City</label>
+        <input id={fieldId("city")} type="text" name="city" placeholder="City (Optional)" value={formData.city} onChange={handleChange} autoComplete="address-level2" className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 outline-none focus:border-[#0B3B68]" />
       </div>
 
       {/* Specialization */}
       <div>
-        <label className="sr-only" htmlFor="lead-specialization">Specialization</label>
+        <label className="sr-only" htmlFor={fieldId("specialization")}>Specialization</label>
         <select
-          id="lead-specialization"
+          id={fieldId("specialization")}
           name="specialization"
           value={formData.specialization}
           onChange={handleChange}
           aria-invalid={Boolean(errors.specialization)}
-          aria-describedby={errors.specialization ? "lead-specialization-error" : undefined}
+          aria-describedby={errors.specialization ? fieldId("specialization-error") : undefined}
           className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 outline-none focus:border-[#0B3B68]"
         >
           <option value="">
@@ -250,7 +277,7 @@ export default function LeadForm() {
         </select>
 
         {errors.specialization && (
-          <p id="lead-specialization-error" className="mt-1 text-sm text-red-600" role="alert">
+          <p id={fieldId("specialization-error")} className="mt-1 text-sm text-red-600" role="alert">
             {errors.specialization}
           </p>
         )}

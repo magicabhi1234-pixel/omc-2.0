@@ -1,6 +1,10 @@
-export const metadata = {
+import { buildMetadata } from "@/lib/metadata";
+
+export const metadata = buildMetadata({
   title: "Terms & Conditions",
-};
+  description: "Terms and Conditions for using the Online MBA Colleges website and services.",
+  path: "/terms-and-conditions",
+});
 
 export default function TermsAndConditionsPage() {
     return (

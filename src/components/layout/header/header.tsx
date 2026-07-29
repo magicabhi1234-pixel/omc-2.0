@@ -4,16 +4,34 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Container from "@/components/common/container";
 import { navigationLinks } from "@/constants/navigation";
 
 export default function Header() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [lastPathname, setLastPathname] = useState(pathname);
 
   const isThankYouPage =
     pathname === "/thank-you";
+
+  // Close the mobile menu whenever the route changes (adjusting state during
+  // render, per React's guidance, instead of an effect + setState).
+  if (pathname !== lastPathname) {
+    setLastPathname(pathname);
+    if (mobileMenuOpen) setMobileMenuOpen(false);
+  }
+
+  // Close the mobile menu on Escape.
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMobileMenuOpen(false);
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [mobileMenuOpen]);
 
   const openPopup = () => {
     setMobileMenuOpen(false);
@@ -61,7 +79,7 @@ export default function Header() {
 
           <div className="flex items-center gap-2">
             {!isThankYouPage ? (
-              <button onClick={openPopup} className="hidden cursor-pointer rounded-xl bg-[#F47C45] px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90 sm:inline-flex">Free Counseling</button>
+              <button type="button" onClick={openPopup} className="hidden cursor-pointer rounded-xl bg-[#F47C45] px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90 sm:inline-flex">Free Counseling</button>
             ) : (
               <Link href="/" className="rounded-xl bg-[#0B3B68] px-4 py-2.5 text-sm font-semibold text-white transition hover:opacity-90 sm:px-5">Back To Home</Link>
             )}
@@ -81,7 +99,7 @@ export default function Header() {
               {navigationLinks.map((item) => (
                 <Link key={item.href} href={item.href} onClick={() => setMobileMenuOpen(false)} aria-current={pathname === item.href ? "page" : undefined} className={`rounded-lg px-3 py-3 text-sm font-medium transition hover:bg-slate-50 hover:text-[#0B3B68] ${pathname === item.href ? "bg-slate-50 text-[#0B3B68]" : "text-slate-700"}`}>{item.label}</Link>
               ))}
-              <button onClick={openPopup} className="mt-2 cursor-pointer rounded-xl bg-[#F47C45] px-4 py-3 text-sm font-semibold text-white">Free Counseling</button>
+              <button type="button" onClick={openPopup} className="mt-2 cursor-pointer rounded-xl bg-[#F47C45] px-4 py-3 text-sm font-semibold text-white">Free Counseling</button>
             </nav>
           </Container>
         </div>

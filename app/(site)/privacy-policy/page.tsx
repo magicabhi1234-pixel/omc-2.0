@@ -1,6 +1,10 @@
-export const metadata = {
+import { buildMetadata } from "@/lib/metadata";
+
+export const metadata = buildMetadata({
   title: "Privacy Policy",
-};
+  description: "Privacy Policy of Online MBA Colleges - how we collect, use and protect your information.",
+  path: "/privacy-policy",
+});
 
 export default function PrivacyPolicyPage() {
     return (

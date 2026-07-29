@@ -21,9 +21,9 @@ export default function Stats({ stats }: Props) {
               key={item.label}
               className="group rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-lg transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
             >
-              <h3 className="text-4xl font-bold text-[#0B3B68]">
+              <p className="text-4xl font-bold text-[#0B3B68]">
                 {item.value}
-              </h3>
+              </p>
               <p className="mt-3 text-slate-600">{item.label}</p>
             </div>
           ))}

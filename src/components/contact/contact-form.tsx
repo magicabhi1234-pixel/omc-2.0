@@ -1,5 +1,3 @@
-"use client";
-
 import LeadForm from "@/components/common/lead-form";
 
 export default function ContactForm() {

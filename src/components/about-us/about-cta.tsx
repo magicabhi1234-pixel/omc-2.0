@@ -1,6 +1,5 @@
-"use client";
-
 import Container from "@/components/common/container";
+import OpenPopupButton from "@/components/common/open-popup-button";
 
 export default function AboutCTA() {
   return (
@@ -18,16 +17,9 @@ export default function AboutCTA() {
             from our admission experts.
           </p>
 
-          <button
-            onClick={() =>
-              window.dispatchEvent(
-                new Event("openLeadPopup")
-              )
-            }
-            className="mt-8 cursor-pointer rounded-xl bg-[#F47C45] px-8 py-4 font-semibold text-white"
-          >
+          <OpenPopupButton className="mt-8 cursor-pointer rounded-xl bg-[#F47C45] px-8 py-4 font-semibold text-white">
             Get Free Counselling
-          </button>
+          </OpenPopupButton>
 
         </div>
 

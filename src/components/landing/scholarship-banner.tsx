@@ -1,6 +1,5 @@
-"use client";
-
 import { ScholarshipBanner as ScholarshipBannerType } from "@/types/landing";
+import OpenPopupButton from "@/components/common/open-popup-button";
 
 type Props = Partial<ScholarshipBannerType>;
 
@@ -10,12 +9,6 @@ export default function ScholarshipBanner(props: Props) {
     description = "Apply through Online MBA Colleges and get exclusive scholarship benefits, EMI options and admission assistance.",
     button = { label: "Apply For Scholarship", variant: "primary" },
   } = props;
-
-  const openPopup = () => {
-    window.dispatchEvent(
-      new Event("openLeadPopup")
-    );
-  };
 
   return (
     <section className="py-20">
@@ -33,7 +26,7 @@ export default function ScholarshipBanner(props: Props) {
             <div>
 
               <span className="rounded-full bg-white/10 px-4 py-2 text-sm backdrop-blur">
-                🎁 Limited Time Offer
+                <span aria-hidden="true">🎁</span> Limited Time Offer
               </span>
 
               <h2 className="mt-6 text-4xl font-bold md:text-5xl">
@@ -49,15 +42,15 @@ export default function ScholarshipBanner(props: Props) {
               <div className="mt-8 flex flex-wrap gap-4">
 
                 <div className="rounded-full bg-white/10 px-4 py-3 backdrop-blur">
-                  ✅ Scholarship Assistance
+                  <span aria-hidden="true">✅</span> Scholarship Assistance
                 </div>
 
                 <div className="rounded-full bg-white/10 px-4 py-3 backdrop-blur">
-                  ✅ Easy EMI Options
+                  <span aria-hidden="true">✅</span> Easy EMI Options
                 </div>
 
                 <div className="rounded-full bg-white/10 px-4 py-3 backdrop-blur">
-                  ✅ Free Counselling
+                  <span aria-hidden="true">✅</span> Free Counselling
                 </div>
 
               </div>
@@ -69,20 +62,17 @@ export default function ScholarshipBanner(props: Props) {
 
               <div className="inline-block rounded-3xl bg-white p-8 shadow-2xl">
 
-                <h3 className="text-6xl font-bold text-[#F47C45]">
+                <p className="text-6xl font-bold text-[#F47C45]">
                   ₹30K
-                </h3>
+                </p>
 
                 <p className="mt-2 text-lg font-semibold text-slate-800">
                   Scholarship Benefit
                 </p>
 
-                <button
-                  onClick={openPopup}
-                  className="mt-6 cursor-pointer rounded-xl bg-[#F47C45] px-8 py-4 font-semibold text-white transition hover:scale-105"
-                >
+                <OpenPopupButton className="mt-6 cursor-pointer rounded-xl bg-[#F47C45] px-8 py-4 font-semibold text-white transition hover:scale-105">
                   {button.label}
-                </button>
+                </OpenPopupButton>
 
               </div>
 
@@ -96,4 +86,3 @@ export default function ScholarshipBanner(props: Props) {
     </section>
   );
 }
-

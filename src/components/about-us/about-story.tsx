@@ -38,7 +38,7 @@ export default function AboutStory() {
 
               <div className="rounded-2xl bg-white p-5 shadow-sm">
                 <h3 className="text-lg font-semibold text-[#0B3B68]">
-                  🎓 50+ Universities
+                  <span aria-hidden="true">🎓</span> 50+ Universities
                 </h3>
                 <p className="mt-2 text-sm text-slate-600">
                   Compare top UGC-approved online MBA universities.
@@ -47,7 +47,7 @@ export default function AboutStory() {
 
               <div className="rounded-2xl bg-white p-5 shadow-sm">
                 <h3 className="text-lg font-semibold text-[#0B3B68]">
-                  🤖 AI Powered Comparison
+                  <span aria-hidden="true">🤖</span> AI Powered Comparison
                 </h3>
                 <p className="mt-2 text-sm text-slate-600">
                   Compare fees, rankings and placements instantly.
@@ -56,7 +56,7 @@ export default function AboutStory() {
 
               <div className="rounded-2xl bg-white p-5 shadow-sm">
                 <h3 className="text-lg font-semibold text-[#0B3B68]">
-                  📈 Career Guidance
+                  <span aria-hidden="true">📈</span> Career Guidance
                 </h3>
                 <p className="mt-2 text-sm text-slate-600">
                   Get expert counselling before admission.

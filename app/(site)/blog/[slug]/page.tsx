@@ -5,6 +5,8 @@ import Container from "@/components/common/container";
 import BlogContent from "@/components/blog/blog-content";
 import BlogCTAButton from "@/components/blog/blog-cta-button";
 import { blogPosts, allBlogSlugs } from "@/data/registry";
+import { SITE } from "@/constants/site";
+import type { BlogPost } from "@/types/blog";
 
 type PageProps = {
   params: Promise<{
@@ -52,6 +54,55 @@ function formatDate(iso: string): string {
   });
 }
 
+function BlogPostJsonLd({ post }: { post: BlogPost }) {
+  const graph: Record<string, unknown>[] = [
+    {
+      "@type": "Article",
+      "@id": post.seo.canonical,
+      headline: post.h1,
+      description: post.seo.metaDescription,
+      image: `${SITE.url}${post.featuredImage.src}`,
+      datePublished: post.publishedDate,
+      dateModified: post.lastModifiedDate ?? post.publishedDate,
+      author: {
+        "@type": "Person",
+        name: post.author,
+      },
+      publisher: {
+        "@type": "Organization",
+        name: SITE.name,
+      },
+      mainEntityOfPage: post.seo.canonical,
+    },
+  ];
+
+  if (post.faqs && post.faqs.length > 0) {
+    graph.push({
+      "@type": "FAQPage",
+      mainEntity: post.faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.answer,
+        },
+      })),
+    });
+  }
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": graph,
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
+  );
+}
+
 export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params;
   const post = blogPosts[slug];
@@ -62,6 +113,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   return (
     <article className="bg-white">
+      <BlogPostJsonLd post={post} />
 
       {/* Hero */}
       <section className="bg-gradient-to-br from-slate-50 via-blue-50 to-orange-50 py-16">
@@ -77,9 +129,9 @@ export default async function BlogPostPage({ params }: PageProps) {
             </h1>
 
             <div className="mt-6 flex flex-wrap gap-5 text-sm text-slate-500">
-              <span>📅 {formatDate(post.publishedDate)}</span>
-              {post.readingTime && <span>⏱ {post.readingTime} Read</span>}
-              <span>🎓 {post.author}</span>
+              <span><span aria-hidden="true">📅</span> {formatDate(post.publishedDate)}</span>
+              {post.readingTime && <span><span aria-hidden="true">⏱</span> {post.readingTime} Read</span>}
+              <span><span aria-hidden="true">🎓</span> {post.author}</span>
             </div>
 
           </div>
@@ -95,6 +147,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               alt={post.featuredImage.alt}
               fill
               priority
+              sizes="(max-width: 1024px) 100vw, 1024px"
               className="object-cover"
             />
           </div>

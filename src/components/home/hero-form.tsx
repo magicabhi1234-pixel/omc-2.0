@@ -1,6 +1,3 @@
-"use client";
-
-import React from "react";
 import LeadForm from "@/components/common/lead-form";
 
 export default function HeroForm() {
@@ -9,7 +6,7 @@ export default function HeroForm() {
 
       {/* Badge */}
       <div className="mb-4 inline-flex rounded-full bg-orange-100 px-4 py-2 text-xs font-semibold text-[#F47C45]">
-        🎓 Admission Open 2026
+        <span aria-hidden="true">🎓</span> Admission Open 2026
       </div>
 
       {/* Heading */}
@@ -28,7 +25,7 @@ export default function HeroForm() {
 
       {/* Trust Line */}
       <div className="mt-4 text-center text-xs text-slate-500">
-        🔒 Your information is safe and secure.
+        <span aria-hidden="true">🔒</span> Your information is safe and secure.
       </div>
 
     </div>

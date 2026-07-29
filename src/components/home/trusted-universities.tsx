@@ -1,6 +1,6 @@
-"use client";
 import Image from "next/image";
 import Container from "@/components/common/container";
+import OpenPopupButton from "@/components/common/open-popup-button";
 
 const universities = [
   {
@@ -85,16 +85,9 @@ export default function TrustedUniversities() {
               </p>
 
               {/* CTA */}
-              <button
-                onClick={() =>
-                  window.dispatchEvent(
-                    new Event("openLeadPopup")
-                  )
-                }
-                className="mt-5 w-full cursor-pointer rounded-xl border border-slate-200 py-3 text-sm font-semibold text-[#0B3B68] transition hover:bg-[#0B3B68] hover:text-white"
-              >
+              <OpenPopupButton className="mt-5 w-full cursor-pointer rounded-xl border border-slate-200 py-3 text-sm font-semibold text-[#0B3B68] transition hover:bg-[#0B3B68] hover:text-white">
                 View Details →
-              </button>
+              </OpenPopupButton>
             </div>
           ))}
         </div>

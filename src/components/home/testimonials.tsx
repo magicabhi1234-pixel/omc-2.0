@@ -1,5 +1,3 @@
-"use client";
-
 import Container from "@/components/common/container";
 
 const testimonials = [
@@ -50,7 +48,8 @@ export default function Testimonials() {
               className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
             >
               <div className="mb-4 flex text-[#F47C45]">
-                ⭐⭐⭐⭐⭐
+                <span aria-hidden="true">⭐⭐⭐⭐⭐</span>
+                <span className="sr-only">Rated 5 out of 5 stars</span>
               </div>
 
               <p className="leading-7 text-slate-600">

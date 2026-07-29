@@ -1,13 +1,12 @@
-"use client";
-
 import Container from "@/components/common/container";
+import OpenPopupButton from "@/components/common/open-popup-button";
 
 export default function CTA() {
   return (
     <section className="py-20">
       <Container>
         <div className="relative overflow-hidden rounded-[32px] bg-[#0B3B68]">
-          
+
           {/* Background Effects */}
           <div className="absolute -left-20 -top-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
           <div className="absolute -bottom-20 -right-20 h-64 w-64 rounded-full bg-[#F47C45]/20 blur-3xl" />
@@ -35,22 +34,22 @@ export default function CTA() {
 
                 <div className="mt-8 grid gap-4 sm:grid-cols-2">
                   <div className="flex items-center gap-3 text-white">
-                    <span>✓</span>
+                    <span aria-hidden="true">✓</span>
                     <span>50+ UGC Approved Universities</span>
                   </div>
 
                   <div className="flex items-center gap-3 text-white">
-                    <span>✓</span>
+                    <span aria-hidden="true">✓</span>
                     <span>AI Based Comparison</span>
                   </div>
 
                   <div className="flex items-center gap-3 text-white">
-                    <span>✓</span>
+                    <span aria-hidden="true">✓</span>
                     <span>Free Career Counselling</span>
                   </div>
 
                   <div className="flex items-center gap-3 text-white">
-                    <span>✓</span>
+                    <span aria-hidden="true">✓</span>
                     <span>Placement Insights</span>
                   </div>
                 </div>
@@ -59,7 +58,7 @@ export default function CTA() {
               {/* Right Card */}
               <div className="mx-auto w-full max-w-lg rounded-3xl bg-white p-10 text-center shadow-2xl">
 
-                <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-orange-100 text-4xl">
+                <div aria-hidden="true" className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-orange-100 text-4xl">
                   🎓
                 </div>
 
@@ -73,41 +72,23 @@ export default function CTA() {
                 </p>
 
                 <div className="mt-8 space-y-4">
-                  <button
-                    onClick={() => {
-                      if (typeof window !== "undefined") {
-                        window.dispatchEvent(
-                          new Event("openLeadPopup")
-                        );
-                      }
-                    }}
-                    className="w-full cursor-pointer rounded-xl bg-[#F47C45] py-4 font-semibold text-white transition hover:opacity-90"
-                  >
+                  <OpenPopupButton className="w-full cursor-pointer rounded-xl bg-[#F47C45] py-4 font-semibold text-white transition hover:opacity-90">
                     Get Free Counselling
-                  </button>
+                  </OpenPopupButton>
 
-                  <button
-                    onClick={() => {
-                      if (typeof window !== "undefined") {
-                        window.dispatchEvent(
-                          new Event("openLeadPopup")
-                        );
-                      }
-                    }}
-                    className="w-full cursor-pointer rounded-xl border border-slate-200 py-4 font-semibold text-slate-800 transition hover:bg-slate-50"
-                  >
+                  <OpenPopupButton className="w-full cursor-pointer rounded-xl border border-slate-200 py-4 font-semibold text-slate-800 transition hover:bg-slate-50">
                     Compare Universities
-                  </button>
+                  </OpenPopupButton>
                 </div>
 
                 <div className="mt-6 flex items-center justify-center gap-2 text-sm text-slate-500">
-                  <span>⭐</span>
+                  <span aria-hidden="true">⭐</span>
                   <span>5000+ Students Guided Successfully</span>
                 </div>
 
                 <div className="mt-8 rounded-2xl bg-slate-50 p-4">
                   <p className="text-sm text-slate-600">
-                    🎯 Trusted by students across India for MBA admissions,
+                    <span aria-hidden="true">🎯</span> Trusted by students across India for MBA admissions,
                     university comparison and career guidance.
                   </p>
                 </div>

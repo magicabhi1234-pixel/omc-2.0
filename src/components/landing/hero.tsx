@@ -1,6 +1,5 @@
-"use client";
-
 import { HeroSection } from "@/types/landing";
+import OpenPopupButton from "@/components/common/open-popup-button";
 
 type Props = Partial<HeroSection>;
 
@@ -12,12 +11,6 @@ export default function Hero(props: Props) {
     primaryButton = { label: "Apply Now", variant: "primary" },
     secondaryButton = { label: "Free Counselling", variant: "outline" },
   } = props;
-
-  const openPopup = () => {
-    window.dispatchEvent(
-      new Event("openLeadPopup")
-    );
-  };
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-[#0B3B68] via-[#123f6d] to-[#0F172A] py-20 text-white">
@@ -48,35 +41,29 @@ export default function Hero(props: Props) {
             <div className="mt-8 flex flex-wrap gap-3">
 
               <div className="rounded-full bg-white/10 px-4 py-2 backdrop-blur">
-                ✅ UGC Approved
+                <span aria-hidden="true">✅</span> UGC Approved
               </div>
 
               <div className="rounded-full bg-white/10 px-4 py-2 backdrop-blur">
-                ✅ EMI Available
+                <span aria-hidden="true">✅</span> EMI Available
               </div>
 
               <div className="rounded-full bg-white/10 px-4 py-2 backdrop-blur">
-                ✅ Placement Support
+                <span aria-hidden="true">✅</span> Placement Support
               </div>
 
             </div>
 
             <div className="mt-10 flex flex-wrap gap-4">
 
-              <button
-                onClick={openPopup}
-                className="cursor-pointer rounded-xl bg-[#F47C45] px-8 py-4 font-semibold text-white transition hover:scale-105"
-              >
+              <OpenPopupButton className="cursor-pointer rounded-xl bg-[#F47C45] px-8 py-4 font-semibold text-white transition hover:scale-105">
                 {primaryButton.label}
-              </button>
+              </OpenPopupButton>
 
               {secondaryButton && (
-                <button
-                  onClick={openPopup}
-                  className="cursor-pointer rounded-xl border border-white px-8 py-4 font-semibold text-white transition hover:bg-white hover:text-[#0B3B68]"
-                >
+                <OpenPopupButton className="cursor-pointer rounded-xl border border-white px-8 py-4 font-semibold text-white transition hover:bg-white hover:text-[#0B3B68]">
                   {secondaryButton.label}
-                </button>
+                </OpenPopupButton>
               )}
 
             </div>
@@ -88,9 +75,9 @@ export default function Hero(props: Props) {
 
             <div className="rounded-3xl border border-white/10 bg-white/10 p-6 backdrop-blur-xl shadow-2xl">
 
-              <h3 className="mb-6 text-center text-2xl font-bold">
+              <p className="mb-6 text-center text-2xl font-bold">
                 Top MBA Universities
-              </h3>
+              </p>
 
               <div className="space-y-4">
 
@@ -131,9 +118,9 @@ export default function Hero(props: Props) {
                   Scholarship Available
                 </p>
 
-                <h4 className="mt-2 text-4xl font-bold">
+                <p className="mt-2 text-4xl font-bold">
                   ₹30,000
-                </h4>
+                </p>
 
                 <p className="mt-2 text-sm">
                   Limited Time Admission Benefit
@@ -152,4 +139,3 @@ export default function Hero(props: Props) {
     </section>
   );
 }
-

@@ -7,7 +7,44 @@ type Props = {
 type Block =
   | { type: "heading"; level: number; text: string }
   | { type: "list"; ordered: boolean; items: string[] }
+  | { type: "table"; rows: string[][] }
   | { type: "paragraph"; text: string };
+
+/** Converts the inline HTML tags found in this dataset's embedded tables to their Markdown equivalents. */
+function htmlInlineToMarkdown(html: string): string {
+  return html
+    .replace(/<strong>([\s\S]*?)<\/strong>/gi, "**$1**")
+    .replace(/<b>([\s\S]*?)<\/b>/gi, "**$1**")
+    .replace(/<em>([\s\S]*?)<\/em>/gi, "*$1*")
+    .replace(/<i>([\s\S]*?)<\/i>/gi, "*$1*")
+    .replace(/<br\s*\/?>/gi, " ")
+    .trim();
+}
+
+/** Parses a raw `<table>...</table>` HTML block into a plain rows/cells structure. */
+function parseHtmlTable(html: string): string[][] {
+  const rows = [...html.matchAll(/<tr[^>]*>([\s\S]*?)<\/tr>/gi)];
+  return rows.map((rowMatch) =>
+    [...rowMatch[1].matchAll(/<t[dh][^>]*>([\s\S]*?)<\/t[dh]>/gi)].map((cellMatch) =>
+      htmlInlineToMarkdown(cellMatch[1])
+    )
+  );
+}
+
+/** Parses a Markdown pipe-table (`| a | b |` rows with a `|---|---|` separator). */
+function parseMarkdownTable(lines: string[]): string[][] {
+  const toCells = (line: string) =>
+    line
+      .trim()
+      .replace(/^\|/, "")
+      .replace(/\|$/, "")
+      .split("|")
+      .map((cell) => cell.trim());
+
+  return lines
+    .filter((line) => !/^\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)*\|?$/.test(line.trim()))
+    .map(toCells);
+}
 
 const HEADING_CLASSES: Record<number, string> = {
   1: "mt-14 text-4xl font-bold text-slate-900",
@@ -40,15 +77,41 @@ function parseBlocks(markdown: string): Block[] {
     listItems = null;
   };
 
-  for (const rawLine of lines) {
-    const line = rawLine.trim();
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
     const headingMatch = line.match(/^(#{1,6})\s+(.*)$/);
     const bulletMatch = line.match(/^[-*]\s+(.*)$/);
     const numberedMatch = line.match(/^\d+[.)]\s+(.*)$/);
+    const htmlTableStart = /^<table[\s>]/i.test(line);
+    const isPipeRow = /^\|.*\|$/.test(line);
 
     if (!line) {
       flushParagraph();
       flushList();
+      continue;
+    }
+
+    if (htmlTableStart) {
+      flushParagraph();
+      flushList();
+      const tableLines = [line];
+      while (i < lines.length && !/<\/table>/i.test(lines[i])) {
+        i++;
+        if (i < lines.length) tableLines.push(lines[i]);
+      }
+      blocks.push({ type: "table", rows: parseHtmlTable(tableLines.join("\n")) });
+      continue;
+    }
+
+    if (isPipeRow) {
+      flushParagraph();
+      flushList();
+      const tableLines = [line];
+      while (i + 1 < lines.length && /^\|.*\|$/.test(lines[i + 1].trim())) {
+        i++;
+        tableLines.push(lines[i].trim());
+      }
+      blocks.push({ type: "table", rows: parseMarkdownTable(tableLines) });
       continue;
     }
 
@@ -160,6 +223,39 @@ export default function BlogContent({ content }: Props) {
             <ul key={key} className="mt-5 list-disc space-y-2 pl-6 leading-8 text-slate-700">
               {items}
             </ul>
+          );
+        }
+
+        if (block.type === "table") {
+          const [headerRow, ...bodyRows] = block.rows;
+          return (
+            <div key={key} className="mt-6 overflow-x-auto rounded-2xl border border-slate-200">
+              <table className="w-full text-left">
+                <tbody>
+                  {headerRow && (
+                    <tr className="border-b border-slate-200 bg-slate-50">
+                      {headerRow.map((cell, cellIndex) => (
+                        <td key={`${key}-h-${cellIndex}`} className="p-4 font-semibold text-slate-900">
+                          {renderInline(cell, `${key}-h-${cellIndex}`)}
+                        </td>
+                      ))}
+                    </tr>
+                  )}
+                  {bodyRows.map((row, rowIndex) => (
+                    <tr
+                      key={`${key}-r-${rowIndex}`}
+                      className={rowIndex !== bodyRows.length - 1 ? "border-b border-slate-200" : undefined}
+                    >
+                      {row.map((cell, cellIndex) => (
+                        <td key={`${key}-r-${rowIndex}-${cellIndex}`} className="p-4 text-slate-700">
+                          {renderInline(cell, `${key}-r-${rowIndex}-${cellIndex}`)}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           );
         }
 

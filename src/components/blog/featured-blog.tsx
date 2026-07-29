@@ -1,7 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import Container from "@/components/common/container";
-import { blogPostsByDate } from "@/data/registry";
+import type { BlogPost } from "@/types/blog";
+
+type Props = {
+  posts: BlogPost[];
+};
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("en-IN", {
@@ -10,8 +14,8 @@ function formatDate(iso: string): string {
   });
 }
 
-export default function FeaturedBlog() {
-  const post = blogPostsByDate[0];
+export default function FeaturedBlog({ posts }: Props) {
+  const post = posts[0];
 
   if (!post) return null;
 
@@ -43,6 +47,7 @@ export default function FeaturedBlog() {
                 alt={post.featuredImage.alt}
                 fill
                 priority
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"
               />
             </div>
@@ -63,9 +68,9 @@ export default function FeaturedBlog() {
               </p>
 
               <div className="mt-6 flex flex-wrap gap-5 text-sm text-slate-500">
-                <span>📅 {formatDate(post.publishedDate)}</span>
-                {post.readingTime && <span>⏱ {post.readingTime} Read</span>}
-                <span>🎓 {post.author}</span>
+                <span><span aria-hidden="true">📅</span> {formatDate(post.publishedDate)}</span>
+                {post.readingTime && <span><span aria-hidden="true">⏱</span> {post.readingTime} Read</span>}
+                <span><span aria-hidden="true">🎓</span> {post.author}</span>
               </div>
 
               <div className="mt-8">

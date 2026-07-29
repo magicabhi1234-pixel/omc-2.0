@@ -44,8 +44,8 @@ export default function Comparison() {
 
               <tr className="border-b">
                 <td className="p-5 font-medium">UGC Approved</td>
-                <td className="p-5">✅</td>
-                <td className="p-5">✅</td>
+                <td className="p-5"><span aria-hidden="true">✅</span><span className="sr-only">Yes</span></td>
+                <td className="p-5"><span aria-hidden="true">✅</span><span className="sr-only">Yes</span></td>
               </tr>
 
               <tr>

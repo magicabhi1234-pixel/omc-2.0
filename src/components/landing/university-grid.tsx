@@ -2,27 +2,11 @@
 
 import Image from "next/image";
 import { UniversitySection, University, UniversityApproval } from "@/types/landing";
-import { universities as universityCatalog } from "@/data/universities/universities";
+import { universities as universityCatalog, defaultUniversityIds } from "@/data/universities/universities";
 
 type Props = Partial<UniversitySection>;
 
 const FALLBACK_LOGO = "/universities/omc_logo.avif";
-
-// Used only when a page renders <UniversityGrid /> without a universities list of its own.
-const DEFAULT_UNIVERSITY_IDS = [
-  "amity-online",
-  "symbiosis-online",
-  "upes-online",
-  "lpu-online",
-  "sastra-online",
-  "uttaranchal-online",
-  "nmims-online",
-  "jain-online",
-  "manipal-jaipur-online",
-  "dypatil-online",
-  "shoolini-online",
-  "subharti-online",
-];
 
 function getNaacBadge(approvals: UniversityApproval[]): string | null {
   const naac = approvals.find((approval) => approval.id.startsWith("naac"));
@@ -39,7 +23,7 @@ export default function UniversityGrid(props: Props) {
     badge = "Top Universities",
     heading = "Top Distance MBA Universities",
     description = "Compare NAAC grades, fees, approvals, placements and admission process from India's leading distance MBA universities.",
-    universities: universityIds = DEFAULT_UNIVERSITY_IDS,
+    universities: universityIds = defaultUniversityIds,
   } = props;
 
   const openPopup = () => {

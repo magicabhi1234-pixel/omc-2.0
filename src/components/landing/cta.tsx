@@ -1,6 +1,5 @@
-"use client";
-
 import { CTASection } from "@/types/landing";
+import OpenPopupButton from "@/components/common/open-popup-button";
 
 type Props = Partial<CTASection>;
 
@@ -12,12 +11,6 @@ export default function CTA(props: Props) {
     primaryButton = { label: "Apply Now", variant: "primary" },
     secondaryButton = { label: "Get Free Counselling", variant: "outline" },
   } = props;
-
-  const openPopup = () => {
-    window.dispatchEvent(
-      new Event("openLeadPopup")
-    );
-  };
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-r from-[#0B3B68] via-[#123f6d] to-[#0F172A] py-24 text-white">
@@ -48,19 +41,19 @@ export default function CTA(props: Props) {
         <div className="mt-10 flex flex-wrap justify-center gap-4">
 
           <div className="rounded-full bg-white/10 px-5 py-3 backdrop-blur">
-            ✅ Free Counselling
+            <span aria-hidden="true">✅</span> Free Counselling
           </div>
 
           <div className="rounded-full bg-white/10 px-5 py-3 backdrop-blur">
-            ✅ Scholarship Guidance
+            <span aria-hidden="true">✅</span> Scholarship Guidance
           </div>
 
           <div className="rounded-full bg-white/10 px-5 py-3 backdrop-blur">
-            ✅ Admission Support
+            <span aria-hidden="true">✅</span> Admission Support
           </div>
 
           <div className="rounded-full bg-white/10 px-5 py-3 backdrop-blur">
-            ✅ Career Guidance
+            <span aria-hidden="true">✅</span> Career Guidance
           </div>
 
         </div>
@@ -68,20 +61,14 @@ export default function CTA(props: Props) {
         {/* CTA Buttons */}
         <div className="mt-12 flex flex-wrap justify-center gap-5">
 
-          <button
-            onClick={openPopup}
-            className="cursor-pointer rounded-xl bg-[#F47C45] px-10 py-4 text-lg font-semibold text-white transition hover:scale-105"
-          >
+          <OpenPopupButton className="cursor-pointer rounded-xl bg-[#F47C45] px-10 py-4 text-lg font-semibold text-white transition hover:scale-105">
             {primaryButton.label}
-          </button>
+          </OpenPopupButton>
 
           {secondaryButton && (
-            <button
-              onClick={openPopup}
-              className="cursor-pointer rounded-xl border border-white px-10 py-4 text-lg font-semibold text-white transition hover:bg-white hover:text-[#0B3B68]"
-            >
+            <OpenPopupButton className="cursor-pointer rounded-xl border border-white px-10 py-4 text-lg font-semibold text-white transition hover:bg-white hover:text-[#0B3B68]">
               {secondaryButton.label}
-            </button>
+            </OpenPopupButton>
           )}
 
         </div>
@@ -116,4 +103,3 @@ export default function CTA(props: Props) {
     </section>
   );
 }
-

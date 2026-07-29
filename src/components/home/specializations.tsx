@@ -1,7 +1,6 @@
-"use client";
-
 import Container from "@/components/common/container";
 import FeatureIcon from "@/components/common/feature-icon";
+import OpenPopupButton from "@/components/common/open-popup-button";
 
 const specializations = [
   {
@@ -90,16 +89,9 @@ export default function Specializations() {
               </p>
 
               {/* CTA */}
-              <button
-                onClick={() =>
-                  window.dispatchEvent(
-                    new Event("openLeadPopup")
-                  )
-                }
-                className="mt-5 cursor-pointer font-medium text-[#0B3B68] transition hover:text-[#F47C45]"
-              >
+              <OpenPopupButton className="mt-5 cursor-pointer font-medium text-[#0B3B68] transition hover:text-[#F47C45]">
                 Learn More →
-              </button>
+              </OpenPopupButton>
             </div>
           ))}
         </div>

@@ -5,11 +5,15 @@ import { usePathname } from "next/navigation";
 import { X } from "lucide-react";
 import LeadForm from "./lead-form";
 
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
 export default function LeadPopup() {
   const pathname = usePathname();
 
   const [open, setOpen] = useState(false);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
 
   // Route change zali ki popup reset
   useEffect(() => {
@@ -55,11 +59,34 @@ export default function LeadPopup() {
   useEffect(() => {
     if (!open) return;
     closeButtonRef.current?.focus();
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
+
+    const handleKeydown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        return;
+      }
+
+      if (event.key !== "Tab" || !panelRef.current) return;
+
+      const focusable = Array.from(
+        panelRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
+      );
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
-    window.addEventListener("keydown", closeOnEscape);
-    return () => window.removeEventListener("keydown", closeOnEscape);
+
+    window.addEventListener("keydown", handleKeydown);
+    return () => window.removeEventListener("keydown", handleKeydown);
   }, [open]);
 
   // Thank You page var popup hide
@@ -79,6 +106,7 @@ export default function LeadPopup() {
       role="presentation"
     >
       <div
+        ref={panelRef}
         onClick={(e) => e.stopPropagation()}
         className="relative w-full max-w-lg rounded-3xl bg-white p-8 shadow-2xl"
         role="dialog"

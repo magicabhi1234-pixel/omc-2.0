@@ -1,7 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import Container from "@/components/common/container";
-import { blogPostsByDate } from "@/data/registry";
+import type { BlogPost } from "@/types/blog";
+
+type Props = {
+  posts: BlogPost[];
+};
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("en-IN", {
@@ -10,9 +14,7 @@ function formatDate(iso: string): string {
   });
 }
 
-export default function BlogGrid() {
-  const posts = blogPostsByDate.slice(1);
-
+export default function BlogGrid({ posts }: Props) {
   if (posts.length === 0) return null;
 
   return (
@@ -40,6 +42,7 @@ export default function BlogGrid() {
                   src={post.featuredImage.src}
                   alt={post.featuredImage.alt}
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                   className="object-cover"
                 />
               </div>
@@ -58,8 +61,8 @@ export default function BlogGrid() {
                 </p>
 
                 <div className="mt-5 flex flex-wrap gap-4 text-xs text-slate-500">
-                  <span>📅 {formatDate(post.publishedDate)}</span>
-                  {post.readingTime && <span>⏱ {post.readingTime} Read</span>}
+                  <span><span aria-hidden="true">📅</span> {formatDate(post.publishedDate)}</span>
+                  {post.readingTime && <span><span aria-hidden="true">⏱</span> {post.readingTime} Read</span>}
                 </div>
               </div>
             </Link>

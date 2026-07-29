@@ -121,6 +121,13 @@ export const staticPages: StaticPageEntry[] = [
     priority: 0.3,
     changeFrequency: "yearly",
   },
+  {
+    slug: "top-colleges-university-in-north-zone",
+    title: "Top Distance MBA Colleges & Universities in North India",
+    description: "Compare top Distance MBA colleges and universities in North India.",
+    priority: 0.7,
+    changeFrequency: "weekly",
+  },
 ];
 
 // ---------------------------------------------------------------------------

@@ -14,6 +14,9 @@ export const metadata: Metadata = {
   title: "All Landing Pages | Browse Online MBA Programs",
   description:
     "Browse all landing pages for Online MBA, Distance MBA, MBA Specializations, University Pages, and Bachelor Programs.",
+  alternates: {
+    canonical: `${SITE.url}/landing-pages`,
+  },
   openGraph: {
     title: "All Landing Pages | Browse Online MBA Programs",
     description:
