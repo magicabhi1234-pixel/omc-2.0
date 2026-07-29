@@ -10,6 +10,23 @@ import { University } from "@/types/landing";
 // report for the full missing-logo list. Dropping the file in with the
 // same name will make it appear with no further code changes.
 
+// Used by university/compare sections when a page renders them without its
+// own `universities` list (e.g. a static page not backed by LandingPageData).
+export const defaultUniversityIds = [
+  "amity-online",
+  "symbiosis-online",
+  "upes-online",
+  "lpu-online",
+  "sastra-online",
+  "uttaranchal-online",
+  "nmims-online",
+  "jain-online",
+  "manipal-jaipur-online",
+  "dypatil-online",
+  "shoolini-online",
+  "subharti-online",
+];
+
 export const universities: University[] = [
   {
     id: "acharya-online",
