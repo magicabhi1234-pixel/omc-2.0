@@ -3,6 +3,8 @@ import { SITE } from "@/constants/site";
 import {
   staticPages,
   allLandingSlugs,
+  blogPosts,
+  allBlogSlugs,
 } from "@/data/registry";
 
 /**
@@ -11,7 +13,8 @@ import {
  * Automatically includes:
  * - All static pages (Home, About, Contact, Blog, Privacy, Terms)
  * - All landing pages (every entry in src/data/landing-pages/)
- * - Future landing pages are included automatically when added to the registry.
+ * - All blog posts (every entry in src/data/blog-posts/)
+ * - Future landing pages and blog posts are included automatically when added to the registry.
  *
  * No hardcoded URLs. Uses SITE.url from constants.
  */
@@ -58,6 +61,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: "weekly",
     priority: 0.9,
   });
+
+  // -----------------------------------------------------------------------
+  // 4. Blog posts
+  // -----------------------------------------------------------------------
+  for (const slug of allBlogSlugs) {
+    const post = blogPosts[slug];
+    entries.push({
+      url: `${baseUrl}/blog/${slug}`,
+      lastModified: new Date(post.lastModifiedDate ?? post.publishedDate),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    });
+  }
 
   return entries;
 }

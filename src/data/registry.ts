@@ -13,8 +13,19 @@
  * 1. Create the page in app/(site)/
  * 2. Add an entry to staticPages array below.
  *
- * Future blog posts from Sanity CMS are fetched dynamically.
+ * HOW TO ADD A NEW BLOG POST:
+ * 1. Create a new file in src/data/blog-posts/
+ * 2. Export it from src/data/blog-posts/index.ts
+ * 3. It is automatically included here.
  */
+
+import {
+  sikkimManipalUniversityOnlineMba,
+  lucrativeCareerInDataScienceWithOnlineMbaInAiAndMl,
+  onlineMbaInInternationalBusiness,
+  symbiosisOnlineMba,
+  lpuOnlineMba,
+} from "@/data/blog-posts";
 
 import {
   top10OnlineMBANorthZone,
@@ -47,6 +58,7 @@ import {
 } from "@/data/landing-pages";
 
 import type { LandingPageData } from "@/types/landing";
+import type { BlogPost } from "@/types/blog";
 
 // ---------------------------------------------------------------------------
 // Static Pages (non-landing, non-blog)
@@ -177,6 +189,23 @@ export const landingPages: Record<string, LandingPageData> = {
 };
 
 // ---------------------------------------------------------------------------
+// Blog Posts Registry
+// ---------------------------------------------------------------------------
+
+/**
+ * All blog post data objects keyed by their slug.
+ * Adding a new export to src/data/blog-posts/index.ts automatically includes it here.
+ */
+export const blogPosts: Record<string, BlogPost> = {
+  "sikkim-manipal-university-online-mba": sikkimManipalUniversityOnlineMba,
+  "lucrative-career-in-data-science-with-online-mba-in-ai-and-ml":
+    lucrativeCareerInDataScienceWithOnlineMbaInAiAndMl,
+  "online-mba-in-international-business": onlineMbaInInternationalBusiness,
+  "symbiosis-online-mba": symbiosisOnlineMba,
+  "lpu-online-mba": lpuOnlineMba,
+};
+
+// ---------------------------------------------------------------------------
 // Derived Helpers
 // ---------------------------------------------------------------------------
 
@@ -185,3 +214,14 @@ export const allLandingSlugs = Object.keys(landingPages);
 export function getLandingPageBySlug(slug: string): LandingPageData | undefined {
   return landingPages[slug];
 }
+
+export const allBlogSlugs = Object.keys(blogPosts);
+
+export function getBlogPostBySlug(slug: string): BlogPost | undefined {
+  return blogPosts[slug];
+}
+
+/** All blog posts sorted newest-first by publishedDate. */
+export const blogPostsByDate: BlogPost[] = Object.values(blogPosts).sort(
+  (a, b) => new Date(b.publishedDate).getTime() - new Date(a.publishedDate).getTime()
+);

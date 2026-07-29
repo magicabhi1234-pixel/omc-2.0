@@ -1,8 +1,20 @@
 import Image from "next/image";
 import Link from "next/link";
 import Container from "@/components/common/container";
+import { blogPostsByDate } from "@/data/registry";
+
+function formatDate(iso: string): string {
+  return new Date(iso).toLocaleDateString("en-IN", {
+    year: "numeric",
+    month: "long",
+  });
+}
 
 export default function FeaturedBlog() {
+  const post = blogPostsByDate[0];
+
+  if (!post) return null;
+
   return (
     <section className="bg-white py-20">
       <Container>
@@ -27,8 +39,8 @@ export default function FeaturedBlog() {
             {/* Featured Image */}
             <div className="relative min-h-[350px] lg:min-h-full">
               <Image
-                src="/universities/lpu_blog.jpg"
-                alt="LPU Online MBA"
+                src={post.featuredImage.src}
+                alt={post.featuredImage.alt}
                 fill
                 priority
                 className="object-cover"
@@ -39,29 +51,26 @@ export default function FeaturedBlog() {
             <div className="flex flex-col justify-center p-8 lg:p-12">
 
               <span className="w-fit rounded-full bg-orange-100 px-3 py-1 text-sm font-medium text-[#F47C45]">
-                Online MBA
+                {post.category ?? "Online MBA"}
               </span>
 
               <h3 className="mt-5 text-3xl font-bold leading-tight text-slate-900 lg:text-4xl">
-                LPU Online MBA: Fees, Specializations &
-                Admission Guide 2026
+                {post.title}
               </h3>
 
               <p className="mt-5 text-slate-600">
-                Discover everything about LPU Online MBA including
-                eligibility, fees, specializations, admission process,
-                learning management system and career opportunities.
+                {post.excerpt}
               </p>
 
               <div className="mt-6 flex flex-wrap gap-5 text-sm text-slate-500">
-                <span>📅 June 2026</span>
-                <span>⏱ 8 Min Read</span>
-                <span>🎓 MBA Admissions</span>
+                <span>📅 {formatDate(post.publishedDate)}</span>
+                {post.readingTime && <span>⏱ {post.readingTime} Read</span>}
+                <span>🎓 {post.author}</span>
               </div>
 
               <div className="mt-8">
                 <Link
-                  href="/blog/lpu-online-mba"
+                  href={`/blog/${post.slug}`}
                   className="inline-flex items-center rounded-xl bg-[#0B3B68] px-6 py-3 font-semibold text-white transition hover:opacity-90"
                 >
                   Read Article →
