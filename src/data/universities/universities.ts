@@ -122,8 +122,7 @@ export const universities: University[] = [
     id: "assam-university",
     slug: "assam-university",
     name: "Assam University",
-    // TODO: logo pending - see implementation report (missing logo list)
-    logo: "/universities/assam_university.png",
+    logo: "/universities/assam-university.webp",
     studyMode: "Online & Distance",
     duration: "2 years",
     eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
@@ -176,8 +175,7 @@ export const universities: University[] = [
     id: "chandigarh-university-online",
     slug: "chandigarh-university-online",
     name: "Chandigarh University",
-    // TODO: logo pending - see implementation report (missing logo list)
-    logo: "/universities/chitkara-university.png",
+    logo: "/universities/chandigarh-university.webp",
     rating: 4.5,
     reviewCount: 712,
     studyMode: "Online & Distance",
@@ -1070,8 +1068,7 @@ export const universities: University[] = [
     id: "sikkim-manipal-university",
     slug: "sikkim-manipal-university",
     name: "Sikkim Manipal University",
-    // TODO: logo pending - see implementation report (missing logo list)
-    logo: "/universities/sikkim_manipal_university.png",
+    logo: "/universities/sikkim-manipal-university.avif",
     studyMode: "Online & Distance",
     duration: "2 years",
     eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
@@ -1235,8 +1232,7 @@ export const universities: University[] = [
     id: "university-of-madras",
     slug: "university-of-madras",
     name: "University of Madras",
-    // TODO: logo pending - see implementation report (missing logo list)
-    logo: "/universities/university_of_madras.png",
+    logo: "/universities/university-of-madras.avif",
     studyMode: "Online & Distance",
     duration: "2 years",
     eligibility: "Candidates must have secured a minimum of 50% marks in their graduation or equivalent qualification.",
