@@ -129,3 +129,25 @@
     @apply font-sans;
   }
 }
+
+@keyframes zoom-in-zoom-out-two {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.floating-select-university {
+  animation: zoom-in-zoom-out-two 3s ease-in-out infinite;
+  transition: transform 0.2s ease;
+}
+
+.floating-select-university:hover,
+.floating-select-university:focus-visible {
+  animation-play-state: paused;
+}

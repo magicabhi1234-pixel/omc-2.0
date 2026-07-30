@@ -2,6 +2,7 @@ import Header from "./header/header";
 import Footer from "./footer/footer";
 import StickyCTA from "@/components/common/sticky-cta";
 import LeadPopup from "@/components/common/lead-popup";
+import FloatingSelectUniversity from "@/components/common/FloatingSelectUniversity";
 
 export default function Layout({
   children,
@@ -18,6 +19,7 @@ export default function Layout({
 
       <Footer />
       <LeadPopup />
+      <FloatingSelectUniversity />
     </>
   );
 }
