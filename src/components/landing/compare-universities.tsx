@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { CompareSection, CompareFeature, University } from "@/types/landing";
-import { universities as universityCatalog, defaultUniversityIds } from "@/data/universities/universities";
+import { resolveUniversities } from "@/data/universities/universities";
 
 type Props = Partial<CompareSection> & {
   universities?: string[];
@@ -29,16 +29,10 @@ export default function CompareUniversities(props: Props) {
     heading = "Compare universities with confidence",
     description = "Shortlist up to three universities and compare fees, accreditation, and study support side by side.",
     features = DEFAULT_FEATURES,
-    universities: universityIds = defaultUniversityIds,
+    universities: universityIds,
   } = props;
 
-  const pageUniversities = useMemo(
-    () =>
-      universityIds
-        .map((id) => universityCatalog.find((university) => university.id === id))
-        .filter((university): university is University => Boolean(university)),
-    [universityIds]
-  );
+  const pageUniversities = useMemo(() => resolveUniversities(universityIds), [universityIds]);
 
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");

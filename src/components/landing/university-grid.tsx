@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { UniversitySection, University, UniversityApproval } from "@/types/landing";
-import { universities as universityCatalog, defaultUniversityIds } from "@/data/universities/universities";
+import { UniversitySection, UniversityApproval } from "@/types/landing";
+import { resolveUniversities } from "@/data/universities/universities";
 
 type Props = Partial<UniversitySection>;
 
@@ -23,7 +23,7 @@ export default function UniversityGrid(props: Props) {
     badge = "Top Universities",
     heading = "Top Distance MBA Universities",
     description = "Compare NAAC grades, fees, approvals, placements and admission process from India's leading distance MBA universities.",
-    universities: universityIds = defaultUniversityIds,
+    universities: universityIds,
   } = props;
 
   const openPopup = () => {
@@ -32,9 +32,7 @@ export default function UniversityGrid(props: Props) {
     );
   };
 
-  const defaultUniversities = universityIds
-    .map((id) => universityCatalog.find((university) => university.id === id))
-    .filter((university): university is University => Boolean(university));
+  const defaultUniversities = resolveUniversities(universityIds);
 
   return (
     <section className="bg-slate-50 py-20">
@@ -65,7 +63,8 @@ export default function UniversityGrid(props: Props) {
             return (
               <div
                 key={item.id}
-                className="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
+                id={`university-card-${item.id}`}
+                className="group scroll-mt-24 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
               >
 
                 {/* Header */}

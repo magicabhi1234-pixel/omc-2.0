@@ -27,6 +27,13 @@ export const defaultUniversityIds = [
   "subharti-online",
 ];
 
+/** Resolves a page's university id list against the master catalog, in order, dropping any unknown ids. */
+export function resolveUniversities(ids: string[] = defaultUniversityIds): University[] {
+  return ids
+    .map((id) => universities.find((university) => university.id === id))
+    .filter((university): university is University => Boolean(university));
+}
+
 export const universities: University[] = [
   {
     id: "acharya-online",

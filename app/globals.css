@@ -151,3 +151,20 @@
 .floating-select-university:focus-visible {
   animation-play-state: paused;
 }
+
+@keyframes university-card-highlight-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(244, 124, 69, 0);
+  }
+  15% {
+    box-shadow: 0 0 0 6px rgba(244, 124, 69, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 0 3px rgba(244, 124, 69, 0.35);
+  }
+}
+
+.university-card-highlight {
+  animation: university-card-highlight-pulse 2s ease-in-out;
+}

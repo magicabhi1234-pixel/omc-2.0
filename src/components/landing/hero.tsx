@@ -1,7 +1,11 @@
 import { HeroSection } from "@/types/landing";
 import OpenPopupButton from "@/components/common/open-popup-button";
+import UniversitySearch from "@/components/landing/university-search";
+import { resolveUniversities } from "@/data/universities/universities";
 
-type Props = Partial<HeroSection>;
+type Props = Partial<HeroSection> & {
+  universities?: string[];
+};
 
 export default function Hero(props: Props) {
   const {
@@ -10,7 +14,10 @@ export default function Hero(props: Props) {
     description = "Compare fees, rankings, scholarships, placements and admission process from India's leading UGC-approved MBA universities.",
     primaryButton = { label: "Apply Now", variant: "primary" },
     secondaryButton = { label: "Free Counselling", variant: "outline" },
+    universities: universityIds,
   } = props;
+
+  const pageUniversities = resolveUniversities(universityIds);
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-[#0B3B68] via-[#123f6d] to-[#0F172A] py-20 text-white">
@@ -37,6 +44,8 @@ export default function Hero(props: Props) {
             <p className="mt-6 max-w-2xl text-lg text-slate-300">
               {description}
             </p>
+
+            <UniversitySearch universities={pageUniversities} />
 
             <div className="mt-8 flex flex-wrap gap-3">
 

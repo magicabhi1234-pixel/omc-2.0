@@ -113,7 +113,7 @@ export default async function LandingPage({ params }: PageProps) {
     <main>
       <LandingPageJsonLd page={page} canonical={canonical} />
 
-      <Hero {...page.hero} />
+      <Hero {...page.hero} universities={page.universitySection?.universities} />
 
       {page.stats && <Stats stats={page.stats.stats} />}
 
