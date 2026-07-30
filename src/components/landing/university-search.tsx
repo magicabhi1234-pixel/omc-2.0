@@ -100,7 +100,7 @@ export default function UniversitySearch({ universities }: Props) {
             if (query.trim()) setIsOpen(true);
           }}
           onKeyDown={handleKeyDown}
-          placeholder="Search universities on this page..."
+          placeholder="Search University"
           className="w-full bg-transparent text-base text-slate-900 outline-none placeholder:text-slate-400"
         />
       </div>
@@ -109,7 +109,7 @@ export default function UniversitySearch({ universities }: Props) {
         <ul
           id="university-page-search-listbox"
           role="listbox"
-          className="absolute z-20 mt-2 max-h-72 w-full overflow-y-auto rounded-2xl bg-white shadow-xl ring-1 ring-black/5"
+          className="absolute z-[99999] mt-2 max-h-72 w-full overflow-y-auto rounded-2xl bg-white shadow-xl ring-1 ring-black/5"
         >
           {results.map((university, index) => (
             <li key={university.id} role="option" aria-selected={index === activeIndex}>
