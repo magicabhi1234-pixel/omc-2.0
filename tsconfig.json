@@ -37,7 +37,6 @@
     "**/*.tsx"
   ],
   "exclude": [
-    "node_modules",
-    "omc-test"
+    "node_modules"
   ]
 }
