@@ -5,24 +5,34 @@ const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET;
 const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION || "2025-02-19";
 const useCdn = process.env.NEXT_PUBLIC_SANITY_USE_CDN !== "false";
 
-if (!projectId || !dataset) {
-  throw new Error(
-    "Missing NEXT_PUBLIC_SANITY_PROJECT_ID or NEXT_PUBLIC_SANITY_DATASET environment variables."
+/** True once real project config is present - false means every Sanity fetch will fail (and be caught by `sanityFetch`'s fallback). */
+export const isSanityConfigured = Boolean(projectId && dataset);
+
+if (!isSanityConfigured) {
+  // Deliberately not throwing here: this file is imported by nearly every
+  // page (via the registry), so throwing at module scope would crash the
+  // entire build/render rather than just degrading Sanity-backed content.
+  // `createClient` requires non-empty strings, so a placeholder is used -
+  // any resulting fetch fails at request time and is caught by `sanityFetch`.
+  console.error(
+    "[sanity] Missing NEXT_PUBLIC_SANITY_PROJECT_ID or NEXT_PUBLIC_SANITY_DATASET - " +
+      "Sanity-backed content (landing pages, blog posts, universities, testimonials) " +
+      "will be unavailable until these are set."
   );
 }
 
 /** Read-only client for rendering pages. Uses the CDN in production for speed. */
 export const sanity = createClient({
-  projectId,
-  dataset,
+  projectId: projectId || "misconfigured",
+  dataset: dataset || "misconfigured",
   apiVersion,
-  useCdn,
+  useCdn: isSanityConfigured && useCdn,
 });
 
 /** Write-capable client for the migration script only - never import this from app code. */
 export const sanityWriteClient = createClient({
-  projectId,
-  dataset,
+  projectId: projectId || "misconfigured",
+  dataset: dataset || "misconfigured",
   apiVersion,
   useCdn: false,
   token: process.env.SANITY_API_TOKEN,

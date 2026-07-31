@@ -116,7 +116,23 @@ The migration script (`scripts/_migrate-source/migrate.ts` + a hand-written `por
 
 ---
 
-## 9. Remaining recommendations (not done — lower priority / explicitly deferred)
+## 9. Vercel build failure — root cause and fix
+
+**Symptom:** `Missing NEXT_PUBLIC_SANITY_PROJECT_ID or NEXT_PUBLIC_SANITY_DATASET environment variables` during the Vercel build.
+
+**Root cause:** `.gitignore` has a blanket `.env*` rule, which excludes *every* env file — including `.env` (which locally holds `NEXT_PUBLIC_SANITY_PROJECT_ID`/`DATASET`/`API_VERSION`) and `.env.local`. Neither file is committed to git, so Vercel's build — which only has access to what's in the repository plus whatever is configured in its own dashboard — never had these variables at all. Locally the build always worked because both files happen to exist on disk with the same values, masking the gap.
+
+Compounding this: `src/lib/sanity/client.ts` threw synchronously at module scope if these vars were missing. Since that module is imported (transitively, via the registry) by nearly every route — `sitemap.ts`, `[slug]`, `blog/[slug]`, `blog`, `landing-pages`, the homepage — the very first route Next.js touched during "Collecting page data" crashed the *entire* build. `sitemap.xml` happened to be the one named in the error, but the same throw would have fired for any of them; it wasn't sitemap-specific.
+
+**Fixes applied:**
+1. **`src/lib/sanity/client.ts`** no longer throws. Missing config now logs a clear `console.error` and falls back to a placeholder string for `createClient` (which requires non-empty values but does not validate they're real) — any resulting fetch fails at request time and is caught by `sanityFetch`'s existing try/catch, degrading to the caller's `fallback` (e.g. an empty page list) instead of crashing the build or the page. Verified locally by building with the Sanity vars stripped from the environment — build succeeded with 0 errors.
+2. **`.env.example`** now documents every Sanity variable the project actually uses (grepped the full codebase to confirm), so this gap is visible to anyone setting up a new environment.
+
+**What you still need to do:** add the variables to Vercel itself (Project → Settings → Environment Variables) — code-level resilience means a missing var won't crash the build anymore, but the deployed site still needs real values to actually serve CMS content instead of empty fallbacks. See the next section for the exact variables and values.
+
+---
+
+## 10. Remaining recommendations (not done — lower priority / explicitly deferred)
 
 1. **`top-colleges-university-in-north-zone`** is a bespoke static page (`app/(site)/top-colleges-university-in-north-zone/page.tsx`) that renders the same components with no data (all defaults) — its original real content (`src/constants/north-zone-universities.ts`) was already dead/deleted before this session. Recommend migrating it into Sanity as a 28th `landingPage` document and deleting the static route so the dynamic `[slug]` route serves it like the other 27.
 2. **No testimonial content exists yet** — someone will need to add real student testimonials through Studio.
