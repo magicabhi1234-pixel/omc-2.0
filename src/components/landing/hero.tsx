@@ -1,10 +1,9 @@
-import { HeroSection } from "@/types/landing";
+import { HeroSection, University } from "@/types/landing";
 import OpenPopupButton from "@/components/common/open-popup-button";
 import UniversitySearch from "@/components/landing/university-search";
-import { resolveUniversities } from "@/data/universities/universities";
 
 type Props = Partial<HeroSection> & {
-  universities?: string[];
+  universities?: University[];
 };
 
 export default function Hero(props: Props) {
@@ -14,10 +13,8 @@ export default function Hero(props: Props) {
     description = "Compare fees, rankings, scholarships, placements and admission process from India's leading UGC-approved MBA universities.",
     primaryButton = { label: "Apply Now", variant: "primary" },
     secondaryButton = { label: "Free Counselling", variant: "outline" },
-    universities: universityIds,
+    universities: pageUniversities = [],
   } = props;
-
-  const pageUniversities = resolveUniversities(universityIds);
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-[#0B3B68] via-[#123f6d] to-[#0F172A] py-20 text-white">

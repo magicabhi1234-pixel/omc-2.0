@@ -10,7 +10,7 @@ export const seo = defineType({
       name: "metaTitle",
       title: "Meta Title",
       type: "string",
-      validation: (Rule) => Rule.max(60),
+      validation: (Rule) => Rule.required().max(60),
     }),
 
     defineField({
@@ -18,7 +18,7 @@ export const seo = defineType({
       title: "Meta Description",
       type: "text",
       rows: 3,
-      validation: (Rule) => Rule.max(160),
+      validation: (Rule) => Rule.required().max(160),
     }),
 
     defineField({

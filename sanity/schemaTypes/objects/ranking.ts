@@ -7,36 +7,26 @@ export const ranking = defineType({
 
   fields: [
     defineField({
-      name: "agency",
-      title: "Ranking Agency",
+      name: "source",
+      title: "Ranking Source",
+      description: "e.g. NIRF, Times of India",
       type: "string",
       validation: (Rule) => Rule.required(),
     }),
 
     defineField({
-      name: "rank",
-      title: "Rank",
-      type: "number",
-    }),
-
-    defineField({
-      name: "year",
-      title: "Year",
-      type: "number",
+      name: "value",
+      title: "Value",
+      description: "e.g. #32, Top 50",
+      type: "string",
+      validation: (Rule) => Rule.required(),
     }),
   ],
 
   preview: {
     select: {
-      title: "agency",
-      subtitle: "rank",
-    },
-
-    prepare({ title, subtitle }) {
-      return {
-        title,
-        subtitle: subtitle ? `Rank #${subtitle}` : "",
-      };
+      title: "source",
+      subtitle: "value",
     },
   },
 });

@@ -34,6 +34,13 @@ export const hero = defineType({
       options: {
         hotspot: true,
       },
+      fields: [
+        defineField({
+          name: "alt",
+          title: "Alt Text",
+          type: "string",
+        }),
+      ],
     }),
 
     defineField({

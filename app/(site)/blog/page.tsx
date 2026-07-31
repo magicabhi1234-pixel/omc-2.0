@@ -2,7 +2,7 @@ import Container from "@/components/common/container";
 import BlogHero from "@/components/blog/hero";
 import FeaturedBlog from "@/components/blog/featured-blog";
 import BlogGrid from "@/components/blog/blog-grid";
-import { blogPostsByDate } from "@/data/registry";
+import { getBlogPostsByDate } from "@/data/registry";
 import { buildMetadata } from "@/lib/metadata";
 
 export const metadata = buildMetadata({
@@ -21,11 +21,12 @@ export default async function BlogPage({ searchParams }: PageProps) {
   const query = q?.trim() ?? "";
   const normalizedQuery = query.toLowerCase();
 
+  const allPosts = await getBlogPostsByDate();
   const posts = normalizedQuery
-    ? blogPostsByDate.filter((post) =>
+    ? allPosts.filter((post) =>
         `${post.title} ${post.excerpt}`.toLowerCase().includes(normalizedQuery)
       )
-    : blogPostsByDate;
+    : allPosts;
 
   return (
     <>

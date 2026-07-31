@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import Container from "@/components/common/container";
-import type { BlogPost } from "@/types/blog";
+import type { BlogPostSummary } from "@/types/blog";
 
 type Props = {
-  posts: BlogPost[];
+  posts: BlogPostSummary[];
 };
 
 function formatDate(iso: string): string {

@@ -106,7 +106,7 @@ export interface UniversitySection {
 
   description?: string;
 
-  universities: string[];
+  universities: University[];
 }
 
 // =============================================

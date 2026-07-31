@@ -1,6 +1,7 @@
 import Container from "@/components/common/container";
+import { getDefaultTestimonials } from "@/data/registry";
 
-const testimonials = [
+const fallbackTestimonials = [
   {
     name: "Rahul Sharma",
     city: "Pune",
@@ -21,7 +22,13 @@ const testimonials = [
   },
 ];
 
-export default function Testimonials() {
+export default async function Testimonials() {
+  const sanityTestimonials = await getDefaultTestimonials();
+  const testimonials =
+    sanityTestimonials.length > 0
+      ? sanityTestimonials.map((t) => ({ name: t.name, city: t.university ?? "", review: t.review }))
+      : fallbackTestimonials;
+
   return (
     <section className="bg-white py-20">
       <Container>

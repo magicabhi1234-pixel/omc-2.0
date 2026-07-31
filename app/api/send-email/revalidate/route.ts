@@ -21,24 +21,15 @@ export async function POST(req: NextRequest) {
 
     console.log("Sanity Webhook:", body);
 
-    // Revalidate tags
-revalidateTag("landing-page", "max");
-revalidateTag("universities", "max");
-revalidateTag("blog", "max");
-revalidateTag("seo", "max");
-revalidateTag("header", "max");
-revalidateTag("footer", "max");
+    // Revalidate tags immediately - this is a CMS webhook, so editors expect
+    // published changes to be live on next request, not eventually-consistent.
+    revalidateTag("landing-page", { expire: 0 });
+    revalidateTag("blog", { expire: 0 });
+    revalidateTag("testimonial", { expire: 0 });
 
     return NextResponse.json({
       success: true,
-      revalidated: [
-        "landing-page",
-        "universities",
-        "blog",
-        "seo",
-        "header",
-        "footer",
-      ],
+      revalidated: ["landing-page", "blog", "testimonial"],
       timestamp: new Date().toISOString(),
     });
   } catch (error) {

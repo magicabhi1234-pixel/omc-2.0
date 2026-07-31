@@ -3,10 +3,9 @@
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { CompareSection, CompareFeature, University } from "@/types/landing";
-import { resolveUniversities } from "@/data/universities/universities";
 
 type Props = Partial<CompareSection> & {
-  universities?: string[];
+  universities?: University[];
 };
 
 const FALLBACK_LOGO = "/universities/omc_logo.avif";
@@ -29,10 +28,8 @@ export default function CompareUniversities(props: Props) {
     heading = "Compare universities with confidence",
     description = "Shortlist up to three universities and compare fees, accreditation, and study support side by side.",
     features = DEFAULT_FEATURES,
-    universities: universityIds,
+    universities: pageUniversities = [],
   } = props;
-
-  const pageUniversities = useMemo(() => resolveUniversities(universityIds), [universityIds]);
 
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");

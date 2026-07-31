@@ -1,9 +1,10 @@
 import Link from "next/link";
 import Container from "@/components/common/container";
-import { blogPostsByDate } from "@/data/registry";
+import { getBlogPostsByDate } from "@/data/registry";
 
-export default function Blogs() {
-  const posts = blogPostsByDate.slice(0, 3);
+export default async function Blogs() {
+  const allPosts = await getBlogPostsByDate();
+  const posts = allPosts.slice(0, 3);
 
   return (
     <section className="bg-white py-20">

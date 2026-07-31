@@ -2,19 +2,26 @@
 
 import Image from "next/image";
 import { UniversitySection, UniversityApproval } from "@/types/landing";
-import { resolveUniversities } from "@/data/universities/universities";
 
 type Props = Partial<UniversitySection>;
 
 const FALLBACK_LOGO = "/universities/omc_logo.avif";
 
-function getNaacBadge(approvals: UniversityApproval[]): string | null {
-  const naac = approvals.find((approval) => approval.id.startsWith("naac"));
+function validApprovals(approvals: UniversityApproval[] | null | undefined): UniversityApproval[] {
+  return (approvals ?? []).filter(
+    (approval): approval is UniversityApproval => typeof approval?.id === "string"
+  );
+}
+
+function getNaacBadge(approvals: UniversityApproval[] | null | undefined): string | null {
+  const naac = validApprovals(approvals).find((approval) => approval.id.startsWith("naac"));
   return naac ? naac.label : null;
 }
 
-function getOtherApprovalsBadge(approvals: UniversityApproval[]): string | null {
-  const others = approvals.filter((approval) => !approval.id.startsWith("naac")).map((approval) => approval.label);
+function getOtherApprovalsBadge(approvals: UniversityApproval[] | null | undefined): string | null {
+  const others = validApprovals(approvals)
+    .filter((approval) => !approval.id.startsWith("naac"))
+    .map((approval) => approval.label);
   return others.length > 0 ? others.join(", ") : null;
 }
 
@@ -23,7 +30,7 @@ export default function UniversityGrid(props: Props) {
     badge = "Top Universities",
     heading = "Top Distance MBA Universities",
     description = "Compare NAAC grades, fees, approvals, placements and admission process from India's leading distance MBA universities.",
-    universities: universityIds,
+    universities: defaultUniversities = [],
   } = props;
 
   const openPopup = () => {
@@ -31,8 +38,6 @@ export default function UniversityGrid(props: Props) {
       new Event("openLeadPopup")
     );
   };
-
-  const defaultUniversities = resolveUniversities(universityIds);
 
   return (
     <section className="bg-slate-50 py-20">

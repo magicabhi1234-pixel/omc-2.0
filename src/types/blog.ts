@@ -1,11 +1,4 @@
-// =============================================
-// Blog Link
-// =============================================
-
-export interface BlogLink {
-  label: string;
-  url: string;
-}
+import type { PortableTextBlock } from "@portabletext/react";
 
 // =============================================
 // Blog Image
@@ -30,48 +23,47 @@ export interface BlogFAQItem {
 // =============================================
 
 export interface BlogSEO {
-  metaTitle: string;
-  metaDescription: string;
-  canonical: string;
+  title: string;
+  description: string;
+  keywords?: string[];
+  canonical?: string;
+  ogImage?: string;
+  robots?: string;
+}
+
+// =============================================
+// Blog Post Summary (listing cards, related posts)
+// =============================================
+
+export interface BlogPostSummary {
+  slug: string;
+  title: string;
+  h1: string;
+  featuredImage: BlogImage;
+  author: string;
+  publishedDate: string;
+  category?: string;
+  excerpt: string;
+  readingTime?: string;
 }
 
 // =============================================
 // Blog Post
 // =============================================
 
-export interface BlogPost {
-  slug: string;
-
-  title: string;
-
-  h1: string;
-
+export interface BlogPost extends BlogPostSummary {
   seo: BlogSEO;
-
-  featuredImage: BlogImage;
-
-  author: string;
-
-  publishedDate: string;
 
   lastModifiedDate?: string;
 
-  category?: string;
-
   tags?: string[];
 
-  excerpt: string;
-
-  /** Raw source content in Markdown, rendered via <BlogContent />. */
-  content: string;
+  /** Portable Text blocks, rendered via <BlogContent />. */
+  content: PortableTextBlock[];
 
   wordCount?: number;
 
-  readingTime?: string;
-
-  internalLinks?: BlogLink[];
-
-  externalLinks?: BlogLink[];
-
   faqs?: BlogFAQItem[];
+
+  relatedPosts?: BlogPostSummary[];
 }

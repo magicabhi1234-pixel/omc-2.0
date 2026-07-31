@@ -11,7 +11,7 @@ import Testimonials from "@/components/landing/testimonials";
 import FAQ from "@/components/landing/faq";
 import CTA from "@/components/landing/cta";
 
-import { landingPages, allLandingSlugs } from "@/data/registry";
+import { getAllLandingSlugs, getLandingPageBySlug } from "@/data/registry";
 import { SITE } from "@/constants/site";
 import type { LandingPageData } from "@/types/landing";
 
@@ -22,14 +22,15 @@ type PageProps = {
 };
 
 export async function generateStaticParams() {
-  return allLandingSlugs.map((slug) => ({ slug }));
+  const slugs = await getAllLandingSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const page = landingPages[slug];
+  const page = await getLandingPageBySlug(slug);
 
   if (!page) return {};
 
@@ -101,7 +102,7 @@ function LandingPageJsonLd({ page, canonical }: { page: LandingPageData; canonic
 
 export default async function LandingPage({ params }: PageProps) {
   const { slug } = await params;
-  const page = landingPages[slug];
+  const page = await getLandingPageBySlug(slug);
 
   if (!page) {
     notFound();

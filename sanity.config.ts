@@ -2,6 +2,7 @@ import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
 import { schemaTypes } from "./sanity/schemaTypes";
+import { structure } from "./sanity/structure";
 
 const apiVersion =
   process.env.NEXT_PUBLIC_SANITY_API_VERSION || "2025-02-19";
@@ -16,7 +17,7 @@ export default defineConfig({
 
   basePath: "/studio",
 
-  plugins: [structureTool(), visionTool()],
+  plugins: [structureTool({ structure }), visionTool()],
 
   schema: {
     types: schemaTypes,

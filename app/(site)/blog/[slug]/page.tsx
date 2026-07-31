@@ -1,10 +1,11 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import Container from "@/components/common/container";
-import BlogContent from "@/components/blog/blog-content";
+import PortableTextContent from "@/components/blog/portable-text-content";
 import BlogCTAButton from "@/components/blog/blog-cta-button";
-import { blogPosts, allBlogSlugs } from "@/data/registry";
+import { getAllBlogSlugs, getBlogPostBySlug } from "@/data/registry";
 import { SITE } from "@/constants/site";
 import type { BlogPost } from "@/types/blog";
 
@@ -15,33 +16,34 @@ type PageProps = {
 };
 
 export async function generateStaticParams() {
-  return allBlogSlugs.map((slug) => ({ slug }));
+  const slugs = await getAllBlogSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = blogPosts[slug];
+  const post = await getBlogPostBySlug(slug);
 
   if (!post) return {};
 
   return {
-    title: post.seo.metaTitle,
-    description: post.seo.metaDescription,
+    title: post.seo.title,
+    description: post.seo.description,
     alternates: {
       canonical: post.seo.canonical,
     },
     openGraph: {
-      title: post.seo.metaTitle,
-      description: post.seo.metaDescription,
+      title: post.seo.title,
+      description: post.seo.description,
       type: "article",
-      images: [post.featuredImage.src],
+      images: post.seo.ogImage ? [post.seo.ogImage] : [post.featuredImage.src],
     },
     twitter: {
       card: "summary_large_image",
-      title: post.seo.metaTitle,
-      description: post.seo.metaDescription,
+      title: post.seo.title,
+      description: post.seo.description,
     },
   };
 }
@@ -60,8 +62,8 @@ function BlogPostJsonLd({ post }: { post: BlogPost }) {
       "@type": "Article",
       "@id": post.seo.canonical,
       headline: post.h1,
-      description: post.seo.metaDescription,
-      image: `${SITE.url}${post.featuredImage.src}`,
+      description: post.seo.description,
+      image: post.featuredImage.src,
       datePublished: post.publishedDate,
       dateModified: post.lastModifiedDate ?? post.publishedDate,
       author: {
@@ -105,7 +107,7 @@ function BlogPostJsonLd({ post }: { post: BlogPost }) {
 
 export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params;
-  const post = blogPosts[slug];
+  const post = await getBlogPostBySlug(slug);
 
   if (!post) {
     notFound();
@@ -159,7 +161,7 @@ export default async function BlogPostPage({ params }: PageProps) {
         <Container>
           <div className="mx-auto max-w-4xl">
 
-            <BlogContent content={post.content} />
+            <PortableTextContent content={post.content} />
 
             {post.faqs && post.faqs.length > 0 && (
               <>
@@ -173,6 +175,39 @@ export default async function BlogPostPage({ params }: PageProps) {
                       <h3 className="font-semibold">{faq.question}</h3>
                       <p className="mt-2 text-slate-600">{faq.answer}</p>
                     </div>
+                  ))}
+                </div>
+              </>
+            )}
+
+            {post.relatedPosts && post.relatedPosts.length > 0 && (
+              <>
+                <h2 className="mt-14 text-3xl font-bold text-slate-900">
+                  Related Articles
+                </h2>
+
+                <div className="mt-8 grid gap-6 sm:grid-cols-2">
+                  {post.relatedPosts.map((related) => (
+                    <Link
+                      key={related.slug}
+                      href={`/blog/${related.slug}`}
+                      className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                    >
+                      <div className="relative h-40 w-full">
+                        <Image
+                          src={related.featuredImage.src}
+                          alt={related.featuredImage.alt}
+                          fill
+                          sizes="(max-width: 640px) 100vw, 50vw"
+                          className="object-cover"
+                        />
+                      </div>
+                      <div className="p-5">
+                        <h3 className="font-semibold text-slate-900 group-hover:text-[#0B3B68]">
+                          {related.title}
+                        </h3>
+                      </div>
+                    </Link>
                   ))}
                 </div>
               </>

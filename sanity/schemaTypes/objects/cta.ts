@@ -40,12 +40,6 @@ export const cta = defineType({
       type: "string",
       initialValue: "Talk to an Expert",
     }),
-
-    defineField({
-      name: "buttonText",
-      title: "Button Text",
-      type: "string",
-    }),
   ],
 
   preview: {

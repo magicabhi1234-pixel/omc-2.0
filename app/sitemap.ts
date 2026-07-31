@@ -1,24 +1,18 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "@/constants/site";
-import {
-  staticPages,
-  allLandingSlugs,
-  blogPosts,
-  allBlogSlugs,
-} from "@/data/registry";
+import { staticPages, getAllLandingSlugs, getBlogPostsByDate } from "@/data/registry";
 
 /**
  * Dynamically generates sitemap.xml.
  *
  * Automatically includes:
  * - All static pages (Home, About, Contact, Blog, Privacy, Terms)
- * - All landing pages (every entry in src/data/landing-pages/)
- * - All blog posts (every entry in src/data/blog-posts/)
- * - Future landing pages and blog posts are included automatically when added to the registry.
+ * - All landing pages currently published in Sanity
+ * - All blog posts currently published in Sanity
  *
  * No hardcoded URLs. Uses SITE.url from constants.
  */
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = SITE.url.replace(/\/+$/, "");
 
   const entries: MetadataRoute.Sitemap = [];
@@ -43,7 +37,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // -----------------------------------------------------------------------
   // 2. Landing pages
   // -----------------------------------------------------------------------
-  for (const slug of allLandingSlugs) {
+  const landingSlugs = await getAllLandingSlugs();
+  for (const slug of landingSlugs) {
     entries.push({
       url: `${baseUrl}/${slug}`,
       lastModified: new Date(),
@@ -65,11 +60,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // -----------------------------------------------------------------------
   // 4. Blog posts
   // -----------------------------------------------------------------------
-  for (const slug of allBlogSlugs) {
-    const post = blogPosts[slug];
+  const blogPosts = await getBlogPostsByDate();
+  for (const post of blogPosts) {
     entries.push({
-      url: `${baseUrl}/blog/${slug}`,
-      lastModified: new Date(post.lastModifiedDate ?? post.publishedDate),
+      url: `${baseUrl}/blog/${post.slug}`,
+      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.7,
     });
