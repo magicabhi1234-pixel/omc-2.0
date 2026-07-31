@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-30 – 2026-07-31
 **Scope:** Full audit, fix, and CMS migration of landing pages, blog posts, universities, testimonials and SEO onto Sanity, per the original brief's 11-section spec.
-**Status:** Migration complete and live.
+**Status:** Migration complete and live. See §11 for a follow-up production incident (Studio crash + empty blog listing) and its resolution.
 
 ---
 
@@ -140,3 +140,80 @@ Compounding this: `src/lib/sanity/client.ts` threw synchronously at module scope
 4. **`npm audit`** currently reports 37 vulnerabilities (9 moderate, 28 high) in the dependency tree — pre-existing, unrelated to this work, flagged here since `npm install` surfaced it; worth a separate look.
 5. Consider adding a **Sanity webhook** (Settings → API → Webhooks in manage.sanity.io) pointed at `/api/send-email/revalidate?secret=...` so Studio publishes automatically trigger revalidation, if that isn't already configured.
 6. **Rotate the API token** used for this migration if it was only intended for one-time use, or keep it scoped/labeled clearly (e.g. "migration-script") if it stays in `.env.local` for future content operations.
+
+---
+
+## 11. Production incident: Studio crash + empty blog listing (2026-07-31, post-migration)
+
+**Reported symptoms:** `https://omc-2-0.vercel.app/studio` crashed; `/blog` loaded successfully but showed "No articles found"; the migration itself was already confirmed complete (99 universities / 27 landing pages / 5 blog posts in the dataset).
+
+Everything below was verified directly against the codebase and live production configuration — nothing here is assumed.
+
+### 1. Root cause of Studio crash
+
+`sanity.config.ts` read `projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!` and `dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!` with non-null assertions and no fallback. Checked Vercel's actual configured environment variables directly via `vercel env ls` (authenticated CLI, project linked): **the omc-2-0 Vercel project had zero Sanity-related environment variables in Production or Preview.** `NEXT_PUBLIC_*` variables are inlined into the client JavaScript bundle at *build* time, not read at runtime - so the deployed Studio bundle had `projectId: undefined` baked directly into it. When the Studio single-page app booted in the browser, Sanity's own client initialization throws `Configuration must contain \`projectId\`` (reproduced this exact throw locally against `@sanity/client`) - crashing the app.
+
+### 2. Root cause of missing blogs
+
+Same underlying gap (missing env vars), different symptom because of a fix already in place: `src/lib/sanity/client.ts` (hardened in the previous session) doesn't throw on missing config - it falls back to a placeholder value so `createClient` can construct, and lets the resulting fetch fail at request time, caught by `sanityFetch`'s try/catch, returning the caller's `fallback` (an empty array for the blog listing). So the page rendered successfully with zero posts instead of crashing - "loads successfully, No articles found" is exactly what that resilience mechanism looks like when its root cause (missing env vars) is never fixed. This also meant landing pages, universities, and testimonials were silently degraded in production the same way, not just blog - confirmed once the fix was deployed (see §5-6 below).
+
+**How this happened, reconstructed from Vercel's own deployment history** (`vercel ls` / `vercel inspect`):
+- The very first deploy of the full migration work (6h before this incident, commit `f76461d`) **hard-failed the build** with the exact "Missing NEXT_PUBLIC_SANITY_PROJECT_ID..." error - because the env vars were never in Vercel and `client.ts` still threw at module scope at that point.
+- A later deploy (`57d827d`, the `client.ts` resilience fix from the previous session) **succeeded** - but only because it stopped the crash, not because the env vars were added. Studio was still crashing (its config never got the same treatment) and all Sanity-backed content was silently empty.
+
+### 3. Verification of the full data flow (all checked directly, not assumed)
+
+| Check | Result |
+|---|---|
+| Same `projectId`/`dataset` in migration script, `src/lib/sanity/client.ts`, `sanity.config.ts`, `sanity.cli.ts` | Yes - all read `NEXT_PUBLIC_SANITY_PROJECT_ID` / `NEXT_PUBLIC_SANITY_DATASET`, no hardcoded divergent values anywhere in this project |
+| Vercel Production env vars (`vercel env ls`) | 0 Sanity vars before fix; all 5 present after |
+| Vercel Preview env vars | Same gap, same fix applied |
+| Document types created by migration vs. expected by queries | Match (`university`, `landingPage`, `blogPost` - verified in the original migration report, §7-8) |
+| Published vs. draft state of migrated content | All migration-created documents are published (not drafts) - `createOrReplace` targets real document IDs directly |
+| GROQ query filters / slug generation / references | Unchanged since the original migration - already verified with 0 dangling references, 607 university refs across 27 pages |
+| ISR/static generation | `next build` produces 49 static pages (27 landing + 5 blog + others) from live data once env vars were present |
+| Sanity token permissions | Editor-level token, confirmed via successful `sanityWriteClient` write test in the original migration |
+
+### 4. Files modified this incident
+
+- `sanity.config.ts` - removed the non-null assertions; added a `console.error` diagnostic and safe empty-string fallback so a future misconfiguration logs clearly instead of crashing opaquely (Studio still can't function without real values - there's no meaningful "degraded mode" for an editor tool, unlike the public site).
+- `tsconfig.json`, `eslint.config.mjs`, `.gitignore` - removed the `omc-test` exclusions/ignores, now dead since it's been moved out of the project (see §7).
+- Vercel project configuration (via CLI, not a file in this repo): added `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`, `NEXT_PUBLIC_SANITY_API_VERSION`, `NEXT_PUBLIC_SANITY_USE_CDN`, `SANITY_API_TOKEN` to both Production and Preview environments, using the same values already in `.env.local`.
+
+### 5. Fixes implemented
+
+1. Added all 5 Sanity environment variables to Vercel Production + Preview (verified present via `vercel env ls` afterward).
+2. Hardened `sanity.config.ts` against missing config (defense in depth, matching the pattern already used in `client.ts`).
+3. Committed and pushed both fixes, confirmed each resulting Vercel deployment reached `Ready` status (polled via `vercel ls`).
+
+### 6. Confirmation Studio works on production
+
+`https://omc-2-0.vercel.app/studio` returns HTTP 200 and serves a normal-sized Studio application shell (no server-side error page, no baked-in "Configuration must contain" text). **Caveat, stated plainly:** no browser/headless-browser tool was available to open dev tools and confirm the client-side app fully hydrates and an editor can click through documents - this verification is as far as available tooling could go. The specific failure mode reproduced and fixed (undefined `projectId` at build time) is resolved because the variables are now genuinely present in the build; if anything else is wrong with Studio specifically, it would be a new, different issue.
+
+### 7. Confirmation blogs render correctly on production
+
+Verified directly (not assumed) via live HTTP fetches, both before and after the fix, and again after the follow-up cleanup deploy:
+- `/blog`: no longer shows "No articles found" - all 5 real post titles render (LPU Online MBA Colleges, Symbiosis Online MBA, Sikkim Manipal University Online MBA, Lucrative Career in Data Science..., Online MBA in International Business).
+- `/blog/symbiosis-online-mba`: HTTP 200, correct SEO `<title>`, the post's HTML table block renders, 24 real `cdn.sanity.io` image references present.
+- `/sitemap.xml`: 39 URLs (6 static + 27 landing + 5 blog + 1 hub), no stale slugs.
+
+### 8. Confirmation landing pages, universities, and blogs use the same Sanity source
+
+`/top-distance-mba-in-digital-marketing` (a landing page) serves 40 real `cdn.sanity.io/images/9net5r17/production/...` image references - same project ID (`9net5r17`) and dataset (`production`) as the blog posts and the migration itself. `/landing-pages` hub returns 34 real links. This is the same single dataset end-to-end: Studio, the website's read client, the migration script, and now Vercel's environment all point at `9net5r17` / `production` - confirmed by direct inspection of each, not inferred.
+
+### 9. `omc-test` cleanup
+
+Found: `omc-test` was a separate git repository (own `.git`, own `.vercel` project called "omc-test-studio", a *different* Vercel project ID from omc-2-0) that had been sitting inside the omc-2.0 project folder. Its `sanity.config.ts` was hardcoded to the exact same `projectId: '9net5r17', dataset: 'production'` as this project - a duplicate Studio pointed at the same live content, though deployed independently and not the cause of this incident (different Vercel project entirely).
+
+Before touching it, checked its git state directly: clean working tree, but **no git remote configured at all** - its history existed only on this local machine, and deleting it would have destroyed 2 commits' worth of history with no backup anywhere (its separate Vercel deployment only has the built output, not the source). Flagged this to the user before acting.
+
+**Resolution:** moved (not deleted) to `C:\Users\sudhi\Documents\omc-test-archived`, fully preserving its git history. Removed the now-dead `omc-test` carve-outs from `tsconfig.json`, `eslint.config.mjs`, and `.gitignore`. The separate "omc-test-studio" Vercel project and its deployment were left untouched, per the user's choice - only the local folder was archived out of this repo.
+
+### 10. Final production-ready Sanity architecture
+
+One single Sanity project (`9net5r17`) and dataset (`production`), used consistently by:
+- **Studio** (`sanity.config.ts`, served at `/studio` on the omc-2-0 Vercel deployment) - now correctly configured in production.
+- **The website** (`src/lib/sanity/client.ts` → `queries.ts` → `mappers.ts` → `src/data/registry.ts` → pages) - resilient to transient Sanity outages by design, now actually configured in production too.
+- **No other Sanity project or dataset exists anywhere in the active codebase.** The one duplicate config (`omc-test`) has been archived outside the project entirely.
+
+Environment variables are the single source of truth for project/dataset identity, consistently named (`NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`) across the app, Studio, the CLI config, and the (now-deleted) migration script - and are now present in every environment that needs them: local `.env`/`.env.local`, and Vercel Production + Preview.
