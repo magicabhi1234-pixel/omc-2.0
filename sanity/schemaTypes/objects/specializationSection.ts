@@ -21,6 +21,14 @@ export const specializationItem = defineType({
     }),
 
     defineField({
+      name: "description",
+      title: "Description",
+      description: "Shown on the specialization card, e.g. what the specialization covers.",
+      type: "text",
+      rows: 2,
+    }),
+
+    defineField({
       name: "icon",
       title: "Icon",
       type: "string",

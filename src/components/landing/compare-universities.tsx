@@ -25,6 +25,7 @@ function featureValue(university: University, key: CompareFeature["key"]): strin
 
 export default function CompareUniversities(props: Props) {
   const {
+    badge = "Find your best fit",
     heading = "Compare universities with confidence",
     description = "Shortlist up to three universities and compare fees, accreditation, and study support side by side.",
     features = DEFAULT_FEATURES,
@@ -57,7 +58,7 @@ export default function CompareUniversities(props: Props) {
     <section className="bg-slate-50 py-16 md:py-20">
       <div className="mx-auto max-w-7xl px-4">
         <div className="overflow-hidden rounded-3xl bg-[#0B3B68] px-6 py-10 text-center text-white shadow-xl sm:px-10 md:py-14">
-          <span className="rounded-full bg-white/10 px-4 py-2 text-sm font-medium">Find your best fit</span>
+          <span className="rounded-full bg-white/10 px-4 py-2 text-sm font-medium">{badge}</span>
           <h2 className="mx-auto mt-5 max-w-3xl text-3xl font-bold md:text-5xl">{heading}</h2>
           <p className="mx-auto mt-4 max-w-2xl text-slate-200">{description}</p>
           <button type="button" onClick={() => setIsOpen(true)} className="mt-7 cursor-pointer rounded-xl bg-[#F47C45] px-7 py-3 font-semibold text-white transition hover:bg-[#e06c35] focus:outline-none focus:ring-2 focus:ring-white">

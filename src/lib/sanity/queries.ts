@@ -100,7 +100,7 @@ export const LANDING_PAGE_BY_SLUG_QUERY = `*[_type == "landingPage" && slug.curr
   specializations {
     heading,
     description,
-    "items": items[]{ title, "slug": slug.current, icon }
+    "items": items[]{ title, "slug": slug.current, description, icon }
   },
   scholarshipBanner {
     heading,

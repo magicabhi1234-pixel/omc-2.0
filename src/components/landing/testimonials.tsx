@@ -1,36 +1,11 @@
 import { TestimonialsSection as TestimonialsSectionType } from "@/types/landing";
 
-const defaultTestimonials = [
-  {
-    id: "1",
-    name: "Rahul Sharma",
-    designation: "Marketing Manager",
-    university: "Amity University",
-    review: "The distance MBA program helped me advance my career while working full-time. The curriculum was relevant and the faculty was supportive.",
-    rating: 5,
-  },
-  {
-    id: "2",
-    name: "Priya Singh",
-    designation: "Business Analyst",
-    university: "LPU Online",
-    review: "Excellent learning experience with great flexibility. The placement support helped me land my dream job.",
-    rating: 5,
-  },
-  {
-    id: "3",
-    name: "Amit Verma",
-    designation: "Operations Head",
-    university: "Symbiosis",
-    review: "The program was well-structured and the online platform was intuitive. Highly recommended for working professionals.",
-    rating: 4,
-  },
-];
-
 type Props = Partial<TestimonialsSectionType>;
 
 export default function Testimonials({ heading, description, testimonials }: Props) {
-  const items = testimonials && testimonials.length > 0 ? testimonials : defaultTestimonials;
+  if (!testimonials || testimonials.length === 0) return null;
+
+  const items = testimonials;
   const title = heading || "What Our Students Say";
 
   return (

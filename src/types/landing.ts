@@ -190,6 +190,8 @@ export interface Specialization {
 
   slug: string;
 
+  description?: string;
+
   icon?: string;
 }
 

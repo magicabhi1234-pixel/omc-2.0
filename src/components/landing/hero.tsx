@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { HeroSection, University } from "@/types/landing";
 import OpenPopupButton from "@/components/common/open-popup-button";
 import UniversitySearch from "@/components/landing/university-search";
@@ -13,6 +14,8 @@ export default function Hero(props: Props) {
     description = "Compare fees, rankings, scholarships, placements and admission process from India's leading UGC-approved MBA universities.",
     primaryButton = { label: "Apply Now", variant: "primary" },
     secondaryButton = { label: "Free Counselling", variant: "outline" },
+    heroImage,
+    stats = [],
     universities: pageUniversities = [],
   } = props;
 
@@ -76,67 +79,40 @@ export default function Hero(props: Props) {
 
           </div>
 
-          {/* Right Dashboard Card */}
-          <div>
+          {/* Right: Hero Image + Stats */}
+          {(heroImage?.src || stats.length > 0) && (
+            <div>
 
-            <div className="rounded-3xl border border-white/10 bg-white/10 p-6 backdrop-blur-xl shadow-2xl">
+              <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/10 shadow-2xl backdrop-blur-xl">
 
-              <p className="mb-6 text-center text-2xl font-bold">
-                Top MBA Universities
-              </p>
+                {heroImage?.src && (
+                  <div className="relative h-64 w-full sm:h-80">
+                    <Image
+                      src={heroImage.src}
+                      alt={heroImage.alt || heading}
+                      fill
+                      priority
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      className="object-cover"
+                    />
+                  </div>
+                )}
 
-              <div className="space-y-4">
-
-                <div className="flex items-center justify-between rounded-xl bg-white/10 p-4">
-                  <span>Amity University</span>
-                  <span className="font-semibold">
-                    ₹1.99L | A+
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between rounded-xl bg-white/10 p-4">
-                  <span>LPU Online</span>
-                  <span className="font-semibold">
-                    ₹1.80L | A++
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between rounded-xl bg-white/10 p-4">
-                  <span>Chandigarh University</span>
-                  <span className="font-semibold">
-                    ₹1.58L | A+
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between rounded-xl bg-white/10 p-4">
-                  <span>UPES Online</span>
-                  <span className="font-semibold">
-                    ₹1.50L | A
-                  </span>
-                </div>
-
-              </div>
-
-              {/* Scholarship */}
-              <div className="mt-6 rounded-2xl bg-[#F47C45] p-5 text-center">
-
-                <p className="text-sm uppercase tracking-wider">
-                  Scholarship Available
-                </p>
-
-                <p className="mt-2 text-4xl font-bold">
-                  ₹30,000
-                </p>
-
-                <p className="mt-2 text-sm">
-                  Limited Time Admission Benefit
-                </p>
+                {stats.length > 0 && (
+                  <div className={`grid gap-4 p-6 ${stats.length >= 3 ? "grid-cols-3" : "grid-cols-2"}`}>
+                    {stats.map((stat) => (
+                      <div key={stat.label} className="rounded-xl bg-white/10 p-4 text-center">
+                        <p className="text-2xl font-bold">{stat.value}</p>
+                        <p className="mt-1 text-sm text-slate-300">{stat.label}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
 
               </div>
 
             </div>
-
-          </div>
+          )}
 
         </div>
 

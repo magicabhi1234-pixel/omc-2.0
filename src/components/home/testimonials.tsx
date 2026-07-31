@@ -1,33 +1,10 @@
 import Container from "@/components/common/container";
 import { getDefaultTestimonials } from "@/data/registry";
 
-const fallbackTestimonials = [
-  {
-    name: "Rahul Sharma",
-    city: "Pune",
-    review:
-      "OMC helped me compare multiple universities in one place. I saved a lot of time and got admission in the right MBA program.",
-  },
-  {
-    name: "Priya Verma",
-    city: "Mumbai",
-    review:
-      "The counselling team guided me throughout the admission process. Their university comparison feature was very helpful.",
-  },
-  {
-    name: "Amit Singh",
-    city: "Delhi",
-    review:
-      "I was confused between Amity and Manipal. The platform helped me understand fees, placements and approvals easily.",
-  },
-];
-
 export default async function Testimonials() {
-  const sanityTestimonials = await getDefaultTestimonials();
-  const testimonials =
-    sanityTestimonials.length > 0
-      ? sanityTestimonials.map((t) => ({ name: t.name, city: t.university ?? "", review: t.review }))
-      : fallbackTestimonials;
+  const testimonials = await getDefaultTestimonials();
+
+  if (testimonials.length === 0) return null;
 
   return (
     <section className="bg-white py-20">
@@ -49,15 +26,16 @@ export default async function Testimonials() {
         </div>
 
         <div className="mt-14 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {testimonials.map((item, index) => (
+          {testimonials.map((item) => (
             <div
-              key={index}
+              key={item.id}
               className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
             >
-              <div className="mb-4 flex text-[#F47C45]">
-                <span aria-hidden="true">⭐⭐⭐⭐⭐</span>
-                <span className="sr-only">Rated 5 out of 5 stars</span>
+              <div className="mb-4 flex text-[#F47C45]" aria-hidden="true">
+                {"★".repeat(item.rating)}
+                {"☆".repeat(Math.max(0, 5 - item.rating))}
               </div>
+              <span className="sr-only">Rated {item.rating} out of 5 stars</span>
 
               <p className="leading-7 text-slate-600">
                 &ldquo;{item.review}&rdquo;
@@ -69,7 +47,7 @@ export default async function Testimonials() {
                 </h4>
 
                 <p className="text-sm text-slate-500">
-                  {item.city}
+                  {[item.designation, item.university].filter(Boolean).join(" · ")}
                 </p>
               </div>
             </div>

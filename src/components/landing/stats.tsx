@@ -9,12 +9,18 @@ const defaultStats = [
   { value: "98%", label: "Student Satisfaction" },
 ];
 
-export default function Stats({ stats }: Props) {
+export default function Stats({ heading, description, stats }: Props) {
   const items = stats && stats.length > 0 ? stats : defaultStats;
 
   return (
     <section className="-mt-12 relative z-20 pb-16">
       <div className="mx-auto max-w-7xl px-4">
+        {(heading || description) && (
+          <div className="mb-10 text-center text-white">
+            {heading && <h2 className="text-2xl font-bold md:text-3xl">{heading}</h2>}
+            {description && <p className="mx-auto mt-3 max-w-2xl text-slate-200">{description}</p>}
+          </div>
+        )}
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
           {items.map((item) => (
             <div

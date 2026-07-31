@@ -106,7 +106,19 @@ export async function getLandingPageBySlug(slug: string): Promise<LandingPageDat
     tags: ["landing-page", `landing-page:${slug}`],
     fallback: null,
   });
-  return mapLandingPage(raw);
+  const page = mapLandingPage(raw);
+  if (!page) return null;
+
+  // Pages without their own testimonials show the sitewide defaults instead
+  // of nothing - same source as the homepage, never hardcoded per-component.
+  if (!page.testimonials) {
+    const defaults = await getDefaultTestimonials();
+    if (defaults.length > 0) {
+      page.testimonials = { heading: "What Our Students Say", testimonials: defaults };
+    }
+  }
+
+  return page;
 }
 
 export interface LandingPageHubEntry {

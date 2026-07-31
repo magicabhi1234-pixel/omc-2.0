@@ -164,12 +164,23 @@ export default function UniversityGrid(props: Props) {
                       Apply Now
                     </button>
 
-                    <button
-                      onClick={openPopup}
-                      className="w-full cursor-pointer rounded-xl border border-slate-300 py-3 font-semibold transition hover:bg-slate-50"
-                    >
-                      Download Brochure
-                    </button>
+                    {item.brochureUrl ? (
+                      <a
+                        href={item.brochureUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full cursor-pointer rounded-xl border border-slate-300 py-3 text-center font-semibold transition hover:bg-slate-50"
+                      >
+                        Download Brochure
+                      </a>
+                    ) : (
+                      <button
+                        onClick={openPopup}
+                        className="w-full cursor-pointer rounded-xl border border-slate-300 py-3 font-semibold transition hover:bg-slate-50"
+                      >
+                        Download Brochure
+                      </button>
+                    )}
 
                   </div>
 

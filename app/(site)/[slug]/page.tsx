@@ -116,7 +116,7 @@ export default async function LandingPage({ params }: PageProps) {
 
       <Hero {...page.hero} universities={page.universitySection?.universities} />
 
-      {page.stats && <Stats stats={page.stats.stats} />}
+      {page.stats && <Stats {...page.stats} />}
 
       {page.whyChoose && (
         <WhyChoose

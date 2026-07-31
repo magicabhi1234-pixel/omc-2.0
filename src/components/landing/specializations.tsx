@@ -65,7 +65,7 @@ export default function Specializations(props: Props) {
     ? items.map(item => ({
         icon: item.icon || "",
         title: item.title,
-        desc: "",
+        desc: item.description || "",
       }))
     : defaultSpecializations;
 
