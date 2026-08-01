@@ -6,6 +6,8 @@ import WhyChoose from "@/components/landing/why-choose";
 import UniversityGrid from "@/components/landing/university-grid";
 import CompareUniversities from "@/components/landing/compare-universities";
 import Specializations from "@/components/landing/specializations";
+import Benefits from "@/components/landing/benefits";
+import CareerScope from "@/components/landing/career-scope";
 import ScholarshipBanner from "@/components/landing/scholarship-banner";
 import Testimonials from "@/components/landing/testimonials";
 import FAQ from "@/components/landing/faq";
@@ -116,7 +118,7 @@ export default async function LandingPage({ params }: PageProps) {
 
       <Hero {...page.hero} universities={page.universitySection?.universities} />
 
-      {page.stats && <Stats {...page.stats} />}
+      {page.stats && <Stats stats={page.stats.stats} />}
 
       {page.whyChoose && (
         <WhyChoose
@@ -136,6 +138,10 @@ export default async function LandingPage({ params }: PageProps) {
       )}
 
       {page.specializations && <Specializations {...page.specializations} />}
+
+      {page.benefits && <Benefits {...page.benefits} />}
+
+      {page.careerScope && <CareerScope {...page.careerScope} />}
 
       {page.scholarshipBanner && <ScholarshipBanner {...page.scholarshipBanner} />}
 

@@ -21,6 +21,8 @@ import { statCard, statsSection } from "./objects/statsSection";
 import { specializationItem, specializationSection } from "./objects/specializationSection";
 import { scholarshipBanner } from "./objects/scholarshipBanner";
 import { compareFeature, compareSection } from "./objects/compareSection";
+import { benefitItem, benefitsSection } from "./objects/benefitsSection";
+import { careerRole, careerScopeSection } from "./objects/careerScopeSection";
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   // Documents
@@ -42,6 +44,10 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   scholarshipBanner,
   compareFeature,
   compareSection,
+  benefitItem,
+  benefitsSection,
+  careerRole,
+  careerScopeSection,
 
   seo,
   faq,

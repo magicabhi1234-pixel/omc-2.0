@@ -102,6 +102,16 @@ export const LANDING_PAGE_BY_SLUG_QUERY = `*[_type == "landingPage" && slug.curr
     description,
     "items": items[]{ title, "slug": slug.current, description, icon }
   },
+  benefits {
+    heading,
+    description,
+    "items": items[]{ title, description, icon }
+  },
+  careerScope {
+    heading,
+    description,
+    "roles": roles[]{ title, salaryRange, description }
+  },
   scholarshipBanner {
     heading,
     description,

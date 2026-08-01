@@ -1,11 +1,11 @@
 import { TestimonialsSection as TestimonialsSectionType } from "@/types/landing";
+import TestimonialCarousel from "@/components/common/testimonial-carousel";
 
 type Props = Partial<TestimonialsSectionType>;
 
 export default function Testimonials({ heading, description, testimonials }: Props) {
   if (!testimonials || testimonials.length === 0) return null;
 
-  const items = testimonials;
   const title = heading || "What Our Students Say";
 
   return (
@@ -20,39 +20,8 @@ export default function Testimonials({ heading, description, testimonials }: Pro
           </h2>
           {description && <p className="mx-auto mt-5 max-w-3xl text-lg text-slate-600">{description}</p>}
         </div>
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {items.map((testimonial) => (
-            <div
-              key={testimonial.id}
-              className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm transition duration-300 hover:shadow-xl"
-            >
-              <div className="mb-4 flex gap-1">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <span
-                    key={i}
-                    className={`text-lg ${i < testimonial.rating ? "text-yellow-400" : "text-slate-200"}`}
-                  >
-                    &#9733;
-                  </span>
-                ))}
-              </div>
-              <p className="leading-relaxed text-slate-600">&ldquo;{testimonial.review}&rdquo;</p>
-              <div className="mt-6 flex items-center gap-3 border-t pt-6">
-                <div>
-                  <p className="font-bold text-slate-900">{testimonial.name}</p>
-                  {testimonial.designation && (
-                    <p className="text-sm text-slate-500">{testimonial.designation}</p>
-                  )}
-                  {testimonial.university && (
-                    <p className="text-sm text-slate-400">{testimonial.university}</p>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+        <TestimonialCarousel testimonials={testimonials} />
       </div>
     </section>
   );
 }
-

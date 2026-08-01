@@ -151,6 +151,20 @@ export const landingPage = defineType({
     }),
 
     defineField({
+      name: "benefits",
+      title: "Benefits Section",
+      type: "benefitsSection",
+      group: "sections",
+    }),
+
+    defineField({
+      name: "careerScope",
+      title: "Career Scope Section",
+      type: "careerScopeSection",
+      group: "sections",
+    }),
+
+    defineField({
       name: "scholarshipBanner",
       title: "Scholarship Banner",
       type: "scholarshipBanner",

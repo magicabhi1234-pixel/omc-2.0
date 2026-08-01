@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { HeroSection, University } from "@/types/landing";
 import OpenPopupButton from "@/components/common/open-popup-button";
 import UniversitySearch from "@/components/landing/university-search";
@@ -7,6 +6,13 @@ type Props = Partial<HeroSection> & {
   universities?: University[];
 };
 
+const PLACEHOLDER_UNIVERSITIES = [
+  { name: "Amity University", startingFee: "₹1.99L" },
+  { name: "LPU Online", startingFee: "₹1.80L" },
+  { name: "Chandigarh University", startingFee: "₹1.58L" },
+  { name: "UPES Online", startingFee: "₹1.50L" },
+];
+
 export default function Hero(props: Props) {
   const {
     badge = "🎓 Admissions Open 2026",
@@ -14,10 +20,10 @@ export default function Hero(props: Props) {
     description = "Compare fees, rankings, scholarships, placements and admission process from India's leading UGC-approved MBA universities.",
     primaryButton = { label: "Apply Now", variant: "primary" },
     secondaryButton = { label: "Free Counselling", variant: "outline" },
-    heroImage,
-    stats = [],
     universities: pageUniversities = [],
   } = props;
+
+  const topUniversities = pageUniversities.slice(0, 4);
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-[#0B3B68] via-[#123f6d] to-[#0F172A] py-20 text-white">
@@ -79,40 +85,51 @@ export default function Hero(props: Props) {
 
           </div>
 
-          {/* Right: Hero Image + Stats */}
-          {(heroImage?.src || stats.length > 0) && (
-            <div>
+          {/* Right Dashboard Card */}
+          <div>
 
-              <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/10 shadow-2xl backdrop-blur-xl">
+            <div className="rounded-3xl border border-white/10 bg-white/10 p-6 backdrop-blur-xl shadow-2xl">
 
-                {heroImage?.src && (
-                  <div className="relative h-64 w-full sm:h-80">
-                    <Image
-                      src={heroImage.src}
-                      alt={heroImage.alt || heading}
-                      fill
-                      priority
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                      className="object-cover"
-                    />
+              <p className="mb-6 text-center text-2xl font-bold">
+                Top MBA Universities
+              </p>
+
+              <div className="space-y-4">
+
+                {(topUniversities.length > 0 ? topUniversities : PLACEHOLDER_UNIVERSITIES).map((university) => (
+                  <div
+                    key={university.name}
+                    className="flex items-center justify-between rounded-xl bg-white/10 p-4"
+                  >
+                    <span>{university.name}</span>
+                    <span className="font-semibold">
+                      {university.startingFee}
+                    </span>
                   </div>
-                )}
+                ))}
 
-                {stats.length > 0 && (
-                  <div className={`grid gap-4 p-6 ${stats.length >= 3 ? "grid-cols-3" : "grid-cols-2"}`}>
-                    {stats.map((stat) => (
-                      <div key={stat.label} className="rounded-xl bg-white/10 p-4 text-center">
-                        <p className="text-2xl font-bold">{stat.value}</p>
-                        <p className="mt-1 text-sm text-slate-300">{stat.label}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
+              </div>
+
+              {/* Scholarship */}
+              <div className="mt-6 rounded-2xl bg-[#F47C45] p-5 text-center">
+
+                <p className="text-sm uppercase tracking-wider">
+                  Scholarship Available
+                </p>
+
+                <p className="mt-2 text-4xl font-bold">
+                  ₹30,000
+                </p>
+
+                <p className="mt-2 text-sm">
+                  Limited Time Admission Benefit
+                </p>
 
               </div>
 
             </div>
-          )}
+
+          </div>
 
         </div>
 

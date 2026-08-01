@@ -1,4 +1,6 @@
 import type {
+  BenefitsSection,
+  CareerScopeSection,
   CompareSection,
   CTASection,
   FAQSection,
@@ -29,6 +31,8 @@ export interface RawLandingPage {
   whyChoose?: WhyChooseSection;
   stats?: StatsSection;
   specializations?: SpecializationSection;
+  benefits?: BenefitsSection;
+  careerScope?: CareerScopeSection;
   scholarshipBanner?: ScholarshipBanner;
   faq?: FAQSection;
   testimonialsHeading?: string;

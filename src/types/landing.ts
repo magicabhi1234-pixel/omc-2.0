@@ -152,6 +152,46 @@ export interface WhyChooseSection {
 }
 
 // =============================================
+// Benefits
+// =============================================
+
+export interface BenefitItem {
+  title: string;
+
+  description: string;
+
+  icon?: string;
+}
+
+export interface BenefitsSection {
+  heading: string;
+
+  description?: string;
+
+  items: BenefitItem[];
+}
+
+// =============================================
+// Career Scope
+// =============================================
+
+export interface CareerRole {
+  title: string;
+
+  salaryRange?: string;
+
+  description?: string;
+}
+
+export interface CareerScopeSection {
+  heading: string;
+
+  description?: string;
+
+  roles: CareerRole[];
+}
+
+// =============================================
 // Stats Section
 // =============================================
 
@@ -289,6 +329,10 @@ export interface LandingPageData {
   scholarshipBanner?: ScholarshipBanner;
 
   specializations?: SpecializationSection;
+
+  benefits?: BenefitsSection;
+
+  careerScope?: CareerScopeSection;
 
   testimonials?: TestimonialsSection;
 
