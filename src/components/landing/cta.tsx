@@ -45,7 +45,7 @@ export default function CTA(props: Props) {
           </div>
 
           <div className="rounded-full bg-white/10 px-5 py-3 backdrop-blur">
-            <span aria-hidden="true">✅</span> Scholarship Guidance
+            <span aria-hidden="true">✅</span> Placement Assistance
           </div>
 
           <div className="rounded-full bg-white/10 px-5 py-3 backdrop-blur">

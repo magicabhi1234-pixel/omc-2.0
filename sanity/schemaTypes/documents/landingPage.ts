@@ -165,9 +165,9 @@ export const landingPage = defineType({
     }),
 
     defineField({
-      name: "scholarshipBanner",
-      title: "Scholarship Banner",
-      type: "scholarshipBanner",
+      name: "highlightBanner",
+      title: "Highlight Banner",
+      type: "highlightBanner",
       group: "sections",
     }),
 
@@ -231,14 +231,16 @@ export const landingPage = defineType({
   preview: {
     select: {
       title: "title",
-      subtitle: "slug.current",
+      slug: "slug.current",
+      category: "category",
       media: "hero.image",
     },
 
-    prepare({ title, subtitle, media }) {
+    prepare({ title, slug, category, media }) {
+      const subtitle = [category, slug ? `/${slug}` : "No Slug"].filter(Boolean).join(" · ");
       return {
         title,
-        subtitle: subtitle ? `/${subtitle}` : "No Slug",
+        subtitle,
         media,
       };
     },

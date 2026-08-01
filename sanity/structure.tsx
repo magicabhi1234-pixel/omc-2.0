@@ -6,17 +6,13 @@ const UsersIcon = () => <Icon symbol="users" />;
 const BookIcon = () => <Icon symbol="book" />;
 const CommentIcon = () => <Icon symbol="comment" />;
 
-const LANDING_PAGE_CATEGORIES = [
-  "Online MBA",
-  "Distance MBA",
-  "MBA Specializations",
-  "Executive MBA",
-  "University Pages",
-  "Bachelor Programs",
-];
-
 const MANAGED_TYPES = ["landingPage", "university", "blogPost", "testimonial"];
 
+// Kept as a single flat list (not nested per-category panes) so Studio's
+// Content / Landing Pages navigation panes stay visible alongside the
+// document editor - each extra pane level pushes earlier panes further off
+// screen. Category is still visible per-row via the preview subtitle
+// (see landingPage.ts), and editors can re-order by it from the list menu.
 export const structure: StructureResolver = (S) =>
   S.list()
     .title("Content")
@@ -25,28 +21,24 @@ export const structure: StructureResolver = (S) =>
         .title("Landing Pages")
         .icon(DocumentsIcon)
         .child(
-          S.list()
+          S.documentTypeList("landingPage")
             .title("Landing Pages")
-            .items([
-              ...LANDING_PAGE_CATEGORIES.map((category) =>
-                S.listItem()
-                  .title(category)
-                  .child(
-                    S.documentList()
-                      .title(category)
-                      .filter('_type == "landingPage" && category == $category')
-                      .params({ category })
-                      .defaultOrdering([{ field: "title", direction: "asc" }])
-                  )
-              ),
-              S.divider(),
-              S.listItem()
-                .title("All Landing Pages")
-                .child(
-                  S.documentTypeList("landingPage")
-                    .title("All Landing Pages")
-                    .defaultOrdering([{ field: "title", direction: "asc" }])
-                ),
+            .defaultOrdering([{ field: "title", direction: "asc" }])
+            .menuItems([
+              S.orderingMenuItem({
+                name: "titleAsc",
+                title: "By Title",
+                by: [{ field: "title", direction: "asc" }],
+              }),
+              S.orderingMenuItem({
+                name: "categoryAsc",
+                title: "By Category",
+                by: [
+                  { field: "category", direction: "asc" },
+                  { field: "title", direction: "asc" },
+                ],
+              }),
+              ...(S.documentTypeList("landingPage").getMenuItems() ?? []),
             ])
         ),
 

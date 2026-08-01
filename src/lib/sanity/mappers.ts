@@ -6,7 +6,7 @@ import type {
   FAQSection,
   HeroSection,
   LandingPageData,
-  ScholarshipBanner,
+  HighlightBanner,
   SEOData,
   SpecializationSection,
   StatsSection,
@@ -33,7 +33,7 @@ export interface RawLandingPage {
   specializations?: SpecializationSection;
   benefits?: BenefitsSection;
   careerScope?: CareerScopeSection;
-  scholarshipBanner?: ScholarshipBanner;
+  highlightBanner?: HighlightBanner;
   faq?: FAQSection;
   testimonialsHeading?: string;
   testimonials?: Testimonial[];

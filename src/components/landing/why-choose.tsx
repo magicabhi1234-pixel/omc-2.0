@@ -17,7 +17,7 @@ const defaultFeatures = [
   {
     icon: "wallet",
     title: "Affordable Fees",
-    description: "Low-cost MBA programs with EMI and scholarship options.",
+    description: "Low-cost MBA programs with easy EMI options.",
   },
   {
     icon: "trending-up",

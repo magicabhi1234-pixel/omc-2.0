@@ -17,7 +17,7 @@ export default function Hero(props: Props) {
   const {
     badge = "🎓 Admissions Open 2026",
     heading = "Top Distance MBA",
-    description = "Compare fees, rankings, scholarships, placements and admission process from India's leading UGC-approved MBA universities.",
+    description = "Compare fees, rankings, placements and admission process from India's leading UGC-approved MBA universities.",
     primaryButton = { label: "Apply Now", variant: "primary" },
     secondaryButton = { label: "Free Counselling", variant: "outline" },
     universities: pageUniversities = [],
@@ -110,19 +110,19 @@ export default function Hero(props: Props) {
 
               </div>
 
-              {/* Scholarship */}
+              {/* Placement Support */}
               <div className="mt-6 rounded-2xl bg-[#F47C45] p-5 text-center">
 
                 <p className="text-sm uppercase tracking-wider">
-                  Scholarship Available
+                  Placement Support Included
                 </p>
 
                 <p className="mt-2 text-4xl font-bold">
-                  ₹30,000
+                  100%
                 </p>
 
                 <p className="mt-2 text-sm">
-                  Limited Time Admission Benefit
+                  Career Guidance & Placement Assistance
                 </p>
 
               </div>

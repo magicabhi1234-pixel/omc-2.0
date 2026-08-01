@@ -24,7 +24,7 @@ const defaultFaqs = [
   },
   {
     question: "Are EMI options available?",
-    answer: "Yes. Most universities provide easy EMI and scholarship options.",
+    answer: "Yes. Most universities provide easy EMI options along with placement support and career guidance.",
   },
   {
     question: "Do universities provide placement assistance?",

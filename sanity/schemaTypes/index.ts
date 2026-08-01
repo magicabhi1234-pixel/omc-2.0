@@ -19,7 +19,7 @@ import { universitySection } from "./objects/universitySection";
 import { whyChooseItem, whyChooseSection } from "./objects/whyChooseSection";
 import { statCard, statsSection } from "./objects/statsSection";
 import { specializationItem, specializationSection } from "./objects/specializationSection";
-import { scholarshipBanner } from "./objects/scholarshipBanner";
+import { highlightBanner } from "./objects/highlightBanner";
 import { compareFeature, compareSection } from "./objects/compareSection";
 import { benefitItem, benefitsSection } from "./objects/benefitsSection";
 import { careerRole, careerScopeSection } from "./objects/careerScopeSection";
@@ -41,7 +41,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   statsSection,
   specializationItem,
   specializationSection,
-  scholarshipBanner,
+  highlightBanner,
   compareFeature,
   compareSection,
   benefitItem,

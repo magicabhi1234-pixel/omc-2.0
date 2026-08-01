@@ -23,6 +23,13 @@ export default function LeadPopup() {
     }
 
     const closeTimer = setTimeout(() => setOpen(false), 0);
+
+    // Landing Pages listing: no auto-popup, but the click-trigger
+    // (openLeadPopup event, handled in a separate effect below) still works.
+    if (pathname === "/landing-pages") {
+      return () => clearTimeout(closeTimer);
+    }
+
     const timer = setTimeout(() => {
       setOpen(true);
     }, 2000);

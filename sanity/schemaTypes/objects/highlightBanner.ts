@@ -1,8 +1,9 @@
 import { defineField, defineType } from "sanity";
 
-export const scholarshipBanner = defineType({
-  name: "scholarshipBanner",
-  title: "Scholarship Banner",
+export const highlightBanner = defineType({
+  name: "highlightBanner",
+  title: "Highlight Banner",
+  description: "A callout banner for a key value proposition (e.g. placement support), shown near the end of the page.",
   type: "object",
 
   fields: [
@@ -24,13 +25,13 @@ export const scholarshipBanner = defineType({
       name: "buttonLabel",
       title: "Button Label",
       type: "string",
-      initialValue: "Apply For Scholarship",
+      initialValue: "Get Placement Assistance",
     }),
   ],
 
   preview: {
     prepare() {
-      return { title: "Scholarship Banner" };
+      return { title: "Highlight Banner" };
     },
   },
 });

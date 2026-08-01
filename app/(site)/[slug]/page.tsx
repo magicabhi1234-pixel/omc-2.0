@@ -8,7 +8,7 @@ import CompareUniversities from "@/components/landing/compare-universities";
 import Specializations from "@/components/landing/specializations";
 import Benefits from "@/components/landing/benefits";
 import CareerScope from "@/components/landing/career-scope";
-import ScholarshipBanner from "@/components/landing/scholarship-banner";
+import HighlightBanner from "@/components/landing/highlight-banner";
 import Testimonials from "@/components/landing/testimonials";
 import FAQ from "@/components/landing/faq";
 import CTA from "@/components/landing/cta";
@@ -143,7 +143,7 @@ export default async function LandingPage({ params }: PageProps) {
 
       {page.careerScope && <CareerScope {...page.careerScope} />}
 
-      {page.scholarshipBanner && <ScholarshipBanner {...page.scholarshipBanner} />}
+      {page.highlightBanner && <HighlightBanner {...page.highlightBanner} />}
 
       {page.testimonials && <Testimonials {...page.testimonials} />}
 

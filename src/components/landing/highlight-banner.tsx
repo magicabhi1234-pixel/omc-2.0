@@ -1,13 +1,13 @@
-import { ScholarshipBanner as ScholarshipBannerType } from "@/types/landing";
+import { HighlightBanner as HighlightBannerType } from "@/types/landing";
 import OpenPopupButton from "@/components/common/open-popup-button";
 
-type Props = Partial<ScholarshipBannerType>;
+type Props = Partial<HighlightBannerType>;
 
-export default function ScholarshipBanner(props: Props) {
+export default function HighlightBanner(props: Props) {
   const {
-    heading = "Get Scholarship Up To ₹30,000",
-    description = "Apply through Online MBA Colleges and get exclusive scholarship benefits, EMI options and admission assistance.",
-    button = { label: "Apply For Scholarship", variant: "primary" },
+    heading = "Get 100% Placement Support & Career Guidance",
+    description = "Every university on this page offers placement assistance, career guidance and industry-relevant curriculum to help you make the most of your MBA.",
+    button = { label: "Get Placement Assistance", variant: "primary" },
   } = props;
 
   return (
@@ -26,7 +26,7 @@ export default function ScholarshipBanner(props: Props) {
             <div>
 
               <span className="rounded-full bg-white/10 px-4 py-2 text-sm backdrop-blur">
-                <span aria-hidden="true">🎁</span> Limited Time Offer
+                <span aria-hidden="true">🎯</span> Career-Focused Support
               </span>
 
               <h2 className="mt-6 text-4xl font-bold md:text-5xl">
@@ -42,11 +42,11 @@ export default function ScholarshipBanner(props: Props) {
               <div className="mt-8 flex flex-wrap gap-4">
 
                 <div className="rounded-full bg-white/10 px-4 py-3 backdrop-blur">
-                  <span aria-hidden="true">✅</span> Scholarship Assistance
+                  <span aria-hidden="true">✅</span> Placement Support
                 </div>
 
                 <div className="rounded-full bg-white/10 px-4 py-3 backdrop-blur">
-                  <span aria-hidden="true">✅</span> Easy EMI Options
+                  <span aria-hidden="true">✅</span> Career Guidance
                 </div>
 
                 <div className="rounded-full bg-white/10 px-4 py-3 backdrop-blur">
@@ -63,11 +63,11 @@ export default function ScholarshipBanner(props: Props) {
               <div className="inline-block rounded-3xl bg-white p-8 shadow-2xl">
 
                 <p className="text-6xl font-bold text-[#F47C45]">
-                  ₹30K
+                  100%
                 </p>
 
                 <p className="mt-2 text-lg font-semibold text-slate-800">
-                  Scholarship Benefit
+                  Placement Support
                 </p>
 
                 <OpenPopupButton className="mt-6 cursor-pointer rounded-xl bg-[#F47C45] px-8 py-4 font-semibold text-white transition hover:scale-105">

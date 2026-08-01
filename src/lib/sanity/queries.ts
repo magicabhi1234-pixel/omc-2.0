@@ -112,10 +112,10 @@ export const LANDING_PAGE_BY_SLUG_QUERY = `*[_type == "landingPage" && slug.curr
     description,
     "roles": roles[]{ title, salaryRange, description }
   },
-  scholarshipBanner {
+  highlightBanner {
     heading,
     description,
-    "button": { "label": coalesce(buttonLabel, "Apply For Scholarship"), "variant": "primary" }
+    "button": { "label": coalesce(buttonLabel, "Get Placement Assistance"), "variant": "primary" }
   },
   faq {
     heading,

@@ -210,10 +210,10 @@ export interface StatsSection {
 }
 
 // =============================================
-// Scholarship Banner
+// Highlight Banner
 // =============================================
 
-export interface ScholarshipBanner {
+export interface HighlightBanner {
   heading: string;
 
   description?: string;
@@ -326,7 +326,7 @@ export interface LandingPageData {
 
   stats?: StatsSection;
 
-  scholarshipBanner?: ScholarshipBanner;
+  highlightBanner?: HighlightBanner;
 
   specializations?: SpecializationSection;
 
