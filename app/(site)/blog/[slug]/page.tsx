@@ -28,9 +28,12 @@ export async function generateMetadata({
 
   if (!post) return {};
 
+  const ogImage = post.seo.ogImage ?? post.featuredImage.src;
+
   return {
     title: post.seo.title,
     description: post.seo.description,
+    robots: post.seo.robots,
     alternates: {
       canonical: post.seo.canonical,
     },
@@ -38,12 +41,13 @@ export async function generateMetadata({
       title: post.seo.title,
       description: post.seo.description,
       type: "article",
-      images: post.seo.ogImage ? [post.seo.ogImage] : [post.featuredImage.src],
+      images: [ogImage],
     },
     twitter: {
       card: "summary_large_image",
       title: post.seo.title,
       description: post.seo.description,
+      images: [ogImage],
     },
   };
 }

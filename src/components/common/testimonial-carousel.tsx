@@ -119,7 +119,7 @@ export default function TestimonialCarousel({ testimonials }: Props) {
           <div
             key={`${testimonial.id}-${index}`}
             data-testimonial-card
-            className="w-[82%] flex-none snap-start sm:w-[46%] lg:w-[31%]"
+            className="w-full flex-none snap-start md:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)]"
           >
             <TestimonialCard testimonial={testimonial} />
           </div>

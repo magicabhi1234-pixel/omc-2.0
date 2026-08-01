@@ -37,11 +37,13 @@ export async function generateMetadata({
   if (!page) return {};
 
   const canonical = page.seo.canonical ?? `${SITE.url}/${slug}`;
+  const ogImage = page.seo.ogImage ?? page.hero.heroImage?.src;
 
   return {
     title: page.seo.title,
     description: page.seo.description,
     keywords: page.seo.keywords,
+    robots: page.seo.robots,
     alternates: {
       canonical,
     },
@@ -50,11 +52,13 @@ export async function generateMetadata({
       description: page.seo.description,
       url: canonical,
       type: "website",
+      images: ogImage ? [ogImage] : undefined,
     },
     twitter: {
       card: "summary_large_image",
       title: page.seo.title,
       description: page.seo.description,
+      images: ogImage ? [ogImage] : undefined,
     },
   };
 }

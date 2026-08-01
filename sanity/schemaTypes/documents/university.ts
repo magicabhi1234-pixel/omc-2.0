@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { validateSlugFormat } from "../../lib/slugValidation";
 
 const APPROVAL_OPTIONS = [
   "UGC",
@@ -35,13 +36,15 @@ export const university = defineType({
     defineField({
       name: "slug",
       title: "Slug",
+      description: "Must be unique across all universities.",
       type: "slug",
       group: "basic",
       options: {
         source: "name",
         maxLength: 96,
       },
-      validation: (Rule) => Rule.required(),
+      validation: (Rule) =>
+        Rule.required().custom((slug) => validateSlugFormat(slug)),
     }),
 
     defineField({

@@ -46,6 +46,14 @@ type SanityFetchOptions<QueryResponse> = {
 };
 
 /**
+ * Time-based safety net (seconds) on top of the primary on-demand
+ * revalidation path (the Sanity webhook -> /api/revalidate -> revalidateTag).
+ * If the webhook is ever misconfigured or fails silently again, no page can
+ * go stale for longer than this - it isn't the main freshness mechanism.
+ */
+const FALLBACK_REVALIDATE_SECONDS = 300;
+
+/**
  * Fetches from Sanity with tag-based revalidation, returning `fallback`
  * (instead of throwing) if the request fails - so a Sanity outage degrades
  * a page rather than 500ing it.
@@ -58,7 +66,7 @@ export async function sanityFetch<QueryResponse>({
 }: SanityFetchOptions<QueryResponse>): Promise<QueryResponse> {
   try {
     return await sanity.fetch<QueryResponse>(query, params, {
-      next: { tags },
+      next: { tags, revalidate: FALLBACK_REVALIDATE_SECONDS },
     });
   } catch (error) {
     console.error("Sanity fetch failed:", error);

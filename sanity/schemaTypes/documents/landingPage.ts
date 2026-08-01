@@ -1,4 +1,5 @@
 import { defineType, defineField } from "sanity";
+import { landingPageSlugIsUnique, validateSlugFormat } from "../../lib/slugValidation";
 
 export const landingPage = defineType({
   name: "landingPage",
@@ -33,14 +34,16 @@ export const landingPage = defineType({
     defineField({
       name: "slug",
       title: "Slug",
-      description: "The page's URL path, e.g. top-10-online-mba-universities-colleges-north-zone",
+      description: "The page's URL path, e.g. top-10-online-mba-universities-colleges-north-zone. Must be unique and cannot match an existing site page (e.g. \"contact\", \"blog\").",
       type: "slug",
       group: "basic",
       options: {
         source: "title",
         maxLength: 200,
+        isUnique: landingPageSlugIsUnique,
       },
-      validation: (Rule) => Rule.required(),
+      validation: (Rule) =>
+        Rule.required().custom((slug) => validateSlugFormat(slug)),
     }),
 
     defineField({

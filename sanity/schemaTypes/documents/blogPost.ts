@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { validateSlugFormat } from "../../lib/slugValidation";
 
 export const blogPost = defineType({
   name: "blogPost",
@@ -33,13 +34,15 @@ export const blogPost = defineType({
     defineField({
       name: "slug",
       title: "Slug",
+      description: "The post's URL path under /blog/, e.g. lpu-online-mba. Must be unique.",
       type: "slug",
       group: "content",
       options: {
         source: "title",
         maxLength: 200,
       },
-      validation: (Rule) => Rule.required(),
+      validation: (Rule) =>
+        Rule.required().custom((slug) => validateSlugFormat(slug)),
     }),
 
     defineField({
