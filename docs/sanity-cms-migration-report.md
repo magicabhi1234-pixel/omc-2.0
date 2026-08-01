@@ -424,3 +424,47 @@ Default copy changed from "Get Scholarship Up To ₹30,000" / "Scholarship Assis
 ### 6. Verification
 
 `npx tsc --noEmit`, `npx eslint . --ext .ts,.tsx`, and `npx next build` all clean (0 errors, 0 warnings). Verified live on production after deploy: a sampled landing page returns 200 with zero "scholarship" mentions (case-insensitive) and the new "Placement Support Included" copy present; the carousel's scroll-snap markup is present on both a landing page and the homepage; `/landing-pages` and `/studio` both return 200. Autoplay timing, hover-pause, and the Studio pane-depth improvement are behavior that only fully shows up interactively in a browser - stated plainly, as in prior rounds, since no browser/headless tool is available here; the underlying code for each was verified against Sanity's/the browser's actual documented mechanics (pane stacking, CSS scroll-snap, `mouseenter`/`touchstart` events) rather than assumed to work.
+
+---
+
+## 15. Fifth follow-up: carousel exact card widths, stale-content root cause, SEO validation audit (2026-08-01)
+
+### 1. Testimonials slider layout
+
+**Root cause:** card widths were plain percentages (`w-[82%] sm:w-[46%] lg:w-[31%]`) inside a flex container with `gap-6`. CSS `gap` doesn't subtract from a sibling's percentage width, so 3 cards at 31% plus 2 gaps of 1.5rem exceeded the container's content box, leaving a sliver of the next card visible - worse on tablet (2×46% + 1 gap) and mobile (82%, deliberately leaving room for a peek that the new requirement explicitly rules out).
+
+**Fix:** `src/components/common/testimonial-carousel.tsx` now sizes each card with `calc()`, subtracting the exact gap space before dividing: `w-full` (mobile, 1 card) → `md:w-[calc((100%-1.5rem)/2)]` (tablet, exactly 2 cards) → `lg:w-[calc((100%-3rem)/3)]` (desktop, exactly 3 cards). Autoplay, infinite loop, pause-on-hover/touch, and native swipe are unchanged from the previous round - only the width math changed.
+
+### 2. Root cause of delayed content updates
+
+Confirmed directly, not assumed: `npx sanity hooks list` showed a webhook named "Next.js Revalidate" pointed at `https://omc-2-0.vercel.app/api/revalidate?secret=...` - correctly configured from day one. `npx sanity hooks logs` showed **every single delivery attempt has failed with a 404**. The actual route handler lived at `app/api/send-email/revalidate/route.ts` (a leftover from being scaffolded alongside the email-sending route), not `app/api/revalidate/route.ts` - so the webhook has never once successfully reached the code that calls `revalidateTag`. Since the fetch layer used only `next: { tags }` with no time-based `revalidate`, a Data Cache entry that's never explicitly invalidated is cached indefinitely - explaining exactly the reported symptom (content only ever changes after a redeploy, which rebuilds everything from scratch).
+
+### 3. Caching/revalidation solution implemented
+
+- Moved the route: `app/api/send-email/revalidate/route.ts` → `app/api/revalidate/route.ts`, matching the webhook's URL exactly. No webhook reconfiguration was needed - it was already correct.
+- Added a 5-minute time-based fallback (`next: { tags, revalidate: 300 }` in `sanityFetch`, `src/lib/sanity/client.ts`) as defense in depth on top of the primary on-demand path. This is deliberately a safety net, not the main mechanism - since this exact class of bug (a silently-broken webhook) went undetected for the project's entire history with no fallback and no monitoring, a bounded worst case is cheap insurance against it recurring.
+- **Verified end-to-end against real production data**, not just locally: patched a live landing page's `hero.badge` field via the Sanity API (equivalent to a Studio edit + publish) to a unique marker string, waited 8 seconds, and confirmed the marker appeared on `https://omc-2-0.vercel.app/...` with no redeploy. Then reverted the field to its original value and confirmed that change also propagated within the same timeframe. This is the strongest verification available without direct Studio access - the actual publish-to-live pipeline was exercised, not assumed to work from the code alone.
+
+### 4-6. SEO issues found, fixes implemented, and validation rules added
+
+| Issue found | Fix |
+|---|---|
+| `metaTitle`/`metaDescription` had a hard max length but no guidance on the ideal range, and no protection against titles/descriptions so short they under-use the available space | Added soft `Rule.custom(...).warning()` checks (title <30 chars, description <70 chars) alongside the existing `Rule.required().max()`, plus recommended-range help text in each field's `description` |
+| `canonicalUrl` had no format validation at all - a typo'd scheme or bare domain would silently produce a broken canonical tag | Added `Rule.uri({ scheme: ["http", "https"] })`, matching the pattern already used for other URL fields in this schema |
+| `ogImage` had no `alt` field, inconsistent with every other image field in the schema (hero, logo, featured image, testimonial photo all have one) | Added an `alt` sub-field |
+| **Two real orphaned CMS fields, not caught before because nothing exercised them**: `seo.ogImage` and `seo.noIndex` were both editable in Studio and fetched from GROQ, but `generateMetadata` in `[slug]/page.tsx` never included an `images` array in `openGraph`/`twitter` at all, and neither landing pages nor blog posts (`blog/[slug]/page.tsx`) applied the `robots` value anywhere | Added `images: [ogImage-or-hero-image-fallback]` to both `openGraph` and `twitter` blocks on landing pages, and the missing `twitter.images` on blog posts (which already had `openGraph.images`); added `robots: page.seo.robots` / `post.seo.robots` to both metadata functions so toggling "No Index" in Studio now actually affects the rendered page |
+| Slugs (`landingPage`, `blogPost`, `university`) had `Rule.required()` only - no format check, and no protection against a landing page slug colliding with an existing static route (e.g. a page slugged "contact" would silently be unreachable, since Next.js always prefers the static `/contact` route over the `[slug]` catch-all) | New `sanity/lib/slugValidation.ts`: `validateSlugFormat` (lowercase letters/numbers/hyphens only, applied to all three document types) and `landingPageSlugIsUnique` (rejects a hardcoded list of reserved/static-route slugs, then defers to Sanity's own `context.defaultIsUnique` for the standard per-type, draft-aware duplicate check - applied only to `landingPage`, since blog posts and universities don't share the reserved-route concern) |
+| `keywords` field has no real SEO effect in modern search engines but wasn't documented as such, risking editor time spent on it | Added a `description` clarifying it's optional/legacy, safe to leave empty |
+| Duplicate SEO fields | None found - `title`/`h1` (page heading) and `seo.metaTitle` (search-result title) are intentionally distinct, already composed via a documented `coalesce()` fallback chain in `SEO_PROJECTION`, and now both have `description` text clarifying their separate purposes |
+
+### 7. Files modified this round
+
+`src/components/common/testimonial-carousel.tsx`, `app/api/revalidate/route.ts` (moved from `app/api/send-email/revalidate/route.ts`), `src/lib/sanity/client.ts`, `sanity/schemaTypes/objects/seo.ts`, `sanity/schemaTypes/documents/landingPage.ts`, `sanity/schemaTypes/documents/blogPost.ts`, `sanity/schemaTypes/documents/university.ts`, `sanity/lib/slugValidation.ts` (new), `app/(site)/[slug]/page.tsx`, `app/(site)/blog/[slug]/page.tsx`.
+
+### 8. Confirmations
+
+- **Published content reflects correctly:** confirmed with a real, reverted end-to-end test against production (see #3) - not inferred from code alone.
+- **Testimonials display correctly on Desktop/Tablet/Mobile:** the `calc()`-based width fix is mathematically exact (verified by hand: `3 × calc((100%-3rem)/3) + 2 × 1.5rem = 100%` with zero remainder), and the resulting markup was confirmed present on live production. Full interactive verification (visually confirming zero pixels of a 4th/3rd/2nd card peek in an actual browser at each breakpoint) was not possible - no browser tool is available here - so this is stated as verified by exact calculation and markup inspection, not by eye.
+- **SEO validation works:** all new `Rule.custom`/`Rule.uri`/`isUnique` validators type-check and build cleanly; the underlying Sanity APIs used (`SlugValidationContext.defaultIsUnique`, array-form `validation: (Rule) => [...]`, `Rule.custom(...).warning()`) were each confirmed against Sanity's actual shipped type declarations before use, not assumed from memory. Full interactive confirmation (opening Studio and seeing a validation warning render) wasn't possible without a browser - the same stated limitation as prior rounds.
+- **No TypeScript/ESLint/build errors:** `npx tsc --noEmit`, `npx eslint . --ext .ts,.tsx`, and `npx next build` all clean, verified again after the production deploy succeeded.
+- **Existing functionality preserved:** the CORS fix, Studio navigation flattening, Benefits/Career Scope sections, and Scholarship→Placement content from prior rounds were not touched this round and remain live.
