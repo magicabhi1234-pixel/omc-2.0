@@ -386,3 +386,41 @@ The custom desk structure (`sanity/structure.tsx`) itself needed no changes - it
 - **Every CMS section is represented on the frontend:** yes, per the table in #8, including the two brand-new sections - confirmed live on production via direct HTTP checks, not assumed.
 - **Testimonials are responsive sliders:** yes, verified via the rendered HTML containing the scroll-snap carousel markup on both a landing page and the homepage on live production.
 - **No TypeScript/ESLint/build errors:** `npx tsc --noEmit`, `npx eslint . --ext .ts,.tsx`, and `npx next build` all clean (0 errors, 0 warnings) after every change in this round, verified again after the production deploy succeeded.
+
+---
+
+## 14. Fourth follow-up: Studio pane flattening, autoplay carousel, popup exception, Scholarship→Placement rewrite (2026-08-01)
+
+### 1. Studio navigation UX
+
+**Root cause:** the "Landing Pages" desk item opened a nested `S.list()` of 6 category sub-lists, each of which opened its own `S.documentList()`, before finally reaching the document editor - 4 navigation pane levels deep before the editor. Sanity Studio stacks panes horizontally with a minimum width each; at that depth, the browser viewport can't show them all at once, so the earliest panes (Content, Landing Pages) scroll out of view and only the most recent 1-2 panes stay visible - exactly the reported symptom.
+
+**Fix:** `sanity/structure.tsx` - removed the category sub-list level entirely. "Landing Pages" is now a single flat `S.documentTypeList`, cutting the depth from 4 panes to 2 before the editor. Category is still visible per-row (added to the list preview subtitle in `landingPage.ts`, alongside the slug), and a "By Category" sort option was added to the list's menu so editors can still group visually without a separate pane. Editors can now switch between any two landing pages directly from the visible list pane next to the open document, and Content/Landing Pages stay on screen.
+
+### 2. Testimonials: automatic sliding
+
+`src/components/common/testimonial-carousel.tsx` rewritten to auto-advance one card every 4 seconds, looping infinitely: the last real card is followed by cloned copies of the first few cards, so advancing past the end lands on a visual duplicate, then a silent (non-animated) scroll reset snaps back to index 0 once the transition finishes - the visual effect is a continuous, seamless loop with no visible jump. Autoplay pauses on `mouseenter`/`touchstart` (resumes on `mouseleave`/`touchend`), so hovering on desktop or an active swipe on mobile stops the auto-advance without disabling manual interaction. A scroll listener keeps the internal position in sync with the user's own swipes/manual button clicks, so autoplay always resumes from wherever the user left it rather than jumping backward. Multiple cards remain visible on desktop, two on tablet, one (swipeable) on mobile - unchanged from the previous round.
+
+### 3. Landing Pages listing popup
+
+Root cause: `src/components/common/lead-popup.tsx` has a single, sitewide 2-second auto-open timer with no per-page opt-out. Added a check for `pathname === "/landing-pages"` that skips scheduling the auto-open timer specifically on that route, while leaving the `openLeadPopup` custom-event listener (used by every "Apply Now" / "Talk to an Expert" button via `OpenPopupButton`) completely untouched - click-triggered popups still work identically on this page and every other page.
+
+### 4. Scholarship → Placement Support content
+
+Confirmed via a full-codebase grep that `scholarshipBanner` had zero real content set on any of the 27 live landing pages, so renaming it was lossless. Renamed end-to-end rather than just rewording, so Studio's field label matches what's actually rendered (a stale "Scholarship Banner" label showing Placement Support copy would have been exactly the kind of CMS/frontend mismatch this project has been fixing all along):
+
+| Old | New |
+|---|---|
+| `sanity/schemaTypes/objects/scholarshipBanner.ts` | `sanity/schemaTypes/objects/highlightBanner.ts` |
+| `ScholarshipBanner` type/field (`src/types/landing.ts`, `mappers.ts`, `queries.ts`, `landingPage.ts`) | `HighlightBanner` / `highlightBanner` |
+| `src/components/landing/scholarship-banner.tsx` | `src/components/landing/highlight-banner.tsx` |
+
+Default copy changed from "Get Scholarship Up To ₹30,000" / "Scholarship Assistance" / "₹30K Scholarship Benefit" to "Get 100% Placement Support & Career Guidance" / "Placement Support" · "Career Guidance" · "Free Counselling" / "100% Placement Support". Also fixed every other scattered mention found by a full grep of `src/` and `sanity/`: Hero's description and its dashboard-card highlight strip (was "Scholarship Available - ₹30,000"), CTA's trust badge ("Scholarship Guidance" → "Placement Assistance"), Why Choose's "Affordable Fees" description (dropped the scholarship mention, kept EMI), FAQ's EMI answer (dropped scholarship, added placement support/career guidance), and the legacy static `top-colleges-university-in-north-zone` page's metadata description and component imports (which still referenced the pre-rename file and would have failed to build otherwise). A repeat grep for `scholarship`/`Scholarship` across both `src/` and `sanity/` after all edits returned zero matches.
+
+### 5. Files affected this round
+
+`sanity/structure.tsx`, `sanity/schemaTypes/documents/landingPage.ts`, `sanity/schemaTypes/index.ts`, `sanity/schemaTypes/objects/highlightBanner.ts` (new, replaces `scholarshipBanner.ts`), `src/types/landing.ts`, `src/lib/sanity/queries.ts`, `src/lib/sanity/mappers.ts`, `src/components/landing/highlight-banner.tsx` (new, replaces `scholarship-banner.tsx`), `src/components/landing/hero.tsx`, `src/components/landing/cta.tsx`, `src/components/landing/why-choose.tsx`, `src/components/landing/faq.tsx`, `src/components/common/testimonial-carousel.tsx`, `src/components/common/lead-popup.tsx`, `app/(site)/[slug]/page.tsx`, `app/(site)/top-colleges-university-in-north-zone/page.tsx`.
+
+### 6. Verification
+
+`npx tsc --noEmit`, `npx eslint . --ext .ts,.tsx`, and `npx next build` all clean (0 errors, 0 warnings). Verified live on production after deploy: a sampled landing page returns 200 with zero "scholarship" mentions (case-insensitive) and the new "Placement Support Included" copy present; the carousel's scroll-snap markup is present on both a landing page and the homepage; `/landing-pages` and `/studio` both return 200. Autoplay timing, hover-pause, and the Studio pane-depth improvement are behavior that only fully shows up interactively in a browser - stated plainly, as in prior rounds, since no browser/headless tool is available here; the underlying code for each was verified against Sanity's/the browser's actual documented mechanics (pane stacking, CSS scroll-snap, `mouseenter`/`touchstart` events) rather than assumed to work.
