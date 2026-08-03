@@ -58,6 +58,13 @@ export const staticPages: StaticPageEntry[] = [
     changeFrequency: "monthly",
   },
   {
+    slug: "about",
+    title: "About",
+    description: "Learn about Online MBA Colleges and our mission.",
+    priority: 0.5,
+    changeFrequency: "monthly",
+  },
+  {
     slug: "contact",
     title: "Contact",
     description: "Get in touch with Online MBA Colleges.",
@@ -69,6 +76,13 @@ export const staticPages: StaticPageEntry[] = [
     title: "Blog",
     description: "Read the latest articles about Online MBA programs.",
     priority: 0.8,
+    changeFrequency: "weekly",
+  },
+  {
+    slug: "category/learning",
+    title: "Learning",
+    description: "MBA admissions guides, university comparisons and career insights.",
+    priority: 0.6,
     changeFrequency: "weekly",
   },
   {

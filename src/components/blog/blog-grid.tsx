@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Container from "@/components/common/container";
+import { blogPostHref } from "@/lib/blog-links";
 import type { BlogPostSummary } from "@/types/blog";
 
 type Props = {
@@ -34,7 +35,7 @@ export default function BlogGrid({ posts }: Props) {
           {posts.map((post) => (
             <Link
               key={post.slug}
-              href={`/blog/${post.slug}`}
+              href={blogPostHref(post.slug)}
               className="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
             >
               <div className="relative h-56 w-full">

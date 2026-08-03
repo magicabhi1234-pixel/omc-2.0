@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Container from "@/components/common/container";
+import { blogPostHref } from "@/lib/blog-links";
 import type { BlogPostSummary } from "@/types/blog";
 
 type Props = {
@@ -75,7 +76,7 @@ export default function FeaturedBlog({ posts }: Props) {
 
               <div className="mt-8">
                 <Link
-                  href={`/blog/${post.slug}`}
+                  href={blogPostHref(post.slug)}
                   className="inline-flex items-center rounded-xl bg-[#0B3B68] px-6 py-3 font-semibold text-white transition hover:opacity-90"
                 >
                   Read Article →

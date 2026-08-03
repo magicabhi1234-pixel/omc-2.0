@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "@/constants/site";
 import { staticPages, getAllLandingSlugs, getBlogPostsByDate } from "@/data/registry";
+import { blogPostHref } from "@/lib/blog-links";
 
 /**
  * Dynamically generates sitemap.xml.
@@ -63,7 +64,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const blogPosts = await getBlogPostsByDate();
   for (const post of blogPosts) {
     entries.push({
-      url: `${baseUrl}/blog/${post.slug}`,
+      url: `${baseUrl}${blogPostHref(post.slug)}`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.7,

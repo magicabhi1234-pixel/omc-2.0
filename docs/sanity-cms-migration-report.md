@@ -468,3 +468,87 @@ Confirmed directly, not assumed: `npx sanity hooks list` showed a webhook named 
 - **SEO validation works:** all new `Rule.custom`/`Rule.uri`/`isUnique` validators type-check and build cleanly; the underlying Sanity APIs used (`SlugValidationContext.defaultIsUnique`, array-form `validation: (Rule) => [...]`, `Rule.custom(...).warning()`) were each confirmed against Sanity's actual shipped type declarations before use, not assumed from memory. Full interactive confirmation (opening Studio and seeing a validation warning render) wasn't possible without a browser - the same stated limitation as prior rounds.
 - **No TypeScript/ESLint/build errors:** `npx tsc --noEmit`, `npx eslint . --ext .ts,.tsx`, and `npx next build` all clean, verified again after the production deploy succeeded.
 - **Existing functionality preserved:** the CORS fix, Studio navigation flattening, Benefits/Career Scope sections, and Scholarship→Placement content from prior rounds were not touched this round and remain live.
+
+## 16. Exact-URL-parity content migration audit (2026-08-03)
+
+### Mandate
+
+A strict, non-negotiable requirement superseding any prior "equivalent page" mapping: every internal link discoverable by recursively crawling `https://onlinembacolleges.in` must exist at the **exact same slug** on OMC 2.0. No substituting a different existing page, no redirects — only exact slug parity, with content migrated using OMC's existing layout/components/design system, metadata, sitemap entry, and route registration.
+
+### Recursive crawl result
+
+Crawled `https://onlinembacolleges.in` starting from the original 36-URL checklist, following every internal link discovered (including 3 pages not previously examined: `/about/`, `/category/learning/`, `/top-online-and-distance-mba-colleges-in-north-zone-india/`). No further unexamined internal links remained after this pass — the crawl is complete.
+
+**EXISTING URLS** (exact slug already present on OMC 2.0, no action needed): all 36 original checklist URLs plus every other internal link discovered whose exact slug already existed — 28 URLs total.
+
+**NEW URLS DISCOVERED** (exact slug missing — required a new page): 8 URLs.
+
+**NEW PAGES CREATED** — all 8, listed explicitly:
+1. `https://omc-2-0.vercel.app/about`
+2. `https://omc-2-0.vercel.app/lpu-online-mba`
+3. `https://omc-2-0.vercel.app/symbiosis-online-mba`
+4. `https://omc-2-0.vercel.app/sikkim-manipal-university-online-mba`
+5. `https://omc-2-0.vercel.app/lucrative-career-in-data-science-with-online-mba-in-ai-and-ml`
+6. `https://omc-2-0.vercel.app/online-mba-in-international-business`
+7. `https://omc-2-0.vercel.app/category/learning`
+8. `https://omc-2-0.vercel.app/top-online-and-distance-mba-colleges-in-north-zone-india`
+
+### Implementation per page
+
+- **`/about`** — new static route reusing the same 5 About components already powering `/about-us` (`AboutHero`/`AboutStory`/`AboutMission`/`AboutStats`/`AboutCTA`). Renders fully live (no redirect); `canonical` points to `/about-us` to avoid a duplicate-content signal since the content is identical.
+- **5 flat-slug blog posts** (`/lpu-online-mba`, `/symbiosis-online-mba`, `/sikkim-manipal-university-online-mba`, `/lucrative-career-in-data-science-with-online-mba-in-ai-and-ml`, `/online-mba-in-international-business`) — each a literal static route folder (takes precedence over the `/blog/[slug]` dynamic catch-all) that fetches the *same* underlying Sanity `blogPost` document via the existing `getBlogPostBySlug()`. No content duplication in Sanity — only new routes. Extracted the article JSX shared between `/blog/[slug]` and these 5 into `src/components/blog/blog-post-view.tsx`, and the JSON-LD builder into `src/components/blog/blog-post-json-ld.tsx`, so both the flat routes and `/blog/[slug]` render identically. The flat URL is now the self-canonical primary for each of these 5 posts; `/blog/<slug>` stays fully live (no redirect) but its `canonical` now points to the flat sibling via a new `src/lib/blog-links.ts` helper (`blogPostHref()` / `isFlatSlugPost()`).
+- **`/category/learning`** — new static route listing all published blog posts (matches the source page, which lists the same posts with no pagination), reusing the existing `FeaturedBlog`/`BlogGrid` components.
+- **`/top-online-and-distance-mba-colleges-in-north-zone-india`** — no new route file needed; the existing `[slug]/page.tsx` catch-all already serves any `landingPage` document generically. Created a new Sanity `landingPage` document with content migrated from the source page: hero, university section, compare section, 15 FAQs, and CTA, referencing 23 universities (13 Online MBA + 10 Distance MBA). 19 of the 23 matched existing `university` documents in the catalog by name; 4 had no existing match and were created fresh: `Chandigarh University Distance`, `GITAM University Distance` (both reuse their Online sibling's existing logo asset — same institution), `Bharati Vidyapeeth Online`, and `Mewar University Distance` (both given a generated placeholder SVG logo in brand colors, since no source logo asset exists — **flagged as a content gap**: real logos should replace these). **Content-modeling note:** the `landingPage` schema's `category` field is single-select and has no option covering "combines Online MBA + Distance MBA on one page"; set to `"Online MBA"` (13 of 23 universities) as the closer fit — this is a schema limitation, not a data-fidelity gap.
+
+### INTERLINKS UPDATED
+
+Every internal blog-post link in the codebase now resolves through `blogPostHref()` instead of a hardcoded `/blog/${slug}`:
+- `src/components/blog/blog-grid.tsx`
+- `src/components/blog/featured-blog.tsx`
+- `src/components/home/blogs.tsx` (homepage blog widget)
+- `src/components/blog/blog-post-view.tsx` (Related Articles section, shared by `/blog/[slug]` and all 5 flat routes)
+
+A repo-wide search after the change confirmed zero remaining hardcoded `` `/blog/${...}` `` link templates outside `blog-links.ts` itself.
+
+### SITEMAP ENTRIES ADDED
+
+- `/about` and `/category/learning` added to the `staticPages` registry (`src/data/registry.ts`), picked up automatically by `app/sitemap.ts`.
+- `/top-online-and-distance-mba-colleges-in-north-zone-india` requires no sitemap change — `getAllLandingSlugs()` already queries all `landingPage` documents generically.
+- The 5 flat blog routes: `app/sitemap.ts` now builds each blog post's sitemap URL via `blogPostHref()` instead of a hardcoded `/blog/${slug}`, so the flat URL (the new canonical) is what's listed for these 5 posts, and `/blog/<slug>` (now non-canonical for these 5) is correctly no longer listed in its place.
+
+### ROUTES REGISTERED
+
+8 new route folders under `app/(site)/`: `about/`, `lpu-online-mba/`, `symbiosis-online-mba/`, `sikkim-manipal-university-online-mba/`, `lucrative-career-in-data-science-with-online-mba-in-ai-and-ml/`, `online-mba-in-international-business/`, `category/learning/`. The 8th URL (`top-online-and-distance-mba-colleges-in-north-zone-india`) uses the existing `[slug]/page.tsx` catch-all — confirmed no static-route naming collision via `sanity/lib/slugValidation.ts`'s `RESERVED_LANDING_PAGE_SLUGS` list.
+
+### FILES CREATED
+
+- `app/(site)/about/page.tsx`
+- `app/(site)/lpu-online-mba/page.tsx`
+- `app/(site)/symbiosis-online-mba/page.tsx`
+- `app/(site)/sikkim-manipal-university-online-mba/page.tsx`
+- `app/(site)/lucrative-career-in-data-science-with-online-mba-in-ai-and-ml/page.tsx`
+- `app/(site)/online-mba-in-international-business/page.tsx`
+- `app/(site)/category/learning/page.tsx`
+- `src/components/blog/blog-post-view.tsx`
+- `src/components/blog/blog-post-json-ld.tsx`
+- `src/lib/blog-links.ts`
+
+### FILES MODIFIED
+
+- `app/(site)/blog/[slug]/page.tsx` — now uses the shared `BlogPostView`/`BlogPostJsonLd` components; `canonical` now redirects to the flat sibling URL (via `isFlatSlugPost()`/`blogPostHref()`) for the 5 migrated posts.
+- `src/components/blog/blog-grid.tsx`, `src/components/blog/featured-blog.tsx`, `src/components/home/blogs.tsx` — blog links now use `blogPostHref()`.
+- `src/data/registry.ts` — added `about` and `category/learning` to `staticPages`.
+- `app/sitemap.ts` — blog post URLs now built via `blogPostHref()`.
+
+### Data changes (Sanity, via a one-off write script, deleted after use per convention)
+
+- Created `landingPage` document `top-online-and-distance-mba-colleges-in-north-zone-india`.
+- Created 4 `university` documents: `chandigarh-university-distance`, `gitam-university-distance`, `bharati-vidyapeeth-online`, `mewar-university-distance`.
+
+### Verification
+
+- `npx tsc --noEmit` — clean.
+- `npx eslint app src --ext .ts,.tsx` — clean.
+- `npx next build` — compiled successfully; all 8 new URLs present in the build's route table (`/about`, `/category/learning`, `/lpu-online-mba`, `/symbiosis-online-mba`, `/sikkim-manipal-university-online-mba`, `/lucrative-career-in-data-science-with-online-mba-in-ai-and-ml`, `/online-mba-in-international-business` as static routes; the north-zone-india landing page generated statically via the `[slug]` catch-all's `generateStaticParams`).
+- Fetched the new `landingPage` document back from Sanity post-creation to confirm 23 universities and 15 FAQs are attached correctly.
+- Not yet deployed/checked against the live production URL — this round's verification stopped at a clean local build; a production smoke test (as done in round 15 via a real edit-and-revert against `https://omc-2-0.vercel.app`) was not performed here.

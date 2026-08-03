@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Container from "@/components/common/container";
 import { getBlogPostsByDate } from "@/data/registry";
+import { blogPostHref } from "@/lib/blog-links";
 
 export default async function Blogs() {
   const allPosts = await getBlogPostsByDate();
@@ -43,7 +44,7 @@ export default async function Blogs() {
               </p>
 
               <Link
-                href={`/blog/${post.slug}`}
+                href={blogPostHref(post.slug)}
                 className="mt-6 inline-block font-semibold text-[#0B3B68] transition hover:text-[#F47C45]"
               >
                 Read Article →
