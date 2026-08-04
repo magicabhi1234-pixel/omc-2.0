@@ -113,7 +113,7 @@ export default function TestimonialCarousel({ testimonials }: Props) {
     >
       <div
         ref={scrollerRef}
-        className="flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth px-1 pb-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth contain-layout px-1 pb-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {displayItems.map((testimonial, index) => (
           <div

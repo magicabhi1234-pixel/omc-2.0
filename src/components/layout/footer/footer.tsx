@@ -12,7 +12,7 @@ export default function Footer() {
   return (
     <footer className="bg-[#0F172A] text-white">
       <Container>
-        <div className="grid gap-10 py-16 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-10 py-16 md:grid-cols-2 lg:grid-cols-3">
 
           {/* About */}
           <div>
@@ -34,7 +34,7 @@ export default function Footer() {
               Quick Links
             </h4>
 
-            <ul className="mt-4 space-y-3 text-slate-400">
+            <ul className="mt-4 grid grid-flow-row gap-3 text-slate-400 sm:grid-flow-col sm:grid-cols-2 sm:grid-rows-3 sm:gap-x-8 sm:gap-y-3">
               <li>
                 <Link
                   href="/about-us"
@@ -86,55 +86,6 @@ export default function Footer() {
                   className="transition hover:text-[#F47C45]"
                 >
                   All Landing Pages
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Universities */}
-          <div>
-            <h4 className="text-lg font-semibold">
-              Top Universities
-            </h4>
-
-            <ul className="mt-4 space-y-3 text-slate-400">
-              <li className="flex items-center gap-2">
-                <GraduationCap size={16} />
-                Amity University Online
-              </li>
-
-              <li className="flex items-center gap-2">
-                <GraduationCap size={16} />
-                Manipal University Jaipur
-              </li>
-
-              <li>
-                <Link
-                  href="/top-10-online-mba-universities-colleges-north-zone"
-                  className="flex items-center gap-2 transition hover:text-[#F47C45]"
-                >
-                  <GraduationCap size={16} />
-                  Online North
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  href="/top-10-distance-mba-universities-colleges-north-zone"
-                  className="flex items-center gap-2 transition hover:text-[#F47C45]"
-                >
-                  <GraduationCap size={16} />
-                  Distance North
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  href="/top-colleges-university-in-north-zone"
-                  className="flex items-center gap-2 transition hover:text-[#F47C45]"
-                >
-                  <GraduationCap size={16} />
-                  North Landing Page
                 </Link>
               </li>
             </ul>

@@ -552,3 +552,49 @@ A repo-wide search after the change confirmed zero remaining hardcoded `` `/blog
 - `npx next build` — compiled successfully; all 8 new URLs present in the build's route table (`/about`, `/category/learning`, `/lpu-online-mba`, `/symbiosis-online-mba`, `/sikkim-manipal-university-online-mba`, `/lucrative-career-in-data-science-with-online-mba-in-ai-and-ml`, `/online-mba-in-international-business` as static routes; the north-zone-india landing page generated statically via the `[slug]` catch-all's `generateStaticParams`).
 - Fetched the new `landingPage` document back from Sanity post-creation to confirm 23 universities and 15 FAQs are attached correctly.
 - Not yet deployed/checked against the live production URL — this round's verification stopped at a clean local build; a production smoke test (as done in round 15 via a real edit-and-revert against `https://omc-2-0.vercel.app`) was not performed here.
+
+## 17. Testimonials overflow root cause, footer restructure, internal-link audit (2026-08-04)
+
+### 1. Testimonials Slider Horizontal Scroll
+
+**Root cause, empirically confirmed (not guessed):** installed Playwright (`npm install --no-save playwright`, removed after use) to measure `document.documentElement.scrollWidth` vs `clientWidth` directly in a real Chromium instance, since this class of bug can't be reasoned about reliably from CSS alone. The testimonials carousel (`src/components/common/testimonial-carousel.tsx`) renders its cards in a `flex overflow-x-auto` track — correct and intentional, since that's what lets the carousel scroll internally. The bug: **the scroll container's own overflowing content was leaking into its ancestors' `scrollWidth`, despite `overflow-x: auto` being correctly applied and the container's own box being correctly bounded.** Bisected against the live page by toggling CSS properties in the browser one at a time: removing `scroll-snap-type` did *not* fix it, forcing `width: 100%` did *not* fix it, but adding `contain: layout` to the scroll container did — dropping `document.documentElement.scrollWidth` from 4666px to exactly 1440px (matching viewport) at desktop, with matching fixes at every breakpoint tested. This confirms the mechanism: without an explicit layout-containment boundary, a scrolling flex container's internal overflow can still be reported as ancestor/document scrollable overflow in Chromium, even though the box itself never paints outside its bounds.
+
+**Fix:** added the `contain-layout` Tailwind utility (compiles to `contain: layout`) to the scroll container in `testimonial-carousel.tsx`. This is a real CSS containment declaration addressing the actual leak mechanism — not `overflow-x: hidden` on `body`/`html`, which was deliberately avoided per the task's explicit instruction.
+
+**Verified, not assumed:**
+- `document.documentElement.scrollWidth === clientWidth` (zero overflow) confirmed via Playwright at 320px, 375px, 768px, 1024px, and 1440px, on both the homepage and a landing page using the same shared component.
+- Slider/autoplay preserved: scripted a real click on "Next"/"Previous" and confirmed `scrollLeft` moves accordingly; waited a full autoplay interval (4s) and confirmed `scrollLeft` advances automatically without user interaction.
+
+### 2. Footer Layout Update
+
+`src/components/layout/footer/footer.tsx`: removed the entire "Top Universities" column (including its 2 non-functional plain-text entries with no `href` and 3 zone-page links). Outer footer grid reduced from `lg:grid-cols-4` to `lg:grid-cols-3` (About / Quick Links / Contact) since the fourth slot no longer exists. The Quick Links `<ul>` (unchanged 6 links: About Us, Contact Us, Blog, Privacy Policy, Terms & Conditions, All Landing Pages) now uses `grid-flow-col grid-cols-2 grid-rows-3` at `sm:` and up — column-major placement puts links 1–3 in column 1 and 4–6 in column 2, side by side at equal (`1fr`/`1fr`) width, while staying a single stacked column (`grid-flow-row`) below `sm:`.
+
+**Verified via Playwright** at 375px (mobile), 820px (tablet), and 1440px (desktop): "Top Universities" heading absent from the DOM at all three; at tablet/desktop the 6 links render as two `left`-offset groups of 3 with equal computed width (167px at 820px, 173px at 1440px); at mobile all 6 stack full-width in one column; `document.documentElement.scrollWidth === clientWidth` at all three (no horizontal scroll introduced).
+
+### 3. Internal Link Replacement Audit
+
+Ran an exhaustive recursive scan (not schema-by-schema guesswork) over **every** Sanity document — all 244 documents including drafts, every field at every depth via a generic object/array walker — searching for any string containing `onlinembacolleges.in`. Also grepped the entire codebase (`app/`, `src/`) for the same string.
+
+**Findings:**
+- Codebase: only `src/constants/site.ts` (`SITE.url`, the site's own configured production domain — not a content link, out of scope) and this docs file. No hardcoded source-domain links in components.
+- Sanity content: **exactly 1 document, 2 fields** — `blogPost-lpu-online-mba`, both in its Portable Text `content` array, at `content[0].markDefs[0].href` and `content[11].markDefs[0].href` — both pointing to `https://onlinembacolleges.in/top-online-and-distance-mba-colleges-in-north-zone-india` (one with a trailing slash), the exact anchor ("Lovely Professional University (LPU)") the task's example named.
+
+**Fix:** patched both `markDefs[].href` values via a one-off Sanity write script (deleted after use, per convention) to `https://omc-2-0.vercel.app/top-online-and-distance-mba-colleges-in-north-zone-india`. Deliberately used the absolute OMC production URL rather than a bare relative path (`/top-online-and-distance-mba-colleges-in-north-zone-india`): the `link` annotation's `href` field schema (`sanity/schemaTypes/documents/blogPost.ts`) validates with `Rule.uri({ scheme: ["http", "https"] })` and no `allowRelative`, so a relative path would fail Studio's own validation on the next edit — the absolute vercel.app URL satisfies the schema, works immediately, and was explicitly listed as an acceptable target in the task. Anchor text, SEO value, and interlinking structure were untouched — only the `href` changed.
+
+**Verified:** re-ran the exhaustive 244-document scan after the patch — **0 remaining references** anywhere. Restarted the dev server (to bypass a stale in-memory data-cache read) and confirmed via Playwright that the "Lovely Professional University" link on `/lpu-online-mba` now resolves to `https://omc-2-0.vercel.app/top-online-and-distance-mba-colleges-in-north-zone-india`.
+
+### Files modified this round
+
+`src/components/common/testimonial-carousel.tsx`, `src/components/layout/footer/footer.tsx`.
+
+### Sanity documents updated this round
+
+`blogPost-lpu-online-mba` (2 `markDefs[].href` values patched).
+
+### Verification
+
+- `npx tsc --noEmit` — clean.
+- `npx eslint app src --ext .ts,.tsx` — clean.
+- `npx next build` — compiled successfully, all 57 routes generated, no errors.
+- No console errors (via Playwright `console`/`pageerror` listeners) on `/`, `/lpu-online-mba`, or `/top-online-and-distance-mba-colleges-in-north-zone-india`.
+- Playwright and its Chromium binary were installed with `--no-save` for this investigation and fully removed afterward; `git status` confirms only the two intended component files are modified, with no changes to `package.json`/`package-lock.json`.
