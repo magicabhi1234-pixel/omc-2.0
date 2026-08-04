@@ -75,7 +75,7 @@ export default function Specializations(props: Props) {
 
         <div className="mb-14 text-center">
 
-          <span className="rounded-full bg-orange-100 px-4 py-2 text-sm font-medium text-[#F47C45]">
+          <span className="rounded-full bg-orange-100 px-4 py-2 text-sm font-medium text-orange-700">
             MBA Programs
           </span>
 

@@ -11,7 +11,7 @@ export default async function Blogs() {
     <section className="bg-white py-20">
       <Container>
         <div className="mb-12 text-center">
-          <p className="font-semibold uppercase tracking-wider text-[#F47C45]">
+          <p className="font-semibold uppercase tracking-wider text-orange-700">
             Latest Articles
           </p>
 

@@ -1,6 +1,13 @@
+import dynamic from "next/dynamic";
 import Container from "@/components/common/container";
 import { getDefaultTestimonials } from "@/data/registry";
-import TestimonialCarousel from "@/components/common/testimonial-carousel";
+
+// Code-split from the initial bundle: this is the last section on the page
+// (below the fold on first load), so its autoplay/swipe JS doesn't need to
+// share the critical hydration pass with above-the-fold content. SSR stays
+// on (default) so the testimonial content itself is still in the initial
+// HTML for SEO and no-JS clients - only the client hydration is deferred.
+const TestimonialCarousel = dynamic(() => import("@/components/common/testimonial-carousel"));
 
 export default async function Testimonials() {
   const testimonials = await getDefaultTestimonials();
@@ -11,7 +18,7 @@ export default async function Testimonials() {
     <section className="bg-white py-20">
       <Container>
         <div className="text-center">
-          <span className="text-sm font-semibold uppercase tracking-wider text-[#F47C45]">
+          <span className="text-sm font-semibold uppercase tracking-wider text-orange-700">
             Student Reviews
           </span>
 

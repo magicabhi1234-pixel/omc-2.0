@@ -10,7 +10,7 @@ export default function ContactForm() {
           {/* Left Content */}
           <div className="flex flex-col justify-center">
 
-            <span className="inline-flex w-fit rounded-full bg-orange-100 px-4 py-2 text-sm font-medium text-[#F47C45]">
+            <span className="inline-flex w-fit rounded-full bg-orange-100 px-4 py-2 text-sm font-medium text-orange-700">
               Free MBA Counselling
             </span>
 

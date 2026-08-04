@@ -62,7 +62,7 @@ export default function HighlightBanner(props: Props) {
 
               <div className="inline-block rounded-3xl bg-white p-8 shadow-2xl">
 
-                <p className="text-6xl font-bold text-[#F47C45]">
+                <p className="text-6xl font-bold text-orange-700">
                   100%
                 </p>
 

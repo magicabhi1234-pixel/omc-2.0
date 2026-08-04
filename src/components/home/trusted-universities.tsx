@@ -30,7 +30,7 @@ export default function TrustedUniversities() {
     <section className="bg-white py-20">
       <Container>
         <div className="text-center">
-          <span className="text-sm font-semibold uppercase tracking-wider text-[#F47C45]">
+          <span className="text-sm font-semibold uppercase tracking-wider text-orange-700">
             Trusted Universities
           </span>
 

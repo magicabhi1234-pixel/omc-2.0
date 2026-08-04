@@ -1,5 +1,8 @@
+import dynamic from "next/dynamic";
 import { TestimonialsSection as TestimonialsSectionType } from "@/types/landing";
-import TestimonialCarousel from "@/components/common/testimonial-carousel";
+
+// Code-split (see src/components/home/testimonials.tsx for rationale).
+const TestimonialCarousel = dynamic(() => import("@/components/common/testimonial-carousel"));
 
 type Props = Partial<TestimonialsSectionType>;
 
@@ -12,7 +15,7 @@ export default function Testimonials({ heading, description, testimonials }: Pro
     <section className="py-20">
       <div className="mx-auto max-w-7xl px-4">
         <div className="mb-14 text-center">
-          <span className="rounded-full bg-orange-100 px-4 py-2 text-sm font-medium text-[#F47C45]">
+          <span className="rounded-full bg-orange-100 px-4 py-2 text-sm font-medium text-orange-700">
             Testimonials
           </span>
           <h2 className="mt-5 text-4xl font-bold text-slate-900 md:text-5xl">

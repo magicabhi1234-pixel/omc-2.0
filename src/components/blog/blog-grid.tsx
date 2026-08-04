@@ -22,7 +22,7 @@ export default function BlogGrid({ posts }: Props) {
     <section className="bg-slate-50 py-20">
       <Container>
         <div className="mb-10 text-center">
-          <span className="text-sm font-semibold uppercase tracking-wider text-[#F47C45]">
+          <span className="text-sm font-semibold uppercase tracking-wider text-orange-700">
             More Articles
           </span>
 
@@ -49,7 +49,7 @@ export default function BlogGrid({ posts }: Props) {
               </div>
 
               <div className="p-6">
-                <span className="w-fit rounded-full bg-orange-100 px-3 py-1 text-xs font-medium text-[#F47C45]">
+                <span className="w-fit rounded-full bg-orange-100 px-3 py-1 text-xs font-medium text-orange-700">
                   {post.category ?? "Online MBA"}
                 </span>
 

@@ -10,7 +10,7 @@ export default function Benefits({ heading, description, items }: Props) {
     <section className="bg-slate-50 py-20">
       <div className="mx-auto max-w-7xl px-4">
         <div className="mb-14 text-center">
-          <span className="rounded-full bg-orange-100 px-4 py-2 text-sm font-medium text-[#F47C45]">
+          <span className="rounded-full bg-orange-100 px-4 py-2 text-sm font-medium text-orange-700">
             Benefits
           </span>
           <h2 className="mt-5 text-4xl font-bold text-slate-900 md:text-5xl">

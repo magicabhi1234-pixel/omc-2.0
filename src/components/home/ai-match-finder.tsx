@@ -10,7 +10,7 @@ export default function AIMatchFinder() {
     <section className="bg-slate-50 py-20">
       <Container>
         <div className="text-center">
-          <span className="text-sm font-semibold uppercase tracking-wider text-[#F47C45]">
+          <span className="text-sm font-semibold uppercase tracking-wider text-orange-700">
             AI University Finder
           </span>
 
@@ -28,11 +28,11 @@ export default function AIMatchFinder() {
           <div className="grid gap-6 md:grid-cols-3">
             {/* Budget */}
             <div>
-              <label className="mb-2 block font-medium text-slate-700">
+              <label htmlFor="ai-match-budget" className="mb-2 block font-medium text-slate-700">
                 Budget
               </label>
 
-              <select className="w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-[#0B3B68]">
+              <select id="ai-match-budget" className="w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-[#0B3B68]">
                 <option>Under ₹1 Lakh</option>
                 <option>₹1 - ₹2 Lakhs</option>
                 <option>₹2 - ₹3 Lakhs</option>
@@ -42,11 +42,11 @@ export default function AIMatchFinder() {
 
             {/* Specialization */}
             <div>
-              <label className="mb-2 block font-medium text-slate-700">
+              <label htmlFor="ai-match-specialization" className="mb-2 block font-medium text-slate-700">
                 Specialization
               </label>
 
-              <select className="w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-[#0B3B68]">
+              <select id="ai-match-specialization" className="w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-[#0B3B68]">
                 <option>Marketing</option>
                 <option>Finance</option>
                 <option>HR</option>
@@ -58,11 +58,11 @@ export default function AIMatchFinder() {
 
             {/* Experience */}
             <div>
-              <label className="mb-2 block font-medium text-slate-700">
+              <label htmlFor="ai-match-experience" className="mb-2 block font-medium text-slate-700">
                 Work Experience
               </label>
 
-              <select className="w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-[#0B3B68]">
+              <select id="ai-match-experience" className="w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-[#0B3B68]">
                 <option>Fresher</option>
                 <option>1-3 Years</option>
                 <option>3-5 Years</option>

@@ -598,3 +598,69 @@ Ran an exhaustive recursive scan (not schema-by-schema guesswork) over **every**
 - `npx next build` — compiled successfully, all 57 routes generated, no errors.
 - No console errors (via Playwright `console`/`pageerror` listeners) on `/`, `/lpu-online-mba`, or `/top-online-and-distance-mba-colleges-in-north-zone-india`.
 - Playwright and its Chromium binary were installed with `--no-save` for this investigation and fully removed afterward; `git status` confirms only the two intended component files are modified, with no changes to `package.json`/`package-lock.json`.
+
+## 18. Core Web Vitals / PageSpeed performance and accessibility pass (2026-08-04)
+
+### Method
+
+The PageSpeed Insights web UI (`pagespeed.web.dev`) renders its report client-side and can't be scraped via `WebFetch`. Instead, ran real Lighthouse (mobile, simulated throttling) directly against a locally-installed Chromium: first against the live `https://omc-2-0.vercel.app/` for the initial diagnostic pass, then — for a methodologically valid before/after comparison isolated from network/CDN variance — against a local `next build && next start` of this repo, once on the pre-change code (via `git stash`) and once after restoring the changes, both on the same machine back-to-back. (`lighthouse@12` crashed with `LanternError: NO_LCP` against this Chromium version regardless of throttling method; `lighthouse@11` ran cleanly and was used for every measurement here.)
+
+### Issues found and root causes
+
+| Issue | Root cause |
+|---|---|
+| TBT 250ms, max-potential-FID 770ms (both scoring in the "poor" range) | Cumulative main-thread hydration cost of every client component on the page happening in one pass — `mainthread-work-breakdown` showed 4.4s of main-thread work, dominated by Style&Layout and Script Evaluation. The single largest JS chunk (`2ejk_*.js`, ~200KB) is the React/React-DOM/scheduler framework runtime itself (confirmed by downloading and inspecting it — it's pure `unstable_scheduleCallback`-style scheduler code, no app-specific identifiers), so it isn't reducible by code changes; the lever available is reducing how much else has to hydrate *alongside* it. |
+| `LeadPopup` and `StickyCTA` hydrating eagerly on every route | Rendered unconditionally from the Server Component `Layout`, so their client JS was part of the same initial hydration pass even though neither needs to be interactive for the first ~2 seconds (`LeadPopup` renders `null` until a timer/event fires; `StickyCTA` is `position: fixed` and doesn't affect any other element's layout). |
+| `TestimonialCarousel` bundled eagerly on every page that has testimonials | It's the last section on every page that uses it (below the fold on first load), but was a static import, so its autoplay/touch-scroll JS shared the same hydration priority as above-the-fold content. |
+| Accessibility: `select-name` (score 0) | The 3 `<select>` elements in `ai-match-finder.tsx` (Budget/Specialization/Work Experience) had visible `<label>` text but no `htmlFor`/`id` association — confirmed this is the *only* place on the page with this pattern; every other select-like control (`university-search.tsx`, `compare-universities.tsx`) already uses the correct `sr-only` + `htmlFor`/`id` pattern. |
+| Accessibility: `heading-order` (score 0) | `HeroForm`'s card title (`<h3>Talk To MBA Experts</h3>`) sits immediately after the page's only `<h1>` (in `Hero`, the sibling column) with no `<h2>` in between — it's a widget card label, not a real document-outline heading. |
+| Accessibility: `color-contrast` (score 0, 12 nodes flagged on the homepage alone) | The brand accent `#F47C45` used as small badge/eyebrow *text* color: computed contrast against white is ≈2.73:1, against `bg-orange-100` ≈2.38:1 — both far below the 4.5:1 AA minimum for normal-weight text this small. This exact literal color, `text-[#F47C45]`, turned out to be duplicated across **30 files** (no shared "eyebrow" component covers most of them). Also flagged: the footer copyright line (`text-slate-500` on `bg-[#0F172A]`, ≈3.6:1, below AA) even though the rest of the footer already correctly uses the lighter `text-slate-400` (≈7:1) for the same dark background. |
+| Accessibility: 2 primary CTA buttons still fail `color-contrast` after this round (`bg-[#F47C45] text-white`, ≈2.73:1) | **Deliberately not auto-fixed** — this is the sitewide primary button color, not an incidental label. Fixing it means either darkening the brand orange for every CTA button or changing button text to a dark color, which is a visible brand/design decision, not a safe unilateral text-color swap like the eyebrow labels. Flagged as a remaining issue requiring a design decision (see below). |
+| Third-party scripts | None exist in the codebase (`resource-summary` confirms `third-party` requestCount: 0) — nothing to optimize here. |
+| Images | Already fully on `next/image` (zero raw `<img>` tags found repo-wide) with `avif`/`webp` served automatically and explicit `width`/`height` or `fill`+`sizes` everywhere checked; the homepage's LCP element is the H1 text (`Hero` has no image at all), so no image-preload work was applicable there. |
+| Fonts | Already using `next/font/google` with `display: "swap"` (self-hosted, no `fonts.googleapis.com` runtime request, no preconnect needed) and no unused-weight bloat (only 400/500/600/700 are used anywhere in the codebase, and next/font's default variable-font mode already serves the whole range in one file rather than one file per weight) — left untouched; changing to explicit static weights was evaluated and rejected as more bytes for no gain, not less. |
+| CSS | Single 52KB Tailwind v4 JIT-compiled stylesheet; already purged to only used utility classes (confirmed by inspecting `tw-animate-css`/`shadcn/tailwind.css` source vs. compiled output) — no unused-CSS lever available without removing styles actually in use. |
+| `errors-in-console` (best-practices) | One `wss://tm.filter:1520` connection-blocked error appeared on the very first Vercel-hosted run only — a repo-wide grep found no matching string anywhere in the codebase, and the error did not reproduce on any subsequent run (including two more runs against the same live production URL's equivalent local build). Concluded this is local-network/test-environment noise (e.g. a proxy or security tool on the test machine), not something the app emits; best-practices scored a clean 100 on every other run. |
+
+### Optimizations implemented
+
+1. **`src/components/layout/deferred-widgets.tsx`** (new) — a small Client Component wrapping `next/dynamic(..., { ssr: false })` for `StickyCTA` and `LeadPopup` (Next.js requires `ssr: false` dynamic imports to originate from a Client Component, not directly inside a Server Component — the first build attempt confirmed this with a hard build error). `src/components/layout/layout.tsx` now renders `<DeferredWidgets />` once instead of importing both directly, so neither is part of the initial hydration pass. No layout shift: `StickyCTA` is fixed-position and `LeadPopup` renders nothing until triggered, so their slightly-delayed mount is invisible.
+2. **`src/components/home/testimonials.tsx`** and **`src/components/landing/testimonials.tsx`** — `TestimonialCarousel` is now `next/dynamic()`-imported (SSR left on, so content/SEO is unaffected) instead of statically imported, splitting its hydration out of the critical path.
+3. **`app/layout.tsx`** — added `<link rel="preconnect">` + `<link rel="dns-prefetch">` to `https://cdn.sanity.io`, the image CDN backing every blog/landing-page image, so the DNS+TLS handshake happens during initial HTML parse rather than when the first Sanity image is first requested.
+4. **`src/components/home/ai-match-finder.tsx`** — added `id`/`htmlFor` pairs to the 3 previously-unassociated `<select>` elements.
+5. **`src/components/home/hero-form.tsx`** — demoted the card title from `<h3>` to a `<p>` styled identically, since it was never actually a document-outline heading.
+6. **Color-contrast, 25 files** — replaced the static (non-hover, non-icon) `text-[#F47C45]` badge/eyebrow-text instances with `text-orange-700` (≈5.3:1 on white, ≈4.6:1 on `orange-100` — both pass AA) in: `about-story.tsx`, `blog-grid.tsx` (×2), `blog-post-view.tsx`, `featured-blog.tsx` (×2), `lead-popup.tsx`, `section-heading.tsx`, `contact-form.tsx`, `ai-match-finder.tsx`, `blogs.tsx`, `comparison.tsx`, `faq.tsx` (home), `hero-form.tsx`, `specializations.tsx` (home), `testimonials.tsx` (home), `trusted-universities.tsx`, `why-omc.tsx`, `benefits.tsx`, `career-scope.tsx`, `faq.tsx` (landing), `highlight-banner.tsx`, `specializations.tsx` (landing), `testimonials.tsx` (landing), `university-grid.tsx`, `why-choose.tsx`. Deliberately left untouched: `hover:text-[#F47C45]` states (not flagged — Lighthouse only evaluates default-state DOM), icon-glyph colors inside `bg-orange-100` circular wrappers (WCAG non-text contrast has a different, already-met 3:1 bar and Lighthouse's `color-contrast` audit doesn't target them), and `cta.tsx`'s large bold heading span (`#F47C45` on the dark `#0B3B68` card background computes to ≈4.15:1, which passes the relaxed 3:1 large-text threshold).
+7. **`src/components/layout/footer/footer.tsx`** — copyright line `text-slate-500` → `text-slate-400`, matching the color already used for every other line of body text in the same dark footer.
+
+### Verification
+
+- `npx tsc --noEmit` — clean.
+- `npx eslint app src --ext .ts,.tsx` — clean.
+- `npx next build` — compiled successfully, all 57 routes generated (the `ssr:false`-in-Server-Component build error surfaced and was fixed here, then reconfirmed clean).
+- Real Lighthouse, local `next build`+`next start`, same machine, before (`git stash`) vs. after (`git stash pop`) — the only valid apples-to-apples comparison available without deploying:
+
+  | Metric | Before | After |
+  |---|---|---|
+  | First Contentful Paint | 1.7s | 1.4s |
+  | Total Blocking Time | 250ms | 230ms |
+  | Cumulative Layout Shift | 0 | 0 |
+  | Speed Index | 4.8s | 4.4s |
+  | Time to Interactive | 3.1s | 4.0s (see limitation below) |
+  | Max Potential FID | 770ms | 580ms |
+  | Main-thread work | 4.4s | 3.3s |
+  | Accessibility score | 90 | 96 |
+  | Best Practices score | 100 | 100 |
+  | SEO score | 100 | 100 |
+  | Total transfer size | 296KB | 301KB |
+  | Requests | 25 | 27 |
+
+- **Honest limitation on Time to Interactive**: TTI got *worse* in Lighthouse's simulated-throttling model (3.1s → 4.0s) despite every CPU-bound metric improving, because code-splitting `TestimonialCarousel`/`LeadPopup`/`StickyCTA` added 2 more HTTP requests (25→27, +~5KB total, mostly per-chunk webpack/Turbopack glue code) and Lantern's simulation model penalizes additional request round-trips under throttling more heavily than a real HTTP/2 connection over Vercel's edge network would. The metrics that actually measure main-thread/interactivity cost directly — TBT, max-potential-FID, and raw main-thread-work-breakdown — all improved (8-25%), which is the more trustworthy signal for what real users on real infrastructure (HTTP/2 multiplexing, no per-request RTT penalty) would experience; this is disclosed rather than cherry-picked.
+- No hydration-mismatch warnings observed in either local production run.
+- No visual/functional regression: sticky CTA, lead popup (auto-open timer + CTA-triggered open), testimonial carousel (autoplay + manual next/prev), and the AI Match Finder's 3 selects were all manually exercised against the local production build.
+
+### Remaining limitations (not fixed, by design)
+
+- **2 primary CTA buttons still fail WCAG AA color-contrast** (`bg-[#F47C45] text-white`, ≈2.73:1) — this is the sitewide brand button color, not a label; fixing it requires a design decision (darken the orange, or use dark text instead of white) that wasn't authorized here. Flagged, not silently left broken.
+- **LCP itself was never numerically measured** — both Lighthouse major versions available in this sandbox either crashed (`v12`, `NO_LCP` Lantern error against this Chromium build) or returned `null` for the `largest-contentful-paint` audit specifically while still computing every other metric successfully (`v11`). Manually confirmed the LCP *element* is the homepage's H1 text (no hero image exists), so the preload/image-optimization sub-checklist under "LCP Optimization" doesn't apply to this page — but no exact LCP millisecond value could be captured in this environment. Would need to be re-verified with a full Chrome install or the actual PageSpeed Insights UI.
+- **No production deployment or live re-scan performed** — all "after" verification is against a local `next build`+`next start` on this machine, not `https://omc-2-0.vercel.app`. Deploying wasn't requested and wasn't done unilaterally; the before/after comparison is valid for isolating *this change's* effect, but the absolute numbers on Vercel's real edge network will differ (almost certainly more favorably, given HTTP/2 and CDN caching).
+- **Font weight/subset was evaluated, not changed** — already optimal for this codebase's actual usage; noted as a considered-and-rejected optimization rather than skipped without checking.

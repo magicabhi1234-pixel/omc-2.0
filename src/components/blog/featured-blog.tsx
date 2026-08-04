@@ -24,7 +24,7 @@ export default function FeaturedBlog({ posts }: Props) {
     <section className="bg-white py-20">
       <Container>
         <div className="mb-10 text-center">
-          <span className="text-sm font-semibold uppercase tracking-wider text-[#F47C45]">
+          <span className="text-sm font-semibold uppercase tracking-wider text-orange-700">
             Featured Article
           </span>
 
@@ -56,7 +56,7 @@ export default function FeaturedBlog({ posts }: Props) {
             {/* Content */}
             <div className="flex flex-col justify-center p-8 lg:p-12">
 
-              <span className="w-fit rounded-full bg-orange-100 px-3 py-1 text-sm font-medium text-[#F47C45]">
+              <span className="w-fit rounded-full bg-orange-100 px-3 py-1 text-sm font-medium text-orange-700">
                 {post.category ?? "Online MBA"}
               </span>
 

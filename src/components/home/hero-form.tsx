@@ -5,15 +5,18 @@ export default function HeroForm() {
     <div className="relative mx-auto max-w-md overflow-hidden rounded-[28px] border border-slate-200 bg-white p-6 shadow-xl">
 
       {/* Badge */}
-      <div className="mb-4 inline-flex rounded-full bg-orange-100 px-4 py-2 text-xs font-semibold text-[#F47C45]">
+      <div className="mb-4 inline-flex rounded-full bg-orange-100 px-4 py-2 text-xs font-semibold text-orange-700">
         <span aria-hidden="true">🎓</span> Admission Open 2026
       </div>
 
       {/* Heading */}
       <div className="mb-5">
-        <h3 className="text-xl font-bold text-slate-900">
+        {/* Not a real heading in the document outline (the page's only h1 is
+            in Hero, right beside this card) - a p styled like a heading
+            avoids skipping straight from h1 to h3. */}
+        <p className="text-xl font-bold text-slate-900">
           Talk To MBA Experts
-        </h3>
+        </p>
 
         <p className="mt-2 text-sm text-slate-500">
           Free Admission Guidance & University Comparison

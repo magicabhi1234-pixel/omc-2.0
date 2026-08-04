@@ -9,7 +9,7 @@ export default function AboutStory() {
 
           {/* Left Content */}
           <div>
-            <span className="font-semibold uppercase tracking-wider text-[#F47C45]">
+            <span className="font-semibold uppercase tracking-wider text-orange-700">
               Who We Are
             </span>
 

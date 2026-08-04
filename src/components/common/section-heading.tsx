@@ -25,7 +25,7 @@ export default function SectionHeading({
       className={`mb-12 flex flex-col ${alignment} ${className}`}
     >
       {badge && (
-        <span className="mb-4 inline-flex rounded-full bg-[#F47C45]/10 px-4 py-1.5 text-sm font-semibold text-[#F47C45]">
+        <span className="mb-4 inline-flex rounded-full bg-[#F47C45]/10 px-4 py-1.5 text-sm font-semibold text-orange-700">
           {badge}
         </span>
       )}

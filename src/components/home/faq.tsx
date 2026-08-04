@@ -23,7 +23,7 @@ export default function FAQ() {
     <section className="py-20 bg-slate-50">
       <Container>
         <div className="text-center mb-12">
-          <p className="text-[#F47C45] font-semibold uppercase">
+          <p className="text-orange-700 font-semibold uppercase">
             FAQs
           </p>
 

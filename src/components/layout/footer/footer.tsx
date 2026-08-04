@@ -140,7 +140,7 @@ export default function Footer() {
 
         </div>
 
-        <div className="border-t border-slate-800 py-6 text-center text-sm text-slate-500">
+        <div className="border-t border-slate-800 py-6 text-center text-sm text-slate-400">
           © 2026 Online MBA Colleges. All Rights Reserved.
         </div>
       </Container>

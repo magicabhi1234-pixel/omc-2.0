@@ -133,7 +133,7 @@ export default function LeadPopup() {
 
         {/* Header */}
         <div className="mb-6 text-center">
-          <span className="rounded-full bg-orange-100 px-3 py-1 text-sm font-medium text-[#F47C45]">
+          <span className="rounded-full bg-orange-100 px-3 py-1 text-sm font-medium text-orange-700">
             Admission Open 2026
           </span>
 

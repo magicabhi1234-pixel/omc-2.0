@@ -28,7 +28,7 @@ export default function WhyOMC() {
     <section className="py-20 bg-white">
       <Container>
         <div className="text-center">
-          <span className="text-sm font-semibold uppercase tracking-wider text-[#F47C45]">
+          <span className="text-sm font-semibold uppercase tracking-wider text-orange-700">
             Why Choose Us
           </span>
 
