@@ -16,6 +16,11 @@ export default function TestimonialCarousel({ testimonials }: Props) {
   const pausedRef = useRef(false);
   const resetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const scrollSyncTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Card width + gap, cached via ResizeObserver rather than read with
+  // offsetWidth/getComputedStyle on every scroll/click - those force a
+  // synchronous layout recalculation, which shows up as "Forced reflow" in
+  // PageSpeed when it happens repeatedly during interaction.
+  const stepRef = useRef(0);
 
   const count = testimonials.length;
   const cloneCount = Math.min(3, count);
@@ -24,19 +29,27 @@ export default function TestimonialCarousel({ testimonials }: Props) {
   // snaps back to index 0 (no animation) once the transition settles.
   const displayItems = count > 1 ? [...testimonials, ...testimonials.slice(0, cloneCount)] : testimonials;
 
-  const getStep = () => {
+  useEffect(() => {
     const el = scrollerRef.current;
     const card = el?.querySelector<HTMLElement>("[data-testimonial-card]");
-    if (!el || !card) return 0;
-    const style = window.getComputedStyle(el);
-    const gap = parseFloat(style.columnGap || style.gap || "0");
-    return card.offsetWidth + gap;
-  };
+    if (!el || !card) return;
+
+    const measure = () => {
+      const style = window.getComputedStyle(el);
+      const gap = parseFloat(style.columnGap || style.gap || "0");
+      stepRef.current = card.offsetWidth + gap;
+    };
+
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(card);
+    return () => observer.disconnect();
+  }, [count]);
 
   const scrollToIndex = (index: number, smooth: boolean) => {
     const el = scrollerRef.current;
     if (!el) return;
-    el.scrollTo({ left: index * getStep(), behavior: smooth ? "smooth" : "auto" });
+    el.scrollTo({ left: index * stepRef.current, behavior: smooth ? "smooth" : "auto" });
   };
 
   const goNext = () => {
@@ -78,7 +91,7 @@ export default function TestimonialCarousel({ testimonials }: Props) {
     const handleScroll = () => {
       if (scrollSyncTimeoutRef.current) clearTimeout(scrollSyncTimeoutRef.current);
       scrollSyncTimeoutRef.current = setTimeout(() => {
-        const step = getStep();
+        const step = stepRef.current;
         if (step > 0) {
           indexRef.current = Math.round(el.scrollLeft / step) % count;
         }

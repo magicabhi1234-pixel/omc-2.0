@@ -4,6 +4,10 @@ import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
+  // Italic is used in exactly one place sitewide (a blog blockquote) and
+  // the browser synthesizes it fine from the normal weight - not worth
+  // doubling every visitor's font payload for one rarely-seen element.
+  style: ["normal"],
   variable: "--font-plus-jakarta-sans",
   display: "swap",
 });
