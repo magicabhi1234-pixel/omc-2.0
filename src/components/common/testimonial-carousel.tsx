@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Testimonial } from "@/types/landing";
 
 type Props = {
@@ -11,6 +11,7 @@ const AUTOPLAY_INTERVAL_MS = 4000;
 const RESET_DELAY_MS = 550;
 
 export default function TestimonialCarousel({ testimonials }: Props) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const scrollerRef = useRef<HTMLDivElement>(null);
   const indexRef = useRef(0);
   const pausedRef = useRef(false);
@@ -21,6 +22,32 @@ export default function TestimonialCarousel({ testimonials }: Props) {
   // synchronous layout recalculation, which shows up as "Forced reflow" in
   // PageSpeed when it happens repeatedly during interaction.
   const stepRef = useRef(0);
+  // This carousel is always the last, below-the-fold section on any page
+  // that renders it. Scroll-snap settling on mount and the autoplay's own
+  // scrollTo() calls both fire real ("trusted") scroll events - and Chromium
+  // stops reporting Largest Contentful Paint entries entirely the moment ANY
+  // scroll event fires anywhere on the page, even on a nested, off-screen
+  // container. Staying non-scrollable (and not autoplaying) until the
+  // carousel is actually near the viewport keeps the page's LCP measurement
+  // window completely free of scroll events, since by the time a user
+  // scrolls this far, LCP has already finalized.
+  const [active, setActive] = useState(false);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setActive(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
 
   const count = testimonials.length;
   const cloneCount = Math.min(3, count);
@@ -72,15 +99,17 @@ export default function TestimonialCarousel({ testimonials }: Props) {
     scrollToIndex(indexRef.current, true);
   };
 
-  // Autoplay
+  // Autoplay - doesn't start until the carousel is near the viewport (see
+  // the IntersectionObserver above), so it can never fire the scroll event
+  // that would otherwise freeze LCP reporting during initial page load.
   useEffect(() => {
-    if (count <= 1) return;
+    if (count <= 1 || !active) return;
     const id = window.setInterval(() => {
       if (!pausedRef.current) goNext();
     }, AUTOPLAY_INTERVAL_MS);
     return () => window.clearInterval(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [count]);
+  }, [count, active]);
 
   // Keep indexRef in sync with the actual scroll position after any
   // user-driven swipe/scroll settles, so autoplay resumes from the right spot.
@@ -118,6 +147,7 @@ export default function TestimonialCarousel({ testimonials }: Props) {
 
   return (
     <div
+      ref={containerRef}
       className="relative"
       onMouseEnter={pause}
       onMouseLeave={resume}
@@ -126,7 +156,9 @@ export default function TestimonialCarousel({ testimonials }: Props) {
     >
       <div
         ref={scrollerRef}
-        className="flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth contain-layout px-1 pb-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className={`flex gap-6 scroll-smooth contain-layout px-1 pb-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${
+          active ? "snap-x snap-mandatory overflow-x-auto" : "overflow-x-hidden"
+        }`}
       >
         {displayItems.map((testimonial, index) => (
           <div
