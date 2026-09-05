@@ -5,7 +5,8 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "cdn.sanity.io",
+        hostname: "cduthhiqrowburlasdio.supabase.co",
+        pathname: "/storage/v1/object/public/**",
       },
     ],
   },

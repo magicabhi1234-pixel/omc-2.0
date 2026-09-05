@@ -46,12 +46,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={plusJakartaSans.variable}>
       <head>
-        {/* Sanity's image CDN serves every blog/landing-page image; warming
+        {/* Supabase Storage serves every blog/landing-page image; warming
             the connection here (rather than at the first <img> request)
             shaves the DNS+TLS handshake off whichever image ends up being
             the LCP element on those pages. */}
-        <link rel="preconnect" href="https://cdn.sanity.io" />
-        <link rel="dns-prefetch" href="https://cdn.sanity.io" />
+        <link rel="preconnect" href="https://cduthhiqrowburlasdio.supabase.co" />
+        <link rel="dns-prefetch" href="https://cduthhiqrowburlasdio.supabase.co" />
       </head>
       <body>
         {children}

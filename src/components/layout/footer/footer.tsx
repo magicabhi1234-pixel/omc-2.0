@@ -8,7 +8,51 @@ import {
   GraduationCap,
 } from "lucide-react";
 
-export default function Footer() {
+export interface FooterQuickLink {
+  label: string;
+  href: string;
+}
+
+export interface FooterSiteInfo {
+  footer_about?: string;
+  email?: string;
+  phone?: string;
+  footer_hours?: string;
+}
+
+const DEFAULT_QUICK_LINKS: FooterQuickLink[] = [
+  { label: "About Us", href: "/about-us" },
+  { label: "Contact Us", href: "/contact" },
+  { label: "Blog", href: "/blog" },
+  { label: "Privacy Policy", href: "/privacy-policy" },
+  { label: "Terms & Conditions", href: "/terms-and-conditions" },
+  { label: "All Landing Pages", href: "/landing-pages" },
+];
+
+const DEFAULTS = {
+  about:
+    "India's AI-powered platform to compare online MBA universities, fees, rankings, placements and specializations.",
+  email: "info@onlinembacolleges.com",
+  phone: "+91 8421903846",
+  hours: "Mon - Sat | 9:00 AM - 7:00 PM",
+};
+
+export default function Footer({
+  quickLinks,
+  siteInfo,
+}: {
+  quickLinks?: FooterQuickLink[];
+  siteInfo?: FooterSiteInfo;
+}) {
+  // Falls back to the original hardcoded content if the CMS-managed settings
+  // haven't been configured yet - same content either way.
+  const links = quickLinks && quickLinks.length > 0 ? quickLinks : DEFAULT_QUICK_LINKS;
+  const about = siteInfo?.footer_about || DEFAULTS.about;
+  const email = siteInfo?.email || DEFAULTS.email;
+  const phone = siteInfo?.phone || DEFAULTS.phone;
+  const hours = siteInfo?.footer_hours || DEFAULTS.hours;
+  const phoneHref = phone.replace(/[^+\d]/g, "");
+
   return (
     <footer className="bg-[#0F172A] text-white">
       <Container>
@@ -21,9 +65,7 @@ export default function Footer() {
             </h3>
 
             <p className="mt-4 leading-7 text-slate-400">
-              India&apos;s AI-powered platform to compare online MBA
-              universities, fees, rankings, placements and
-              specializations.
+              {about}
             </p>
 
           </div>
@@ -35,59 +77,16 @@ export default function Footer() {
             </h4>
 
             <ul className="mt-4 grid grid-flow-row gap-3 text-slate-400 sm:grid-flow-col sm:grid-cols-2 sm:grid-rows-3 sm:gap-x-8 sm:gap-y-3">
-              <li>
-                <Link
-                  href="/about-us"
-                  className="transition hover:text-[#F47C45]"
-                >
-                  About Us
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  href="/contact"
-                  className="transition hover:text-[#F47C45]"
-                >
-                  Contact Us
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  href="/blog"
-                  className="transition hover:text-[#F47C45]"
-                >
-                  Blog
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  href="/privacy-policy"
-                  className="transition hover:text-[#F47C45]"
-                >
-                  Privacy Policy
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  href="/terms-and-conditions"
-                  className="transition hover:text-[#F47C45]"
-                >
-                  Terms & Conditions
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  href="/landing-pages"
-                  className="transition hover:text-[#F47C45]"
-                >
-                  All Landing Pages
-                </Link>
-              </li>
+              {links.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="transition hover:text-[#F47C45]"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -104,7 +103,7 @@ export default function Footer() {
                   size={18}
                   className="text-[#F47C45]"
                 />
-                <a href="mailto:info@onlinembacolleges.com" className="transition hover:text-white">info@onlinembacolleges.com</a>
+                <a href={`mailto:${email}`} className="transition hover:text-white">{email}</a>
               </li>
 
               <li className="flex items-center gap-3">
@@ -112,7 +111,7 @@ export default function Footer() {
                   size={18}
                   className="text-[#F47C45]"
                 />
-                <a href="tel:+918421903846" className="transition hover:text-white">+91 8421903846</a>
+                <a href={`tel:${phoneHref}`} className="transition hover:text-white">{phone}</a>
               </li>
 
               <li className="flex items-center gap-3">
@@ -131,7 +130,7 @@ export default function Footer() {
                   className="text-[#F47C45]"
                 />
                 <span>
-                  Mon - Sat | 9:00 AM - 7:00 PM
+                  {hours}
                 </span>
               </li>
 

@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     // Read webhook payload (optional)
     const body = await req.json().catch(() => ({}));
 
-    console.log("Sanity Webhook:", body);
+    console.log("Revalidate webhook:", body);
 
     // Revalidate tags immediately - this is a CMS webhook, so editors expect
     // published changes to be live on next request, not eventually-consistent.

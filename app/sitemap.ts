@@ -8,8 +8,8 @@ import { blogPostHref } from "@/lib/blog-links";
  *
  * Automatically includes:
  * - All static pages (Home, About, Contact, Blog, Privacy, Terms)
- * - All landing pages currently published in Sanity
- * - All blog posts currently published in Sanity
+ * - All landing pages currently published
+ * - All blog posts currently published
  *
  * No hardcoded URLs. Uses SITE.url from constants.
  */

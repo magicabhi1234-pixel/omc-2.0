@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { PortableText, type PortableTextComponents, type PortableTextBlock } from "@portabletext/react";
-import { urlForImage } from "@/lib/sanity/image";
 
 type Props = {
   content: PortableTextBlock[];
@@ -50,7 +49,7 @@ const components: PortableTextComponents = {
   },
   types: {
     image: ({ value }) => {
-      const url = urlForImage(value)?.width(1200).url();
+      const url = value?.asset?.url as string | undefined;
       if (!url) return null;
       return (
         <span className="relative mt-6 block h-80 w-full overflow-hidden rounded-2xl">
