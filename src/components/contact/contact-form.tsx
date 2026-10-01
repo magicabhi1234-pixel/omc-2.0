@@ -41,7 +41,7 @@ export default function ContactForm() {
             </p>
 
             <div className="mt-8">
-              <LeadForm />
+              <LeadForm source="contact" />
             </div>
 
           </div>

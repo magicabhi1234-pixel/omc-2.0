@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Container from "@/components/common/container";
+import NewsletterForm from "./newsletter-form";
 
 import {
   Mail,
@@ -67,6 +68,8 @@ export default function Footer({
             <p className="mt-4 leading-7 text-slate-400">
               {about}
             </p>
+
+            <NewsletterForm />
 
           </div>
 
@@ -140,7 +143,7 @@ export default function Footer({
         </div>
 
         <div className="border-t border-slate-800 py-6 text-center text-sm text-slate-400">
-          © 2026 Online MBA Colleges. All Rights Reserved.
+          © {new Date().getFullYear()} Online MBA Colleges. All Rights Reserved.
         </div>
       </Container>
     </footer>

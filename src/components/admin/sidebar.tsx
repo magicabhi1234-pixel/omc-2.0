@@ -15,14 +15,16 @@ import {
   MessageSquareQuote,
   LogOut,
   Layers,
+  Inbox,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { CurrentProfile } from "@/lib/auth/session";
 import { ROLE_LABELS } from "@/lib/auth/permissions";
-import { logoutAction } from "../../../app/admin/login/actions";
+import { logoutAction } from "../../../app/omc-adminlogin/actions";
 
 const NAV_ITEMS = [
   { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/admin/leads", label: "Leads", icon: Inbox, permission: "canManageLeads" as const },
   { href: "/admin/pages", label: "Landing Pages", icon: FileText },
   { href: "/admin/blogs", label: "Blogs", icon: Newspaper },
   { href: "/admin/content/universities", label: "Universities", icon: GraduationCap },

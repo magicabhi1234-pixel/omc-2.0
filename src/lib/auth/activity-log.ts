@@ -12,7 +12,8 @@ export type ActivityAction =
   | "user_create"
   | "user_update"
   | "user_delete"
-  | "password_reset";
+  | "password_reset"
+  | "export";
 
 export type ActivityContentType =
   | "university"
@@ -23,7 +24,9 @@ export type ActivityContentType =
   | "user"
   | "settings"
   | "navigation"
-  | "content_block";
+  | "content_block"
+  | "lead"
+  | "newsletter_subscriber";
 
 interface LogActivityArgs {
   userId: string | null;

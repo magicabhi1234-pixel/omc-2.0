@@ -4,7 +4,7 @@ import { SITE } from "@/constants/site";
 /**
  * Dynamically generates robots.txt.
  *
- * - Allows crawling in Production.
+ * - Allows crawling in Production, except admin, login and API routes.
  * - Disallows crawling in Development.
  * - Automatically references /sitemap.xml.
  * - Uses the production domain from SITE.url.
@@ -12,15 +12,19 @@ import { SITE } from "@/constants/site";
 export default function robots(): MetadataRoute.Robots {
   const baseUrl = SITE.url.replace(/\/+$/, "");
 
+  if (process.env.NODE_ENV === "development") {
+    return { rules: [{ userAgent: "*", disallow: "/" }] };
+  }
+
   return {
     rules: [
       {
         userAgent: "*",
         allow: "/",
-        disallow: process.env.NODE_ENV === "development" ? "/" : undefined,
+        disallow: ["/admin", "/omc-adminlogin", "/api/"],
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,
+    host: baseUrl,
   };
 }
-

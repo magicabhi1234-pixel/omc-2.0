@@ -10,6 +10,18 @@ Follow these steps in order. Steps 1-2 are the only ones that can't be run from 
 
 This creates all tables, indexes, foreign keys, RLS policies, and seeds the 4 `roles` rows (`super_admin`, `admin`, `editor`, `author`).
 
+Then run `supabase/migrations/0002_security_leads.sql` the same way. It adds:
+- the lead-management columns on `leads` (`lead_type`, `source`, `page_path`, `status`, `notes`). It only adds columns, so it is safe on the existing live table.
+- the `newsletter_subscribers` table
+- `profiles.username`, used for username login at `/omc-adminlogin`
+- the `rate_limits` table and `check_rate_limit()` function, which together give one shared rate limiter across all serverless instances
+
+The site works before 0002 is applied, with reduced functionality:
+- new leads are saved without the tracking columns
+- the rate limiter falls back to a per-instance in-memory limit
+- username login doesn't work (email login still does)
+- the Leads page shows a "please apply migration 0002" notice
+
 ## 2. Create the Storage bucket
 
 Already done from this session (bucket `media`, public, 10MB file size limit) — confirm it still exists under **Storage** in the dashboard. If it's ever missing, recreate it:
@@ -30,14 +42,16 @@ Reads every `university`, `testimonial`, `blogPost`, and `landingPage` document 
 ## 4. Create the first Super Admin
 
 ```bash
-node scripts/create-super-admin.mjs you@example.com "a-strong-password-here" "Your Name"
+ADMIN_PASSWORD='a-strong-password' node scripts/create-super-admin.mjs you@example.com --username yourname --name "Your Name"
 ```
+
+The password is read from `ADMIN_PASSWORD`, never from argv, so it stays out of shell history. It must be at least 12 characters and mix upper case, lower case and digits. If an account with that email already exists, the script updates its password, username and role in place. `--username` requires migration 0002. Users can then sign in at `/omc-adminlogin` with either the username or the email.
 
 Requires step 1 to have run first (needs the `roles` table seeded).
 
 ## 5. Configure navigation & site settings (optional, has safe fallbacks)
 
-Log in at `/admin/login`, go to **Settings**, and fill in:
+Log in at `/omc-adminlogin`, go to **Settings**, and fill in:
 - Site Information (name, tagline, contact email/phone, footer about text, footer hours)
 - Header Navigation
 - Footer Quick Links
@@ -63,7 +77,9 @@ No longer installed: `sanity`, `next-sanity`, `@sanity/client`, `@sanity/icons`,
 ## 8. URLs
 
 - Dashboard: `/admin/dashboard`
-- Login: `/admin/login`
+- Login: `/omc-adminlogin`
+- Leads (super admin and admin only): `/admin/leads`, with CSV and Excel export.
+- The legacy `/admin/login` permanently redirects to `/omc-adminlogin`.
 - All other routes are unchanged: `/admin/pages`, `/admin/blogs`, `/admin/content` (+ `/universities`, `/testimonials`, `/blocks`), `/admin/media`, `/admin/seo`, `/admin/users`, `/admin/settings`, `/admin/activity-logs`.
 
 ## 9. What happens if you skip straight to deploying without steps 1-4

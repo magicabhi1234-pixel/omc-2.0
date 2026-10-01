@@ -44,10 +44,10 @@ export async function getCurrentProfile(): Promise<CurrentProfile | null> {
   };
 }
 
-/** Redirects to /admin/login if not authenticated, or to /admin/dashboard with no further access if the account is deactivated. */
+/** Redirects to the login page if not signed in or if the account has no active profile. */
 export async function requireProfile(): Promise<CurrentProfile> {
   const profile = await getCurrentProfile();
-  if (!profile) redirect("/admin/login");
+  if (!profile) redirect("/omc-adminlogin");
   return profile;
 }
 
