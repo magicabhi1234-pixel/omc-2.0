@@ -6,12 +6,12 @@
 -- ever added, never altered or dropped).
 -- ============================================================================
 
--- Prerequisite check: 0001 creates public.profiles and public.set_updated_at().
+-- Prerequisite check: 0001 creates public.profiles and public.omc_set_updated_at().
 do $$
 begin
   if to_regclass('public.profiles') is null
-     or to_regprocedure('public.set_updated_at()') is null then
-    raise exception 'Apply supabase/migrations/0001_cms_schema.sql before this migration (public.profiles / public.set_updated_at() are missing).';
+     or to_regprocedure('public.omc_set_updated_at()') is null then
+    raise exception 'Apply supabase/migrations/0001_cms_schema.sql before this migration (public.profiles / public.omc_set_updated_at() are missing).';
   end if;
 end $$;
 
@@ -51,7 +51,7 @@ end $$;
 
 drop trigger if exists set_leads_updated_at on public.leads;
 create trigger set_leads_updated_at before update on public.leads
-  for each row execute function public.set_updated_at();
+  for each row execute function public.omc_set_updated_at();
 
 create index if not exists idx_leads_created_at on public.leads(created_at desc);
 create index if not exists idx_leads_status on public.leads(status);
@@ -78,7 +78,7 @@ create index if not exists idx_newsletter_created_at on public.newsletter_subscr
 
 drop trigger if exists set_newsletter_updated_at on public.newsletter_subscribers;
 create trigger set_newsletter_updated_at before update on public.newsletter_subscribers
-  for each row execute function public.set_updated_at();
+  for each row execute function public.omc_set_updated_at();
 
 alter table public.newsletter_subscribers enable row level security;
 
