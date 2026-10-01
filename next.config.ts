@@ -12,6 +12,9 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Standalone output: required by the cPanel deployment (.cpanel.yml + server.js).
+  // Vercel ignores it and builds as usual.
+  output: "standalone",
   poweredByHeader: false,
   images: {
     formats: ["image/avif", "image/webp"],
