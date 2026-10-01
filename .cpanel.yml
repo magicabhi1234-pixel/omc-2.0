@@ -2,8 +2,8 @@
 deployment:
   tasks:
     - export APP=/home/mwventurebuilder/repositories/omc-2.0
-    - cd $APP && npm ci
-    - cd $APP && npm run build
+    - cd $APP && /home/mwventurebuilder/nodevenv/repositories/omc-2.0/22/bin/npm ci
+    - cd $APP && /home/mwventurebuilder/nodevenv/repositories/omc-2.0/22/bin/npm run build
     - /bin/cp -r $APP/public $APP/.next/standalone/
     - /bin/mkdir -p $APP/.next/standalone/.next
     - /bin/cp -r $APP/.next/static $APP/.next/standalone/.next/
