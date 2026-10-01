@@ -6,6 +6,15 @@
 -- ever added, never altered or dropped).
 -- ============================================================================
 
+-- Prerequisite check: 0001 creates public.profiles and public.set_updated_at().
+do $$
+begin
+  if to_regclass('public.profiles') is null
+     or to_regprocedure('public.set_updated_at()') is null then
+    raise exception 'Apply supabase/migrations/0001_cms_schema.sql before this migration (public.profiles / public.set_updated_at() are missing).';
+  end if;
+end $$;
+
 -- ----------------------------------------------------------------------------
 -- Leads (form submissions from /api/leads)
 -- The table already exists in production (created outside migrations); this
