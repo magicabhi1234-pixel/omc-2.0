@@ -21,9 +21,10 @@ export default function Hero() {
             </span>
 
             <h1 className="mt-5 text-4xl font-bold leading-tight text-slate-900 lg:text-6xl">
-              Find The Best
+              Find The Great
               <span className="block text-[#0B3B68]">
-                Online MBA
+                {/* <wbr> lets "Online/Distance" wrap after the slash on narrow phones */}
+                Online/<wbr />Distance MBA
               </span>
               For Your Career
             </h1>

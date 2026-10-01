@@ -1,11 +1,6 @@
 ---
 deployment:
   tasks:
-    - export APP=/home/mwventurebuilder/repositories/omc-2.0
-    - cd $APP && npm ci
-    - cd $APP && npm run build
-    - /bin/cp -r $APP/public $APP/.next/standalone/
-    - /bin/mkdir -p $APP/.next/standalone/.next
-    - /bin/cp -r $APP/.next/static $APP/.next/standalone/.next/
-    - /bin/mkdir -p $APP/tmp
-    - /bin/touch $APP/tmp/restart.txt
+    - export DEPLOYPATH=/home/mwventurebuilder/public_html/
+    - /bin/cp index.html $DEPLOYPATH
+    - /bin/cp style.css $DEPLOYPATH
