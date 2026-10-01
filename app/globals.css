@@ -18,6 +18,17 @@
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
+  --color-canvas: var(--canvas);
+  --color-brand: var(--brand);
+  --color-brand-accent: var(--brand-accent);
+  --color-brand-accent-strong: var(--brand-accent-strong);
+  --color-brand-dark: var(--brand-dark);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-info-soft: var(--info-soft);
+  --font-admin: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
   --color-chart-5: var(--chart-5);
   --color-chart-4: var(--chart-4);
   --color-chart-3: var(--chart-3);
@@ -50,72 +61,97 @@
 
 :root {
   font-family: var(--font-plus-jakarta-sans), Inter, ui-sans-serif, system-ui, sans-serif;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
+
+  /* OMC brand (shared by public site + dashboard) */
+  --brand: #0b3b68;
+  --brand-accent: #f47c45; /* decorative/large text only - 2.7:1 on white */
+  --brand-accent-strong: #c2410c; /* orange for text/buttons on light (5.2:1) */
+  --brand-dark: #0f172a;
+  --brand-text: #334155;
+
+  /* Theme tokens. background/foreground stay white/near-black so the public
+     site (which only reads these two) is unchanged; the dashboard canvas
+     uses --canvas. */
+  --background: #ffffff;
+  --foreground: #0f172a;
+  --canvas: #f4f6fa;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #0b3b68;
+  --primary-foreground: #ffffff;
+  --secondary: #eaf1f8;
+  --secondary-foreground: #0b3b68;
+  --muted: #f1f5f9;
+  --muted-foreground: #5b6b80;
+  --accent: #eef2f7;
+  --accent-foreground: #0f172a;
+  --destructive: #dc2626;
+  --success: #15803d;
+  --success-soft: #ecfdf3;
+  --warning: #b45309;
+  --warning-soft: #fffbeb;
+  --info-soft: #eff6ff;
+  --border: #e3e8ef;
+  --input: #d3dbe6;
+  --ring: #0b3b68;
+  --chart-1: #1f5fa3; /* brand-family blue, validated (dataviz) - navy itself reads gray as a mark */
+  --chart-2: #f47c45;
+  --chart-3: #3b82c4;
+  --chart-4: #94a3b8;
+  --chart-5: #15803d;
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: #0b3b68;
+  --sidebar-foreground: #dbe7f4;
+  --sidebar-primary: #ffffff;
+  --sidebar-primary-foreground: #0b3b68;
+  --sidebar-accent: rgb(255 255 255 / 0.1);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgb(255 255 255 / 0.1);
+  --sidebar-ring: #f47c45;
+  --sidebar-gradient: linear-gradient(180deg, #0b3b68 0%, #0c2f55 45%, #0f172a 100%);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: #0a101c;
+  --foreground: #e6ebf2;
+  --canvas: #0a101c;
+  --card: #111a2b;
+  --card-foreground: #e6ebf2;
+  --popover: #131e31;
+  --popover-foreground: #e6ebf2;
+  --primary: #6aa5e6;
+  --primary-foreground: #08111f;
+  --secondary: #16253b;
+  --secondary-foreground: #c8dcf2;
+  --muted: #162135;
+  --muted-foreground: #96a3b6;
+  --accent: #1a2740;
+  --accent-foreground: #e6ebf2;
+  --destructive: #f87171;
+  --success: #4ade80;
+  --success-soft: rgb(74 222 128 / 0.12);
+  --warning: #fbbf24;
+  --warning-soft: rgb(251 191 36 / 0.12);
+  --info-soft: rgb(106 165 230 / 0.12);
+  --border: #1f2b3f;
+  --input: #2a3851;
+  --ring: #6aa5e6;
+  --chart-1: #4f8fd6; /* validated against the dark card surface */
+  --chart-2: #f48a5a;
+  --chart-3: #3b82c4;
+  --chart-4: #64748b;
+  --chart-5: #4ade80;
+  --sidebar: #0a1a30;
+  --sidebar-foreground: #c3d3e6;
+  --sidebar-primary: #ffffff;
+  --sidebar-primary-foreground: #0b3b68;
+  --sidebar-accent: rgb(255 255 255 / 0.07);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgb(255 255 255 / 0.07);
+  --sidebar-ring: #f47c45;
+  --sidebar-gradient: linear-gradient(180deg, #0c2440 0%, #0a1a30 50%, #070d18 100%);
 }
 
 @layer base {
@@ -179,3 +215,22 @@
   mask-image: radial-gradient(closest-side, #000 0%, rgb(0 0 0 / 0.55) 45%, transparent 100%);
 }
 
+
+/* Dashboard typography (Geist) - applied by the admin shell and login page. */
+.admin-ui {
+  font-family: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+  color: var(--foreground);
+}
+.admin-ui h1,
+.admin-ui h2,
+.admin-ui h3 {
+  letter-spacing: -0.015em;
+}
+/* Dialogs, menus and toasts portal into <body>, outside the .admin-ui wrapper:
+   give the whole body the dashboard font while an admin screen is mounted. */
+body:has(.admin-ui) {
+  font-family: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}

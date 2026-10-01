@@ -1,6 +1,7 @@
 import { supabaseAdmin } from "@/lib/db/client";
 import LandingPageForm from "@/components/admin/landing-page-form";
 import { createLandingPage } from "../actions";
+import { PageHeader } from "@/components/admin/page-kit";
 
 export default async function NewLandingPagePage() {
   const [{ data: universities }, { data: testimonials }] = await Promise.all([
@@ -10,8 +11,8 @@ export default async function NewLandingPagePage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-slate-900">New Landing Page</h1>
-      <div className="mt-6">
+      <PageHeader title="New Landing Page" />
+      <div>
         <LandingPageForm
           action={createLandingPage}
           universityOptions={(universities ?? []).map((u) => ({ id: u.id, label: u.name }))}

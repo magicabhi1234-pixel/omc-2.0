@@ -47,7 +47,7 @@ export default function LoginForm({ next }: { next: string }) {
             type="button"
             onClick={() => setShowPassword((v) => !v)}
             aria-label={showPassword ? "Hide password" : "Show password"}
-            className="absolute inset-y-0 right-0 flex w-10 cursor-pointer items-center justify-center text-slate-500 hover:text-slate-800"
+            className="absolute inset-y-0 right-0 flex w-10 cursor-pointer items-center justify-center text-muted-foreground hover:text-foreground"
           >
             {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
           </button>
@@ -55,12 +55,12 @@ export default function LoginForm({ next }: { next: string }) {
       </div>
 
       {state.error && (
-        <p className="text-sm text-red-600" role="alert">
+        <p className="rounded-lg border border-destructive/25 bg-destructive/10 px-3 py-2.5 text-sm text-destructive" role="alert">
           {state.error}
         </p>
       )}
 
-      <Button type="submit" className="w-full" disabled={pending}>
+      <Button type="submit" size="lg" className="w-full" disabled={pending}>
         {pending ? "Signing in..." : "Sign in"}
       </Button>
     </form>

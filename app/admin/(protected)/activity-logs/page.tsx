@@ -3,6 +3,7 @@ import { supabaseAdmin } from "@/lib/db/client";
 import { requireProfile } from "@/lib/auth/session";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { PageHeader } from "@/components/admin/page-kit";
 
 export default async function ActivityLogsPage() {
   const profile = await requireProfile();
@@ -18,10 +19,9 @@ export default async function ActivityLogsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-slate-900">Activity Logs</h1>
-      <p className="mt-1 text-slate-600">Most recent 200 actions.</p>
+      <PageHeader title="Activity Logs" description={<>Most recent 200 actions.</>} />
 
-      <div className="mt-6 rounded-xl border border-slate-200 bg-white">
+      <div className="rounded-xl border border-border bg-card">
         <Table>
           <TableHeader>
             <TableRow>
@@ -38,13 +38,13 @@ export default async function ActivityLogsPage() {
                 <TableCell>{log.user_email ?? "System"}</TableCell>
                 <TableCell><Badge variant="secondary">{log.action}</Badge></TableCell>
                 <TableCell>{log.content_type}</TableCell>
-                <TableCell className="font-mono text-xs text-slate-500">{log.content_id ?? "—"}</TableCell>
-                <TableCell className="text-slate-500">{new Date(log.created_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}</TableCell>
+                <TableCell className="font-mono text-xs text-muted-foreground">{log.content_id ?? "—"}</TableCell>
+                <TableCell className="text-muted-foreground">{new Date(log.created_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-        {logs.length === 0 && <p className="p-8 text-center text-sm text-slate-500">No activity recorded yet.</p>}
+        {logs.length === 0 && <p className="p-8 text-center text-sm text-muted-foreground">No activity recorded yet.</p>}
       </div>
     </div>
   );

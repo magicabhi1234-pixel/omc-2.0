@@ -1,7 +1,10 @@
 import { notFound } from "next/navigation";
+import { ExternalLink } from "lucide-react";
+import { buttonVariants } from "@/components/ui/button";
 import { supabaseAdmin } from "@/lib/db/client";
 import LandingPageForm from "@/components/admin/landing-page-form";
 import { updateLandingPage } from "../actions";
+import { PageHeader } from "@/components/admin/page-kit";
 
 export default async function EditLandingPagePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -19,8 +22,19 @@ export default async function EditLandingPagePage({ params }: { params: Promise<
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-slate-900">Edit Landing Page</h1>
-      <div className="mt-6">
+      <PageHeader
+        eyebrow="Landing page"
+        title={page.title}
+        description={<>/{page.slug} · {page.status === "published" ? "Published" : "Draft"}</>}
+        actions={
+          page.status === "published" ? (
+            <a href={`/${page.slug}`} target="_blank" rel="noopener noreferrer" className={buttonVariants({ variant: "outline" })}>
+              <ExternalLink size={15} /> View live
+            </a>
+          ) : null
+        }
+      />
+      <div>
         <LandingPageForm
           action={updateLandingPage.bind(null, id)}
           initial={page}

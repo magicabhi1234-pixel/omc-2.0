@@ -48,13 +48,13 @@ export default function NavigationEditor({
   };
 
   return (
-    <section className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5">
+    <section className="rounded-xl border border-border bg-card p-4 sm:p-5">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
-          <h2 className="font-semibold text-slate-900">{title}</h2>
-          {description && <p className="mt-0.5 text-sm text-slate-500">{description}</p>}
+          <h2 className="font-semibold text-foreground">{title}</h2>
+          {description && <p className="mt-0.5 text-sm text-muted-foreground">{description}</p>}
         </div>
-        {dirty && <span className="rounded-full bg-amber-50 px-2 py-0.5 text-xs text-amber-700">Unsaved changes</span>}
+        {dirty && <span className="rounded-full bg-warning-soft px-2 py-0.5 text-xs text-warning">Unsaved changes</span>}
       </div>
 
       <ol className="mt-4 space-y-2">
@@ -69,9 +69,9 @@ export default function NavigationEditor({
               if (from >= 0 && from !== index) move(from, index);
               setDragKey(null);
             }}
-            className={`grid gap-2 rounded-lg border p-2 sm:grid-cols-[auto_1fr_1fr_auto_auto] sm:items-center ${dragKey === item.key ? "border-[#0B3B68] bg-blue-50/40" : "border-slate-100"}`}
+            className={`grid gap-2 rounded-lg border p-2 sm:grid-cols-[auto_1fr_1fr_auto_auto] sm:items-center ${dragKey === item.key ? "border-primary bg-blue-50/40" : "border-border/60"}`}
           >
-            <span className="hidden cursor-grab text-slate-400 sm:block" aria-hidden="true">
+            <span className="hidden cursor-grab text-muted-foreground sm:block" aria-hidden="true">
               <GripVertical size={16} />
             </span>
             <Input
@@ -88,7 +88,7 @@ export default function NavigationEditor({
               maxLength={500}
               onChange={(e) => update(items.map((i) => (i.key === item.key ? { ...i, href: e.target.value } : i)))}
             />
-            <label className="flex items-center gap-2 text-xs whitespace-nowrap text-slate-600">
+            <label className="flex items-center gap-2 text-xs whitespace-nowrap text-muted-foreground">
               <input
                 type="checkbox"
                 checked={Boolean(item.opens_new_tab)}
@@ -105,13 +105,13 @@ export default function NavigationEditor({
                 <ArrowDown size={16} />
               </Button>
               <Button type="button" variant="ghost" size="icon" onClick={() => update(items.filter((i) => i.key !== item.key))} aria-label={`Remove ${item.label || "link"}`}>
-                <Trash2 size={16} className="text-red-600" />
+                <Trash2 size={16} className="text-destructive" />
               </Button>
             </div>
           </li>
         ))}
       </ol>
-      {items.length === 0 && <p className="mt-3 text-sm text-slate-500">No links. The site shows its built-in default menu until you add some.</p>}
+      {items.length === 0 && <p className="mt-3 text-sm text-muted-foreground">No links. The site shows its built-in default menu until you add some.</p>}
 
       <div className="mt-4 flex flex-wrap items-center gap-2">
         <Button type="button" variant="outline" size="sm" onClick={() => update([...items, { key: newKey(), label: "", href: "" }])}>

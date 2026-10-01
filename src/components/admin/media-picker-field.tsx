@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState, useTransition } from "react";
-import { ImageIcon, Search, Upload, X } from "lucide-react";
+import { ImageIcon, Loader2, Search, Upload, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -47,6 +48,7 @@ export default function MediaPickerField({
   const [items, setItems] = useState<PickerMedia[]>([]);
   const [loading, startLoading] = useTransition();
   const [uploading, startUploading] = useTransition();
+  const [dragOver, setDragOver] = useState(false);
   const inputId = `${name ?? label.replace(/\W+/g, "-").toLowerCase()}-url`;
 
   useEffect(() => {
@@ -76,16 +78,48 @@ export default function MediaPickerField({
 
   return (
     <div className="space-y-2">
-      <label htmlFor={inputId} className="text-sm font-medium text-slate-900">
+      <label htmlFor={inputId} className="text-sm font-medium text-foreground">
         {label}
       </label>
-      <div className="flex flex-wrap items-center gap-3">
-        <div className={`flex shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-slate-50 ${previewClassName}`}>
+      <div className="flex flex-wrap items-start gap-4">
+        {/* Preview doubles as a drop zone */}
+        <div
+          onDragOver={(e) => {
+            if (Array.from(e.dataTransfer.types).includes("Files")) {
+              e.preventDefault();
+              e.stopPropagation();
+              setDragOver(true);
+            }
+          }}
+          onDragLeave={() => setDragOver(false)}
+          onDrop={(e) => {
+            const file = e.dataTransfer.files?.[0];
+            if (!file) return;
+            e.preventDefault();
+            e.stopPropagation();
+            setDragOver(false);
+            upload(file);
+          }}
+          className={cn(
+            "relative flex shrink-0 items-center justify-center overflow-hidden rounded-xl border bg-[repeating-conic-gradient(var(--muted)_0%_25%,transparent_0%_50%)] bg-[length:14px_14px] transition",
+            previewClassName === "h-16 w-16" ? "h-24 w-36" : previewClassName,
+            dragOver ? "border-2 border-dashed border-primary ring-4 ring-primary/15" : value ? "border-border" : "border-dashed border-input",
+            error && "border-destructive"
+          )}
+        >
           {value ? (
             // eslint-disable-next-line @next/next/no-img-element -- admin preview of an arbitrary URL
-            <img src={value} alt="" className="h-full w-full object-contain" />
+            <img src={value} alt="" className="h-full w-full object-contain p-1" />
           ) : (
-            <ImageIcon size={20} className="text-slate-400" aria-hidden="true" />
+            <span className="flex flex-col items-center gap-1 px-2 text-center text-[11px] text-muted-foreground">
+              <ImageIcon size={18} aria-hidden="true" />
+              Drop image
+            </span>
+          )}
+          {uploading && (
+            <span className="absolute inset-0 grid place-items-center bg-card/80 text-xs font-medium text-foreground">
+              <Loader2 size={18} className="animate-spin text-primary" aria-label="Uploading" />
+            </span>
           )}
         </div>
         <div className="min-w-0 flex-1 space-y-2">
@@ -94,16 +128,16 @@ export default function MediaPickerField({
             name={name}
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            placeholder="https://... or /path"
+            placeholder="https://… or /path"
             required={required}
             aria-invalid={Boolean(error)}
           />
           <div className="flex flex-wrap gap-2">
             <Button type="button" size="sm" variant="outline" onClick={() => setOpen(true)}>
-              <ImageIcon size={14} className="mr-1" /> Choose from library
+              <ImageIcon size={14} /> Choose from library
             </Button>
-            <label className="inline-flex cursor-pointer items-center rounded-md border border-slate-200 px-3 py-1 text-sm hover:bg-slate-50">
-              <Upload size={14} className="mr-1" /> {uploading ? "Uploading..." : "Upload new"}
+            <label className="inline-flex h-8 cursor-pointer items-center gap-1 rounded-lg border border-input bg-card px-3 text-[0.8rem] font-medium shadow-xs transition hover:bg-accent">
+              <Upload size={14} /> {uploading ? "Uploading…" : "Upload new"}
               <input
                 type="file"
                 accept="image/png,image/jpeg,image/webp,image/avif,image/gif,image/svg+xml"
@@ -118,13 +152,13 @@ export default function MediaPickerField({
             </label>
             {value && (
               <Button type="button" size="sm" variant="ghost" onClick={() => setValue("")}>
-                <X size={14} className="mr-1" /> Clear
+                <X size={14} /> Clear
               </Button>
             )}
           </div>
         </div>
       </div>
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm text-destructive">{error}</p>}
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-3xl">
@@ -133,7 +167,7 @@ export default function MediaPickerField({
             <DialogDescription>Pick an image for “{label}”.</DialogDescription>
           </DialogHeader>
           <div className="relative">
-            <Search size={16} className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-slate-400" />
+            <Search size={16} className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-muted-foreground" />
             <Input autoFocus value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search by name or alt text" className="pl-9" aria-label="Search media" />
           </div>
           <div className="grid max-h-[60vh] grid-cols-2 gap-3 overflow-y-auto sm:grid-cols-4">
@@ -145,18 +179,18 @@ export default function MediaPickerField({
                   setValue(item.url);
                   setOpen(false);
                 }}
-                className={`group overflow-hidden rounded-lg border text-left transition hover:border-[#0B3B68] ${value === item.url ? "border-[#0B3B68] ring-2 ring-[#0B3B68]/30" : "border-slate-200"}`}
+                className={`group overflow-hidden rounded-lg border text-left transition hover:border-primary ${value === item.url ? "border-primary ring-2 ring-primary/30" : "border-border"}`}
               >
-                <div className="flex h-24 items-center justify-center bg-slate-50">
+                <div className="flex h-24 items-center justify-center bg-muted/50">
                   {/* eslint-disable-next-line @next/next/no-img-element -- admin thumbnail */}
                   <img src={item.url} alt={item.alt_text ?? ""} loading="lazy" className="h-full w-full object-contain" />
                 </div>
-                <p className="truncate px-2 py-1 text-xs text-slate-600">{item.file_name}</p>
+                <p className="truncate px-2 py-1 text-xs text-muted-foreground">{item.file_name}</p>
               </button>
             ))}
           </div>
-          {!loading && items.length === 0 && <p className="py-6 text-center text-sm text-slate-500">No images found.</p>}
-          {loading && <p className="text-center text-xs text-slate-500">Loading…</p>}
+          {!loading && items.length === 0 && <p className="py-6 text-center text-sm text-muted-foreground">No images found.</p>}
+          {loading && <p className="text-center text-xs text-muted-foreground">Loading…</p>}
         </DialogContent>
       </Dialog>
     </div>

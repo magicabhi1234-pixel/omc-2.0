@@ -1,11 +1,12 @@
 import TestimonialForm from "@/components/admin/testimonial-form";
 import { createTestimonial } from "../actions";
+import { PageHeader } from "@/components/admin/page-kit";
 
 export default function NewTestimonialPage() {
   return (
     <div>
-      <h1 className="text-2xl font-bold text-slate-900">New Testimonial</h1>
-      <div className="mt-6">
+      <PageHeader title="New Testimonial" />
+      <div>
         <TestimonialForm action={createTestimonial} submitLabel="Create Testimonial" />
       </div>
     </div>

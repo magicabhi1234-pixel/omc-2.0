@@ -88,17 +88,17 @@ export default function FaqManager({
               setDragId(null);
               if (from >= 0) move(from, index);
             }}
-            className={`flex gap-3 rounded-xl border bg-white p-3 sm:p-4 ${dragId === row.id ? "border-[#0B3B68]" : "border-slate-200"}`}
+            className={`flex gap-3 rounded-xl border bg-card p-3 sm:p-4 ${dragId === row.id ? "border-primary" : "border-border"}`}
           >
-            <span className="mt-1 hidden cursor-grab text-slate-400 sm:block" aria-hidden="true">
+            <span className="mt-1 hidden cursor-grab text-muted-foreground sm:block" aria-hidden="true">
               <GripVertical size={16} />
             </span>
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
-                <p className="font-medium text-slate-900">{row.question}</p>
-                {row.status === "draft" && <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">Draft</span>}
+                <p className="font-medium text-foreground">{row.question}</p>
+                {row.status === "draft" && <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">Draft</span>}
               </div>
-              <p className="mt-1 line-clamp-2 text-sm text-slate-600">{row.answer}</p>
+              <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{row.answer}</p>
             </div>
             <div className="flex shrink-0 flex-col gap-1 sm:flex-row">
               <Button type="button" variant="ghost" size="icon" onClick={() => move(index, index - 1)} disabled={index === 0 || pending} aria-label="Move up">
@@ -112,27 +112,27 @@ export default function FaqManager({
               </Button>
               {canDelete && (
                 <Button type="button" variant="ghost" size="icon" onClick={() => remove(row)} disabled={pending} aria-label={`Delete "${row.question}"`}>
-                  <Trash2 size={16} className="text-red-600" />
+                  <Trash2 size={16} className="text-destructive" />
                 </Button>
               )}
             </div>
           </li>
         ))}
       </ol>
-      {rows.length === 0 && !editing && <p className="text-sm text-slate-500">No FAQs on this page yet.</p>}
+      {rows.length === 0 && !editing && <p className="text-sm text-muted-foreground">No FAQs on this page yet.</p>}
 
       {editing ? (
-        <div className="space-y-3 rounded-xl border border-[#0B3B68]/30 bg-white p-4">
-          <h3 className="font-semibold text-slate-900">{editing.id ? "Edit FAQ" : "New FAQ"}</h3>
+        <div className="space-y-3 rounded-xl border border-primary/30 bg-card p-4">
+          <h3 className="font-semibold text-foreground">{editing.id ? "Edit FAQ" : "New FAQ"}</h3>
           <div className="space-y-1">
             <Label htmlFor="faq-question">Question</Label>
             <Input id="faq-question" value={editing.question} maxLength={300} onChange={(e) => setEditing({ ...editing, question: e.target.value })} placeholder="Is an online MBA valid for government jobs?" />
-            <p className="text-xs text-slate-500">Phrase it the way people search or ask a voice assistant.</p>
+            <p className="text-xs text-muted-foreground">Phrase it the way people search or ask a voice assistant.</p>
           </div>
           <div className="space-y-1">
             <Label htmlFor="faq-answer">Answer</Label>
             <Textarea id="faq-answer" rows={5} value={editing.answer} maxLength={3000} onChange={(e) => setEditing({ ...editing, answer: e.target.value })} />
-            <p className="text-xs text-slate-500">Start with a direct one-sentence answer, then add detail. {editing.answer.length}/3000</p>
+            <p className="text-xs text-muted-foreground">Start with a direct one-sentence answer, then add detail. {editing.answer.length}/3000</p>
           </div>
           <label className="flex items-center gap-2 text-sm">
             <input type="checkbox" className="h-4 w-4" checked={editing.status === "published"} onChange={(e) => setEditing({ ...editing, status: e.target.checked ? "published" : "draft" })} />

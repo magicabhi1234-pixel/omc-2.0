@@ -1,175 +1,136 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  LayoutDashboard,
-  FileText,
-  Newspaper,
-  Image as ImageIcon,
-  Search,
-  Users,
-  Settings,
-  History,
-  GraduationCap,
-  MessageSquareQuote,
-  LogOut,
-  Layers,
-  Inbox,
-  HelpCircle,
-  Menu as MenuIcon,
-  ListTree,
-  RefreshCcw,
-} from "lucide-react";
+import { ChevronsLeft, ChevronsRight, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { CurrentProfile } from "@/lib/auth/session";
-import { ROLE_LABELS, type PermissionSet } from "@/lib/auth/permissions";
-import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
-import { logoutAction } from "../../../app/omc-adminlogin/actions";
+import { navItemFor, visibleNav } from "@/components/admin/shell/nav";
 
-type NavItem = { href: string; label: string; icon: typeof LayoutDashboard; permission?: keyof PermissionSet };
-
-const NAV_GROUPS: { label: string; items: NavItem[] }[] = [
-  {
-    label: "Overview",
-    items: [
-      { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
-      { href: "/admin/leads", label: "Leads", icon: Inbox, permission: "canManageLeads" },
-    ],
-  },
-  {
-    label: "Content",
-    items: [
-      { href: "/admin/pages", label: "Landing Pages", icon: FileText },
-      { href: "/admin/blogs", label: "Blogs", icon: Newspaper },
-      { href: "/admin/content/universities", label: "Universities", icon: GraduationCap },
-      { href: "/admin/content/testimonials", label: "Testimonials", icon: MessageSquareQuote },
-      { href: "/admin/faqs", label: "FAQs", icon: HelpCircle, permission: "canPublish" },
-      { href: "/admin/content", label: "All Content", icon: Layers },
-      { href: "/admin/media", label: "Media Library", icon: ImageIcon, permission: "canUploadMedia" },
-    ],
-  },
-  {
-    label: "Site",
-    items: [
-      { href: "/admin/seo", label: "SEO", icon: Search },
-      { href: "/admin/menus", label: "Menus", icon: ListTree, permission: "canManageSettings" },
-      { href: "/admin/settings", label: "Global Settings", icon: Settings, permission: "canManageSettings" },
-      { href: "/admin/sync", label: "Sanity Sync", icon: RefreshCcw, permission: "canManageSettings" },
-    ],
-  },
-  {
-    label: "Admin",
-    items: [
-      { href: "/admin/users", label: "Users", icon: Users, permission: "canManageUsers" },
-      { href: "/admin/activity-logs", label: "Activity Logs", icon: History, permission: "canViewActivityLogs" },
-    ],
-  },
-];
-
-function NavContent({ profile, pathname, onNavigate }: { profile: CurrentProfile; pathname: string; onNavigate?: () => void }) {
+export function BrandMark({ collapsed = false }: { collapsed?: boolean }) {
   return (
-    <>
-      <nav aria-label="Dashboard" className="flex-1 space-y-5 overflow-y-auto px-3 py-4">
-        {NAV_GROUPS.map((group) => {
-          const items = group.items.filter((item) => !item.permission || profile.permissions[item.permission]);
-          if (items.length === 0) return null;
-          return (
-            <div key={group.label}>
-              <p className="px-3 pb-1 text-xs font-semibold tracking-wide text-slate-500 uppercase">{group.label}</p>
-              <ul className="space-y-0.5">
-                {items.map((item) => {
-                  // "All Content" (/admin/content) shouldn't light up for its own sub-sections.
-                  const active =
-                    pathname === item.href ||
-                    (pathname.startsWith(item.href + "/") && !(item.href === "/admin/content" && /\/admin\/content\/(universities|testimonials)/.test(pathname)));
-                  const Icon = item.icon;
-                  return (
-                    <li key={item.href}>
-                      <Link
-                        href={item.href}
-                        onClick={onNavigate}
-                        aria-current={active ? "page" : undefined}
-                        className={cn(
-                          "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition",
-                          active ? "bg-[#0B3B68] text-white" : "text-slate-700 hover:bg-slate-100"
-                        )}
-                      >
-                        <Icon size={18} aria-hidden="true" />
-                        {item.label}
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          );
-        })}
-      </nav>
-
-      <div className="border-t border-slate-200 p-4">
-        <p className="truncate text-sm font-medium text-slate-900">{profile.fullName || profile.email}</p>
-        <p className="text-xs text-slate-500">{ROLE_LABELS[profile.role]}</p>
-        <form action={logoutAction} className="mt-3">
-          <button
-            type="submit"
-            className="flex w-full cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100"
-          >
-            <LogOut size={16} aria-hidden="true" />
-            Log out
-          </button>
-        </form>
-      </div>
-    </>
+    <Link href="/admin/dashboard" className="flex items-center gap-3 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring">
+      <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-white text-sm font-bold tracking-tight text-brand shadow-sm">
+        OMC
+      </span>
+      {!collapsed && (
+        <span className="min-w-0 leading-tight">
+          <span className="block truncate text-[15px] font-semibold text-white">Online MBA Colleges</span>
+          <span className="block text-xs text-sidebar-foreground/70">Admin console</span>
+        </span>
+      )}
+    </Link>
   );
 }
 
-function Brand() {
-  return (
-    <div>
-      <p className="text-lg font-bold text-[#0B3B68]">OMC Admin</p>
-      <p className="mt-0.5 text-xs text-slate-500">Content Management</p>
-    </div>
-  );
-}
-
-/** Fixed sidebar on large screens; a top bar + slide-out drawer on phones and tablets. */
-export default function AdminSidebar({ profile }: { profile: CurrentProfile }) {
+/** Navigation list - shared by the desktop sidebar and the mobile drawer. */
+export function SidebarNav({
+  profile,
+  collapsed = false,
+  onNavigate,
+}: {
+  profile: CurrentProfile;
+  collapsed?: boolean;
+  onNavigate?: () => void;
+}) {
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
+  const active = navItemFor(pathname)?.href;
 
   return (
-    <>
-      <aside className="hidden h-screen w-64 shrink-0 flex-col border-r border-slate-200 bg-white lg:flex">
-        <div className="border-b border-slate-200 px-6 py-5">
-          <Brand />
+    <nav aria-label="Dashboard" className={cn("flex-1 space-y-4 overflow-y-auto py-3", collapsed ? "px-2" : "px-3")}>
+      {visibleNav(profile.permissions).map((group) => (
+        <div key={group.label}>
+          {collapsed ? (
+            <div className="mx-auto mb-2 h-px w-6 bg-sidebar-border" aria-hidden="true" />
+          ) : (
+            <p className="px-3 pb-1.5 text-[11px] font-semibold tracking-[0.08em] text-sidebar-foreground/55 uppercase">{group.label}</p>
+          )}
+          <ul className="space-y-0.5">
+            {group.items.map((item) => {
+              const isActive = item.href === active;
+              const Icon = item.icon;
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    onClick={onNavigate}
+                    aria-current={isActive ? "page" : undefined}
+                    title={collapsed ? item.label : undefined}
+                    className={cn(
+                      "group relative flex items-center gap-3 rounded-lg text-sm font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring",
+                      collapsed ? "justify-center px-0 py-2" : "px-3 py-[7px]",
+                      isActive
+                        ? "bg-white/[0.12] text-white shadow-[inset_0_0_0_1px_rgb(255_255_255/0.06)]"
+                        : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-white"
+                    )}
+                  >
+                    {isActive && <span className="absolute top-1/2 left-0 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-brand-accent" aria-hidden="true" />}
+                    <Icon size={18} strokeWidth={isActive ? 2.25 : 1.9} aria-hidden="true" className={cn("shrink-0", isActive ? "text-brand-accent" : "text-sidebar-foreground/80 group-hover:text-white")} />
+                    {collapsed ? <span className="sr-only">{item.label}</span> : <span className="truncate">{item.label}</span>}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
         </div>
-        <NavContent profile={profile} pathname={pathname} />
-      </aside>
+      ))}
+    </nav>
+  );
+}
 
-      <header className="sticky top-0 z-40 flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 lg:hidden">
-        <Brand />
+/** Desktop sidebar (lg+). Collapsed state lives in a cookie so it renders correctly on first paint. */
+export default function AdminSidebar({
+  profile,
+  collapsed,
+  onToggle,
+}: {
+  profile: CurrentProfile;
+  collapsed: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <aside
+      className={cn(
+        "relative hidden h-dvh shrink-0 flex-col border-r border-black/10 text-sidebar-foreground transition-[width] duration-200 lg:flex",
+        collapsed ? "w-[72px]" : "w-64"
+      )}
+      style={{ backgroundImage: "var(--sidebar-gradient)" }}
+    >
+      <div className={cn("flex h-16 items-center border-b border-sidebar-border", collapsed ? "justify-center px-2" : "px-4")}>
+        <BrandMark collapsed={collapsed} />
+      </div>
+
+      <SidebarNav profile={profile} collapsed={collapsed} />
+
+      <div className={cn("space-y-1 border-t border-sidebar-border p-3", collapsed && "px-2")}>
+        <a
+          href="/"
+          target="_blank"
+          rel="noopener noreferrer"
+          title={collapsed ? "View website" : undefined}
+          className={cn(
+            "flex items-center gap-3 rounded-lg py-2 text-sm text-sidebar-foreground transition hover:bg-sidebar-accent hover:text-white",
+            collapsed ? "justify-center" : "px-3"
+          )}
+        >
+          <ExternalLink size={17} aria-hidden="true" />
+          {!collapsed && <span>View website</span>}
+          <span className="sr-only"> (opens in a new tab)</span>
+        </a>
         <button
           type="button"
-          onClick={() => setOpen(true)}
-          aria-label="Open dashboard menu"
-          aria-expanded={open}
-          className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-[#0B3B68] hover:bg-slate-100"
+          onClick={onToggle}
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          title={collapsed ? "Expand sidebar  [" : "Collapse sidebar  ["}
+          className={cn(
+            "flex w-full cursor-pointer items-center gap-3 rounded-lg py-2 text-sm text-sidebar-foreground transition hover:bg-sidebar-accent hover:text-white",
+            collapsed ? "justify-center" : "px-3"
+          )}
         >
-          <MenuIcon size={22} />
+          {collapsed ? <ChevronsRight size={17} aria-hidden="true" /> : <ChevronsLeft size={17} aria-hidden="true" />}
+          {!collapsed && <span>Collapse</span>}
         </button>
-      </header>
-
-      <Sheet open={open} onOpenChange={setOpen}>
-        <SheetContent side="left" className="w-72 gap-0 p-0">
-          <div className="border-b border-slate-200 px-6 py-5">
-            <SheetTitle className="sr-only">Dashboard menu</SheetTitle>
-            <Brand />
-          </div>
-          <NavContent profile={profile} pathname={pathname} onNavigate={() => setOpen(false)} />
-        </SheetContent>
-      </Sheet>
-    </>
+      </div>
+    </aside>
   );
 }

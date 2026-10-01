@@ -1,12 +1,12 @@
 "use client";
 
+import FormActionBar from "@/components/admin/form-action-bar";
 import { submitWithoutReset } from "@/lib/admin/form-submit";
 import { useActionState, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import MediaPickerField from "@/components/admin/media-picker-field";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import RichTextEditor from "@/components/admin/rich-text-editor";
@@ -66,22 +66,22 @@ export default function BlogPostForm({
         }
         submitWithoutReset(formAction)(event);
       }}
-      className="max-w-3xl space-y-6"
+      className="max-w-4xl space-y-6 rounded-xl border border-border bg-card p-5 shadow-[0_1px_2px_rgb(15_23_42/0.04)] sm:p-6"
     >
       {state.error && (
-        <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">{state.error}</p>
+        <p className="rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive" role="alert">{state.error}</p>
       )}
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="title">Title</Label>
           <Input id="title" name="title" defaultValue={initial?.title} required />
-          {errors.title && <p className="text-xs text-red-600">{errors.title}</p>}
+          {errors.title && <p className="text-xs text-destructive">{errors.title}</p>}
         </div>
         <div className="space-y-2">
           <Label htmlFor="slug">Slug</Label>
           <Input id="slug" name="slug" defaultValue={initial?.slug} required />
-          {errors.slug && <p className="text-xs text-red-600">{errors.slug}</p>}
+          {errors.slug && <p className="text-xs text-destructive">{errors.slug}</p>}
         </div>
       </div>
 
@@ -103,7 +103,7 @@ export default function BlogPostForm({
       <div className="space-y-2">
         <Label htmlFor="excerpt">Excerpt</Label>
         <Textarea id="excerpt" name="excerpt" rows={2} defaultValue={initial?.excerpt} required maxLength={300} />
-        {errors.excerpt && <p className="text-xs text-red-600">{errors.excerpt}</p>}
+        {errors.excerpt && <p className="text-xs text-destructive">{errors.excerpt}</p>}
       </div>
 
       <div className="space-y-2">
@@ -158,8 +158,8 @@ export default function BlogPostForm({
       <div className="space-y-2">
         <Label>Related Posts (max 6)</Label>
         <input type="hidden" name="related_posts" value={relatedIds.join(",")} />
-        <div className="max-h-48 space-y-1 overflow-y-auto rounded-lg border border-slate-200 p-3">
-          {otherPosts.length === 0 && <p className="text-sm text-slate-500">No other posts yet.</p>}
+        <div className="max-h-48 space-y-1 overflow-y-auto rounded-lg border border-border p-3">
+          {otherPosts.length === 0 && <p className="text-sm text-muted-foreground">No other posts yet.</p>}
           {otherPosts.map((post) => (
             <label key={post.id} className="flex cursor-pointer items-center gap-2 text-sm">
               <Checkbox
@@ -178,8 +178,8 @@ export default function BlogPostForm({
         </div>
       </div>
 
-      <fieldset className="space-y-4 rounded-lg border border-slate-200 p-4">
-        <legend className="px-1 text-sm font-semibold text-slate-700">SEO</legend>
+      <fieldset className="space-y-4 rounded-lg border border-border p-4">
+        <legend className="px-1 text-sm font-semibold text-foreground">SEO</legend>
         <div className="space-y-2">
           <Label htmlFor="seo_meta_title">Meta Title</Label>
           <Input id="seo_meta_title" name="seo_meta_title" defaultValue={initial?.seo_meta_title ?? ""} maxLength={60} />
@@ -207,7 +207,7 @@ export default function BlogPostForm({
         </div>
       </fieldset>
 
-      <Button type="submit" disabled={pending}>{pending ? "Saving..." : submitLabel}</Button>
+      <FormActionBar pending={pending} submitLabel={submitLabel} cancelHref="/admin/blogs" />
     </form>
   );
 }

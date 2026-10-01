@@ -18,7 +18,8 @@ export default function DeleteButton({
     <Button
       type="button"
       variant="ghost"
-      size="icon"
+      size="icon-sm"
+      className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
       disabled={pending}
       onClick={() => {
         if (!window.confirm(confirmMessage)) return;
@@ -33,8 +34,9 @@ export default function DeleteButton({
         });
       }}
       aria-label="Delete"
+      title="Delete"
     >
-      <Trash2 size={16} className="text-red-600" />
+      <Trash2 size={15} />
     </Button>
   );
 }

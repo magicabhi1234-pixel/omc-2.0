@@ -36,9 +36,9 @@ export default function MultiSelectPicker({
         onChange={(e) => setSearch(e.target.value)}
         placeholder={searchPlaceholder}
       />
-      <p className="text-xs text-slate-500">{selected.length} selected</p>
-      <div className="max-h-56 space-y-1 overflow-y-auto rounded-lg border border-slate-200 p-3">
-        {filtered.length === 0 && <p className="text-sm text-slate-500">No matches.</p>}
+      <p className="text-xs text-muted-foreground">{selected.length} selected</p>
+      <div className="max-h-56 space-y-1 overflow-y-auto rounded-lg border border-border p-3">
+        {filtered.length === 0 && <p className="text-sm text-muted-foreground">No matches.</p>}
         {filtered.map((option) => (
           <label key={option.id} className="flex cursor-pointer items-center gap-2 text-sm">
             <Checkbox

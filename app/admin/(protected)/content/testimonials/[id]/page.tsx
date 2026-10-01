@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { supabaseAdmin } from "@/lib/db/client";
 import TestimonialForm from "@/components/admin/testimonial-form";
 import { updateTestimonial } from "../actions";
+import { PageHeader } from "@/components/admin/page-kit";
 
 export default async function EditTestimonialPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -10,8 +11,8 @@ export default async function EditTestimonialPage({ params }: { params: Promise<
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-slate-900">Edit Testimonial</h1>
-      <div className="mt-6">
+      <PageHeader title="Edit Testimonial" />
+      <div>
         <TestimonialForm action={updateTestimonial.bind(null, id)} initial={data} submitLabel="Save Changes" />
       </div>
     </div>

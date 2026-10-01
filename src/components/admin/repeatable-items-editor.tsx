@@ -47,7 +47,7 @@ export default function RepeatableItemsEditor({
       {hiddenFieldName && <input type="hidden" name={hiddenFieldName} value={JSON.stringify(items)} readOnly />}
 
       {items.map((item, index) => (
-        <div key={index} className="flex gap-2 rounded-lg border border-slate-200 p-3">
+        <div key={index} className="flex gap-2 rounded-lg border border-border p-3">
           <div className="flex-1 space-y-2">
             {fields.map((field) => (
               <div key={field.name}>
@@ -84,7 +84,7 @@ export default function RepeatableItemsEditor({
             onClick={() => update(items.filter((_, i) => i !== index))}
             aria-label={`Remove ${itemLabel}`}
           >
-            <Trash2 size={16} className="text-red-600" />
+            <Trash2 size={16} className="text-destructive" />
           </Button>
         </div>
       ))}

@@ -1,12 +1,12 @@
 "use client";
 
+import FormActionBar from "@/components/admin/form-action-bar";
 import { submitWithoutReset } from "@/lib/admin/form-submit";
 import { useActionState } from "react";
 import { Input } from "@/components/ui/input";
 import MediaPickerField from "@/components/admin/media-picker-field";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
@@ -52,9 +52,9 @@ export default function UniversityForm({
   const errors = state.fieldErrors ?? {};
 
   return (
-    <form onSubmit={submitWithoutReset(formAction)} className="max-w-2xl space-y-6">
+    <form onSubmit={submitWithoutReset(formAction)} className="max-w-4xl space-y-6 rounded-xl border border-border bg-card p-5 shadow-[0_1px_2px_rgb(15_23_42/0.04)] sm:p-6">
       {state.error && (
-        <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
+        <p className="rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive" role="alert">
           {state.error}
         </p>
       )}
@@ -63,12 +63,12 @@ export default function UniversityForm({
         <div className="space-y-2">
           <Label htmlFor="name">Name</Label>
           <Input id="name" name="name" defaultValue={initial?.name} required />
-          {errors.name && <p className="text-xs text-red-600">{errors.name}</p>}
+          {errors.name && <p className="text-xs text-destructive">{errors.name}</p>}
         </div>
         <div className="space-y-2">
           <Label htmlFor="slug">Slug</Label>
           <Input id="slug" name="slug" defaultValue={initial?.slug} required />
-          {errors.slug && <p className="text-xs text-red-600">{errors.slug}</p>}
+          {errors.slug && <p className="text-xs text-destructive">{errors.slug}</p>}
         </div>
       </div>
 
@@ -167,9 +167,7 @@ export default function UniversityForm({
         <Label htmlFor="featured" className="cursor-pointer font-normal">Featured university</Label>
       </div>
 
-      <Button type="submit" disabled={pending}>
-        {pending ? "Saving..." : submitLabel}
-      </Button>
+      <FormActionBar pending={pending} submitLabel={submitLabel} cancelHref="/admin/content/universities" />
     </form>
   );
 }

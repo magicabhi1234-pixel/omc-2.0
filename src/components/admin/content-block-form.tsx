@@ -1,11 +1,11 @@
 "use client";
 
+import FormActionBar from "@/components/admin/form-action-bar";
 import { submitWithoutReset } from "@/lib/admin/form-submit";
 import { useActionState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { ContentBlockFormState } from "../../../app/admin/(protected)/content/blocks/actions";
 
@@ -33,9 +33,9 @@ export default function ContentBlockForm({
   const [state, formAction, pending] = useActionState(action, {});
 
   return (
-    <form onSubmit={submitWithoutReset(formAction)} className="max-w-2xl space-y-6">
+    <form onSubmit={submitWithoutReset(formAction)} className="max-w-4xl space-y-6 rounded-xl border border-border bg-card p-5 shadow-[0_1px_2px_rgb(15_23_42/0.04)] sm:p-6">
       {state.error && (
-        <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">{state.error}</p>
+        <p className="rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive" role="alert">{state.error}</p>
       )}
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -63,7 +63,7 @@ export default function ContentBlockForm({
           className="font-mono text-xs"
           defaultValue={initial?.data ? JSON.stringify(initial.data, null, 2) : "{}"}
         />
-        <p className="text-xs text-slate-500">Any shape you need - this content type has no fixed schema.</p>
+        <p className="text-xs text-muted-foreground">Any shape you need - this content type has no fixed schema.</p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -88,7 +88,7 @@ export default function ContentBlockForm({
         <Textarea id="seo_meta_description" name="seo_meta_description" rows={2} defaultValue={initial?.seo_meta_description ?? ""} maxLength={160} />
       </div>
 
-      <Button type="submit" disabled={pending}>{pending ? "Saving..." : submitLabel}</Button>
+      <FormActionBar pending={pending} submitLabel={submitLabel} cancelHref="/admin/content/blocks" />
     </form>
   );
 }

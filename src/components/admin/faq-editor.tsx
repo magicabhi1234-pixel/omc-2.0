@@ -39,7 +39,7 @@ export default function FaqEditor({
       {hiddenFieldName && <input type="hidden" name={hiddenFieldName} value={JSON.stringify(faqs)} readOnly />}
 
       {faqs.map((faq, index) => (
-        <div key={index} className="flex gap-2 rounded-lg border border-slate-200 p-3">
+        <div key={index} className="flex gap-2 rounded-lg border border-border p-3">
           <div className="flex-1 space-y-2">
             <div>
               <Label className="text-xs">Question</Label>
@@ -72,7 +72,7 @@ export default function FaqEditor({
             onClick={() => update(faqs.filter((_, i) => i !== index))}
             aria-label="Remove FAQ"
           >
-            <Trash2 size={16} className="text-red-600" />
+            <Trash2 size={16} className="text-destructive" />
           </Button>
         </div>
       ))}

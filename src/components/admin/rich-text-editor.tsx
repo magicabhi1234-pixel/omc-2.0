@@ -41,8 +41,8 @@ function ToolbarButton({
       aria-label={label}
       title={label}
       className={cn(
-        "flex h-8 w-8 cursor-pointer items-center justify-center rounded-md text-slate-600 transition hover:bg-slate-100",
-        active && "bg-slate-200 text-slate-900"
+        "flex h-8 w-8 cursor-pointer items-center justify-center rounded-md text-muted-foreground transition hover:bg-muted",
+        active && "bg-muted text-foreground"
       )}
     >
       {children}
@@ -71,7 +71,7 @@ export default function RichTextEditor({
     content: initialHtml,
     editorProps: {
       attributes: {
-        class: "prose prose-slate max-w-none min-h-[300px] rounded-b-lg border border-t-0 border-slate-200 bg-white p-4 focus:outline-none",
+        class: "prose prose-slate max-w-none min-h-[300px] rounded-b-lg border border-t-0 border-border bg-card p-4 focus:outline-none",
       },
     },
     onUpdate: ({ editor }) => onChange(editor.getHTML()),
@@ -90,7 +90,7 @@ export default function RichTextEditor({
 
   return (
     <div>
-      <div className="flex flex-wrap gap-1 rounded-t-lg border border-slate-200 bg-slate-50 p-2">
+      <div className="flex flex-wrap gap-1 rounded-t-lg border border-border bg-muted/50 p-2">
         <ToolbarButton label="Bold" active={editor.isActive("bold")} onClick={() => editor.chain().focus().toggleBold().run()}>
           <Bold size={16} />
         </ToolbarButton>

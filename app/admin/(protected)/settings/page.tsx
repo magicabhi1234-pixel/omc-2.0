@@ -5,6 +5,7 @@ import { requirePermission } from "@/lib/auth/session";
 import SettingsGroupForm, { type SettingsField } from "@/components/admin/settings-group-form";
 import { cn } from "@/lib/utils";
 import { SETTINGS_GROUPS, parseSettings, type SettingsGroup } from "@/lib/site-settings";
+import { PageHeader } from "@/components/admin/page-kit";
 
 export const metadata: Metadata = { title: "Global Settings" };
 
@@ -78,10 +79,9 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-slate-900">Global Settings</h1>
-      <p className="mt-1 text-slate-600">Changes go live immediately across the site.</p>
+      <PageHeader title="Global Settings" description={<>Changes go live immediately across the site.</>} />
 
-      <nav aria-label="Settings sections" className="mt-6 flex gap-1 overflow-x-auto border-b border-slate-200">
+      <nav aria-label="Settings sections" className="flex gap-1 overflow-x-auto border-b border-border">
         {TABS.map((t) => (
           <Link
             key={t.group}
@@ -89,7 +89,7 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
             aria-current={t.group === active.group ? "page" : undefined}
             className={cn(
               "-mb-px border-b-2 px-4 py-2 text-sm font-medium whitespace-nowrap transition",
-              t.group === active.group ? "border-[#0B3B68] text-[#0B3B68]" : "border-transparent text-slate-500 hover:text-slate-900"
+              t.group === active.group ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"
             )}
           >
             {t.label}
@@ -97,9 +97,9 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
         ))}
       </nav>
 
-      <section className="mt-6 rounded-xl border border-slate-200 bg-white p-4 sm:p-6">
-        <h2 className="font-semibold text-slate-900">{active.label}</h2>
-        <p className="mt-1 mb-5 text-sm text-slate-500">{active.description}</p>
+      <section className="mt-6 rounded-xl border border-border bg-card p-4 sm:p-6">
+        <h2 className="font-semibold text-foreground">{active.label}</h2>
+        <p className="mt-1 mb-5 text-sm text-muted-foreground">{active.description}</p>
         <SettingsGroupForm key={active.group} group={active.group} fields={active.fields} initial={initial} />
       </section>
     </div>

@@ -3,6 +3,7 @@ import { supabaseAdmin } from "@/lib/db/client";
 import { requirePermission } from "@/lib/auth/session";
 import NavigationEditor from "@/components/admin/navigation-editor";
 import { MENU_KEYS, type MenuKey } from "@/lib/site-settings";
+import { PageHeader } from "@/components/admin/page-kit";
 
 export const metadata: Metadata = { title: "Menus" };
 
@@ -21,9 +22,8 @@ export default async function MenusPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-slate-900">Menus</h1>
-      <p className="mt-1 text-slate-600">Drag rows (or use the arrows) to reorder. Changes go live as soon as you save.</p>
-      {error && <p className="mt-4 rounded-lg bg-red-50 p-4 text-sm text-red-700" role="alert">Couldn&apos;t load menus: {error.message}</p>}
+      <PageHeader title="Menus" description={<>Drag rows (or use the arrows) to reorder. Changes go live as soon as you save.</>} />
+      {error && <p className="mt-4 rounded-lg bg-destructive/10 p-4 text-sm text-destructive" role="alert">Couldn&apos;t load menus: {error.message}</p>}
       <div className="mt-6 space-y-6">
         {(Object.keys(MENU_KEYS) as MenuKey[]).map((key) => (
           <NavigationEditor

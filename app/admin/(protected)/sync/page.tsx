@@ -3,6 +3,7 @@ import { supabaseAdmin } from "@/lib/db/client";
 import { requirePermission } from "@/lib/auth/session";
 import SanitySyncPanel from "@/components/admin/sanity-sync-panel";
 import { isSanityConfigured } from "@/lib/sanity/source";
+import { PageHeader } from "@/components/admin/page-kit";
 
 export const metadata: Metadata = { title: "Sanity Sync" };
 
@@ -18,8 +19,8 @@ export default async function SanitySyncPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-slate-900">Sanity Sync</h1>
-      <div className="mt-2 max-w-3xl space-y-2 text-sm text-slate-600">
+      <PageHeader title="Sanity Sync" />
+      <div className="mt-2 max-w-3xl space-y-2 text-sm text-muted-foreground">
         <p>
           This dashboard is the primary CMS. Sanity remains connected as a <strong>read-only fallback and import source</strong>:
         </p>
@@ -31,7 +32,7 @@ export default async function SanitySyncPage() {
       </div>
 
       {!isSanityConfigured ? (
-        <p className="mt-6 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800" role="alert">
+        <p className="mt-6 rounded-lg border border-warning/30 bg-warning-soft p-4 text-sm text-warning" role="alert">
           Sanity isn&apos;t configured - set NEXT_PUBLIC_SANITY_PROJECT_ID and NEXT_PUBLIC_SANITY_DATASET.
         </p>
       ) : (
@@ -41,26 +42,26 @@ export default async function SanitySyncPage() {
       )}
 
       <section className="mt-10">
-        <h2 className="font-semibold text-slate-900">Recent runs</h2>
+        <h2 className="font-semibold text-foreground">Recent runs</h2>
         {error ? (
-          <p className="mt-2 text-sm text-amber-800">Run history unavailable ({error.message}). Apply migration 0004.</p>
+          <p className="mt-2 text-sm text-warning">Run history unavailable ({error.message}). Apply migration 0004.</p>
         ) : runs && runs.length > 0 ? (
-          <ul className="mt-3 divide-y divide-slate-100 rounded-xl border border-slate-200 bg-white">
+          <ul className="mt-3 divide-y divide-border rounded-xl border border-border bg-card">
             {runs.map((run) => {
               const summary = run.summary as Record<string, { imported?: number }>;
               const imported = ["universities", "testimonials", "blog_posts", "landing_pages"].reduce((n, k) => n + (summary?.[k]?.imported ?? 0), 0);
               return (
                 <li key={run.id} className="flex flex-wrap items-center justify-between gap-2 px-4 py-3 text-sm">
                   <span>
-                    <span className="font-medium capitalize text-slate-900">{run.trigger}</span> · {run.status} · {imported} imported
+                    <span className="font-medium capitalize text-foreground">{run.trigger}</span> · {run.status} · {imported} imported
                   </span>
-                  <span className="text-xs text-slate-500">{IST.format(new Date(run.created_at))}</span>
+                  <span className="text-xs text-muted-foreground">{IST.format(new Date(run.created_at))}</span>
                 </li>
               );
             })}
           </ul>
         ) : (
-          <p className="mt-2 text-sm text-slate-500">No imports yet.</p>
+          <p className="mt-2 text-sm text-muted-foreground">No imports yet.</p>
         )}
       </section>
     </div>

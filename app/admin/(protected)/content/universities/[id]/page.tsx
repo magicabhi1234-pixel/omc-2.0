@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { supabaseAdmin } from "@/lib/db/client";
 import UniversityForm from "@/components/admin/university-form";
 import { updateUniversity } from "../actions";
+import { PageHeader } from "@/components/admin/page-kit";
 
 export default async function EditUniversityPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -10,8 +11,8 @@ export default async function EditUniversityPage({ params }: { params: Promise<{
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-slate-900">Edit University</h1>
-      <div className="mt-6">
+      <PageHeader title="Edit University" />
+      <div>
         <UniversityForm
           action={updateUniversity.bind(null, id)}
           initial={data}

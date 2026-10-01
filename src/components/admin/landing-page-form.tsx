@@ -1,12 +1,12 @@
 "use client";
 
+import FormActionBar from "@/components/admin/form-action-bar";
 import { submitWithoutReset } from "@/lib/admin/form-submit";
 import { useActionState, useState } from "react";
 import { Input } from "@/components/ui/input";
 import MediaPickerField from "@/components/admin/media-picker-field";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -117,21 +117,26 @@ export default function LandingPageForm({
   const faqValue = faqMeta.heading || faqItems.length > 0 ? { ...faqMeta, faqs: faqItems } : null;
 
   return (
-    <form onSubmit={submitWithoutReset(formAction)} className="max-w-4xl space-y-6">
+    <form onSubmit={submitWithoutReset(formAction)} className="space-y-6">
       {state.error && (
-        <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">{state.error}</p>
+        <p className="rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive" role="alert">{state.error}</p>
       )}
 
+      <section className="space-y-4 rounded-xl border border-border bg-card p-5 shadow-[0_1px_2px_rgb(15_23_42/0.04)]">
+        <div>
+          <h2 className="text-[15px] font-semibold">Page details</h2>
+          <p className="text-sm text-muted-foreground">Title, URL and where the page is listed.</p>
+        </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="title">Title</Label>
           <Input id="title" name="title" defaultValue={initial?.title} required />
-          {errors.title && <p className="text-xs text-red-600">{errors.title}</p>}
+          {errors.title && <p className="text-xs text-destructive">{errors.title}</p>}
         </div>
         <div className="space-y-2">
           <Label htmlFor="slug">Slug</Label>
           <Input id="slug" name="slug" defaultValue={initial?.slug} required />
-          {errors.slug && <p className="text-xs text-red-600">{errors.slug}</p>}
+          {errors.slug && <p className="text-xs text-destructive">{errors.slug}</p>}
         </div>
       </div>
 
@@ -170,19 +175,21 @@ export default function LandingPageForm({
         </div>
       </div>
 
-      <Tabs defaultValue="hero" className="w-full">
-        <TabsList className="flex-wrap h-auto">
-          <TabsTrigger value="hero">Hero</TabsTrigger>
-          <TabsTrigger value="universities">Universities</TabsTrigger>
-          <TabsTrigger value="compare">Compare</TabsTrigger>
-          <TabsTrigger value="sections">Sections</TabsTrigger>
-          <TabsTrigger value="faq">FAQ</TabsTrigger>
-          <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
-          <TabsTrigger value="cta">CTA</TabsTrigger>
-          <TabsTrigger value="seo">SEO</TabsTrigger>
+      </section>
+
+      <Tabs defaultValue="hero" className="w-full gap-0">
+        <TabsList variant="line" className="sticky top-0 z-10 h-auto w-full justify-start gap-1 overflow-x-auto rounded-none border-b border-border bg-canvas/95 px-0 pt-1 backdrop-blur">
+          <TabsTrigger value="hero" className="h-10 flex-none px-3">Hero</TabsTrigger>
+          <TabsTrigger value="universities" className="h-10 flex-none px-3">Universities</TabsTrigger>
+          <TabsTrigger value="compare" className="h-10 flex-none px-3">Compare</TabsTrigger>
+          <TabsTrigger value="sections" className="h-10 flex-none px-3">Sections</TabsTrigger>
+          <TabsTrigger value="faq" className="h-10 flex-none px-3">FAQ</TabsTrigger>
+          <TabsTrigger value="testimonials" className="h-10 flex-none px-3">Testimonials</TabsTrigger>
+          <TabsTrigger value="cta" className="h-10 flex-none px-3">CTA</TabsTrigger>
+          <TabsTrigger value="seo" className="h-10 flex-none px-3">SEO</TabsTrigger>
         </TabsList>
 
-        <TabsContent keepMounted value="hero" className="space-y-4 pt-4">
+        <TabsContent keepMounted value="hero" className="mt-4 space-y-4 rounded-xl border border-border bg-card p-5 shadow-[0_1px_2px_rgb(15_23_42/0.04)]">
           <HiddenJson name="hero" value={hero} />
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
@@ -227,7 +234,7 @@ export default function LandingPageForm({
           </div>
           <div className="grid gap-3 sm:grid-cols-3">
             {[1, 2, 3].map((n) => (
-              <div key={n} className="space-y-2 rounded-lg border border-slate-200 p-3">
+              <div key={n} className="space-y-2 rounded-lg border border-border p-3">
                 <Label className="text-xs">Stat {n} Value</Label>
                 <Input value={str(hero, `stat${n}Value`)} onChange={(e) => setHero({ ...hero, [`stat${n}Value`]: e.target.value })} />
                 <Label className="text-xs">Stat {n} Label</Label>
@@ -237,7 +244,7 @@ export default function LandingPageForm({
           </div>
         </TabsContent>
 
-        <TabsContent keepMounted value="universities" className="space-y-4 pt-4">
+        <TabsContent keepMounted value="universities" className="mt-4 space-y-4 rounded-xl border border-border bg-card p-5 shadow-[0_1px_2px_rgb(15_23_42/0.04)]">
           <HiddenJson name="university_section" value={universitySection} />
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
@@ -261,11 +268,11 @@ export default function LandingPageForm({
               hiddenFieldName="universities"
               searchPlaceholder="Search universities..."
             />
-            {errors.universities && <p className="text-xs text-red-600">{errors.universities}</p>}
+            {errors.universities && <p className="text-xs text-destructive">{errors.universities}</p>}
           </div>
         </TabsContent>
 
-        <TabsContent keepMounted value="compare" className="space-y-4 pt-4">
+        <TabsContent keepMounted value="compare" className="mt-4 space-y-4 rounded-xl border border-border bg-card p-5 shadow-[0_1px_2px_rgb(15_23_42/0.04)]">
           <HiddenJson name="compare_section" value={compareSectionValue} />
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
@@ -281,10 +288,10 @@ export default function LandingPageForm({
             <Label>Description</Label>
             <Textarea rows={2} value={compareDescription} onChange={(e) => setCompareDescription(e.target.value)} />
           </div>
-          <p className="text-xs text-slate-500">Comparison rows (Fees, Duration, Study Mode, Eligibility, Placement Support) use the standard set automatically.</p>
+          <p className="text-xs text-muted-foreground">Comparison rows (Fees, Duration, Study Mode, Eligibility, Placement Support) use the standard set automatically.</p>
         </TabsContent>
 
-        <TabsContent keepMounted value="sections" className="space-y-6 pt-4">
+        <TabsContent keepMounted value="sections" className="mt-4 space-y-6 rounded-xl border border-border bg-card p-5 shadow-[0_1px_2px_rgb(15_23_42/0.04)]">
           <SectionGroup
             title="Why Choose Us"
             fieldName="why_choose"
@@ -329,7 +336,7 @@ export default function LandingPageForm({
             initialItems={arr(initial?.career_scope, "roles")}
           />
 
-          <div className="space-y-3 rounded-lg border border-slate-200 p-4">
+          <div className="space-y-3 rounded-lg border border-border p-4">
             <HiddenJson name="highlight_banner" value={highlightBannerValue} />
             <Label className="text-sm font-semibold">Highlight Banner</Label>
             <div className="space-y-2">
@@ -347,7 +354,7 @@ export default function LandingPageForm({
           </div>
         </TabsContent>
 
-        <TabsContent keepMounted value="faq" className="space-y-4 pt-4">
+        <TabsContent keepMounted value="faq" className="mt-4 space-y-4 rounded-xl border border-border bg-card p-5 shadow-[0_1px_2px_rgb(15_23_42/0.04)]">
           <HiddenJson name="faq" value={faqValue} />
           <div className="space-y-2">
             <Label>Heading</Label>
@@ -360,7 +367,7 @@ export default function LandingPageForm({
           <FaqEditor initial={faqItems} onChange={setFaqItems} />
         </TabsContent>
 
-        <TabsContent keepMounted value="testimonials" className="space-y-4 pt-4">
+        <TabsContent keepMounted value="testimonials" className="mt-4 space-y-4 rounded-xl border border-border bg-card p-5 shadow-[0_1px_2px_rgb(15_23_42/0.04)]">
           <div className="space-y-2">
             <Label htmlFor="testimonials_heading">Testimonials Heading</Label>
             <Input id="testimonials_heading" name="testimonials_heading" defaultValue={initial?.testimonials_heading ?? "What Our Students Say"} />
@@ -376,7 +383,7 @@ export default function LandingPageForm({
           </div>
         </TabsContent>
 
-        <TabsContent keepMounted value="cta" className="space-y-4 pt-4">
+        <TabsContent keepMounted value="cta" className="mt-4 space-y-4 rounded-xl border border-border bg-card p-5 shadow-[0_1px_2px_rgb(15_23_42/0.04)]">
           <HiddenJson name="cta" value={cta} />
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
@@ -404,7 +411,7 @@ export default function LandingPageForm({
           </div>
         </TabsContent>
 
-        <TabsContent keepMounted value="seo" className="space-y-4 pt-4">
+        <TabsContent keepMounted value="seo" className="mt-4 space-y-4 rounded-xl border border-border bg-card p-5 shadow-[0_1px_2px_rgb(15_23_42/0.04)]">
           <div className="space-y-2">
             <Label htmlFor="seo_meta_title">Meta Title</Label>
             <Input id="seo_meta_title" name="seo_meta_title" defaultValue={initial?.seo_meta_title ?? ""} maxLength={60} />
@@ -433,7 +440,7 @@ export default function LandingPageForm({
         </TabsContent>
       </Tabs>
 
-      <Button type="submit" disabled={pending}>{pending ? "Saving..." : submitLabel}</Button>
+      <FormActionBar pending={pending} submitLabel={submitLabel} cancelHref="/admin/pages" />
     </form>
   );
 }
@@ -464,7 +471,7 @@ function SectionGroup({
   const value = heading || items.length > 0 ? { heading, description, [itemsKey]: items } : null;
 
   return (
-    <div className="space-y-3 rounded-lg border border-slate-200 p-4">
+    <div className="space-y-3 rounded-lg border border-border p-4">
       <HiddenJson name={fieldName} value={value} />
       <Label className="text-sm font-semibold">{title}</Label>
       <div className="space-y-2">

@@ -69,7 +69,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en-IN" className={plusJakartaSans.variable}>
+    // suppressHydrationWarning: the dashboard theme script (next-themes) sets
+    // the light/dark class on <html> before hydration on admin routes.
+    <html lang="en-IN" className={plusJakartaSans.variable} suppressHydrationWarning>
       <head>
         {/* Supabase Storage serves every blog/landing-page image; warming
             the connection here (rather than at the first <img> request)

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { supabaseAdmin } from "@/lib/db/client";
 import { requirePermission } from "@/lib/auth/session";
 import MediaUploader from "@/components/admin/media-uploader";
+import { PageHeader } from "@/components/admin/page-kit";
 import MediaGrid, { type MediaFile } from "@/components/admin/media-grid";
 import { MEDIA_FOLDERS } from "@/lib/admin/media";
 
@@ -32,25 +33,25 @@ export default async function MediaLibraryPage() {
     created_at: row.created_at,
   }));
 
+  // Known categories plus any legacy folder present in the data (e.g. "images"), so every file is filterable.
+  const folders = [...new Set([...MEDIA_FOLDERS, ...files.map((f) => f.folder)])];
+
   return (
     <div>
-      <h1 className="text-2xl font-bold text-slate-900">Media Library</h1>
-      <p className="mt-1 text-slate-600">
-        {files.length} files. Large JPG/PNG uploads are resized to 2400px and converted to WebP automatically.
-      </p>
+      <PageHeader
+        title="Media Library"
+        description={`${files.length} files · drag files anywhere on this page to upload. Large JPG/PNG images are resized to 2400px and converted to WebP.`}
+        actions={<MediaUploader folders={[...MEDIA_FOLDERS]} />}
+      />
       {error && (
-        <p className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800" role="alert">
+        <p className="mb-4 rounded-lg border border-warning/30 bg-warning-soft p-4 text-sm text-warning" role="alert">
           Couldn&apos;t load the library: {error.message}
         </p>
       )}
 
-      <div className="mt-6">
-        <MediaUploader folders={[...MEDIA_FOLDERS]} />
-      </div>
-
       <MediaGrid
         files={files}
-        folders={[...MEDIA_FOLDERS]}
+        folders={folders}
         currentUserId={profile.id}
         canManage={profile.permissions.canManageMedia}
       />

@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
+import FormActionBar from "@/components/admin/form-action-bar";
 import MediaPickerField from "@/components/admin/media-picker-field";
 import type { SettingsGroup } from "@/lib/site-settings";
 import { saveSettingsGroup, type SettingsFormState } from "../../../app/admin/(protected)/settings/actions";
@@ -40,7 +40,7 @@ export default function SettingsGroupForm({
   return (
     <form action={formAction} className="space-y-5">
       {state.error && (
-        <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
+        <p className="rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive" role="alert">
           {state.error}
         </p>
       )}
@@ -57,7 +57,7 @@ export default function SettingsGroupForm({
                 <>
                   <Label htmlFor={`${group}-${field.name}`}>
                     {field.label}
-                    {field.required && <span className="text-red-600"> *</span>}
+                    {field.required && <span className="text-destructive"> *</span>}
                   </Label>
                   {field.type === "textarea" ? (
                     <Textarea id={`${group}-${field.name}`} name={field.name} rows={3} defaultValue={initial[field.name] ?? ""} placeholder={field.placeholder} aria-invalid={Boolean(error)} aria-describedby={describedBy} />
@@ -77,7 +77,7 @@ export default function SettingsGroupForm({
                 </>
               )}
               {(field.help || (error && field.type !== "media")) && (
-                <p id={describedBy} className={`text-xs ${error ? "text-red-600" : "text-slate-500"}`}>
+                <p id={describedBy} className={`text-xs ${error ? "text-destructive" : "text-muted-foreground"}`}>
                   {error && field.type !== "media" ? error : field.help}
                 </p>
               )}
@@ -85,9 +85,7 @@ export default function SettingsGroupForm({
           );
         })}
       </div>
-      <Button type="submit" disabled={pending}>
-        {pending ? "Saving..." : submitLabel}
-      </Button>
+      <FormActionBar pending={pending} submitLabel={submitLabel} hint="Changes go live as soon as you save." />
     </form>
   );
 }

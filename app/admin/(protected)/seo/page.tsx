@@ -5,6 +5,7 @@ import { requireProfile } from "@/lib/auth/session";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { blogPostHref } from "@/lib/blog-links";
 import { cn } from "@/lib/utils";
+import { PageHeader } from "@/components/admin/page-kit";
 
 export const metadata: Metadata = { title: "SEO" };
 
@@ -41,9 +42,9 @@ function Pill({ level, children, title }: { level: Level; children: React.ReactN
       title={title}
       className={cn(
         "inline-flex rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap",
-        level === "ok" && "bg-green-50 text-green-700",
-        level === "warn" && "bg-amber-50 text-amber-800",
-        level === "bad" && "bg-red-50 text-red-700"
+        level === "ok" && "bg-success-soft text-success",
+        level === "warn" && "bg-warning-soft text-warning",
+        level === "bad" && "bg-destructive/10 text-destructive"
       )}
     >
       {children}
@@ -113,31 +114,27 @@ export default async function SeoOverviewPage({ searchParams }: { searchParams: 
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-slate-900">SEO</h1>
-      <p className="mt-1 text-slate-600">
-        What search engines see for each page, using the same fallbacks as the live site (meta title falls back to the page title, etc.).
-        Edit a page to change its SEO fields; sitewide verification tags live in Global Settings.
-      </p>
+      <PageHeader title="SEO" description={<>What search engines see for each page, using the same fallbacks as the live site (meta title falls back to the page title, etc.). Edit a page to change its SEO fields; sitewide verification tags live in Global Settings.</>} />
 
       <dl className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
         {summary.map((s) => (
-          <div key={s.label} className="rounded-xl border border-slate-200 bg-white p-3">
-            <dt className="text-xs text-slate-500">{s.label}</dt>
-            <dd className="mt-1 text-xl font-bold text-slate-900">{s.value}</dd>
+          <div key={s.label} className="rounded-xl border border-border bg-card p-3">
+            <dt className="text-xs text-muted-foreground">{s.label}</dt>
+            <dd className="mt-1 text-xl font-bold text-foreground">{s.value}</dd>
           </div>
         ))}
       </dl>
 
       <div className="mt-6 flex gap-2 text-sm">
-        <Link href="/admin/seo" className={cn("rounded-full px-3 py-1", filter !== "issues" ? "bg-[#0B3B68] text-white" : "bg-white text-slate-700 ring-1 ring-slate-200")}>
+        <Link href="/admin/seo" className={cn("rounded-full px-3 py-1", filter !== "issues" ? "bg-primary text-white" : "bg-card text-foreground ring-1 ring-slate-200")}>
           All ({rows.length})
         </Link>
-        <Link href="/admin/seo?filter=issues" className={cn("rounded-full px-3 py-1", filter === "issues" ? "bg-[#0B3B68] text-white" : "bg-white text-slate-700 ring-1 ring-slate-200")}>
+        <Link href="/admin/seo?filter=issues" className={cn("rounded-full px-3 py-1", filter === "issues" ? "bg-primary text-white" : "bg-card text-foreground ring-1 ring-slate-200")}>
           Needs work ({rows.filter((r) => issues(r) > 0 || duplicates.includes(r)).length})
         </Link>
       </div>
 
-      <div className="mt-4 rounded-xl border border-slate-200 bg-white">
+      <div className="mt-4 rounded-xl border border-border bg-card">
         <Table>
           <TableHeader>
             <TableRow>
@@ -154,11 +151,11 @@ export default async function SeoOverviewPage({ searchParams }: { searchParams: 
             {shown.map((row) => (
               <TableRow key={row.id} className="align-top">
                 <TableCell className="max-w-64 whitespace-normal">
-                  <p className="font-medium text-slate-900">{row.title}</p>
-                  <a href={row.path} target="_blank" rel="noreferrer" className="text-xs text-slate-500 hover:underline">
+                  <p className="font-medium text-foreground">{row.title}</p>
+                  <a href={row.path} target="_blank" rel="noreferrer" className="text-xs text-muted-foreground hover:underline">
                     {row.path}
                   </a>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-muted-foreground">
                     {row.type}
                     {row.status === "draft" && " · draft"}
                   </p>
@@ -166,11 +163,11 @@ export default async function SeoOverviewPage({ searchParams }: { searchParams: 
                 <TableCell className="max-w-72 whitespace-normal">
                   <Pill level={titleLevel(row.metaTitle)}>{row.metaTitle.length} chars</Pill>
                   {duplicates.includes(row) && <Pill level="warn"> duplicate</Pill>}
-                  <p className="mt-1 text-xs text-slate-600">{row.metaTitle || "—"}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">{row.metaTitle || "—"}</p>
                 </TableCell>
                 <TableCell className="max-w-72 whitespace-normal">
                   <Pill level={descriptionLevel(row.metaDescription)}>{row.metaDescription.length} chars</Pill>
-                  <p className="mt-1 line-clamp-2 text-xs text-slate-600">{row.metaDescription || "—"}</p>
+                  <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{row.metaDescription || "—"}</p>
                 </TableCell>
                 <TableCell>
                   <Pill level={row.ogImage ? "ok" : "warn"}>{row.ogImage ? "Set" : "Missing"}</Pill>
@@ -182,7 +179,7 @@ export default async function SeoOverviewPage({ searchParams }: { searchParams: 
                   <Pill level={row.hasFaqs ? "ok" : "warn"}>{row.hasFaqs ? "Yes" : "No FAQs"}</Pill>
                 </TableCell>
                 <TableCell className="text-right">
-                  <Link href={row.editHref} className="text-sm font-medium text-[#0B3B68] hover:underline">
+                  <Link href={row.editHref} className="text-sm font-medium text-primary hover:underline">
                     Edit
                   </Link>
                 </TableCell>

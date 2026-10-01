@@ -56,14 +56,14 @@ export default function SanitySyncPanel() {
       </div>
 
       {result && (
-        <div className="rounded-xl border border-slate-200 bg-white p-4">
-          <p className="text-sm font-medium text-slate-900">
+        <div className="rounded-xl border border-border bg-card p-4">
+          <p className="text-sm font-medium text-foreground">
             {result.dryRun ? "Preview" : "Import result"} · {result.status}
-            {result.error && <span className="text-red-600"> - {result.error}</span>}
+            {result.error && <span className="text-destructive"> - {result.error}</span>}
           </p>
           <div className="mt-3 overflow-x-auto">
             <table className="w-full min-w-[560px] text-left text-sm">
-              <thead className="text-slate-500">
+              <thead className="text-muted-foreground">
                 <tr>
                   <th className="py-2 font-medium">Content</th>
                   <th className="py-2 font-medium">In Sanity</th>
@@ -73,22 +73,22 @@ export default function SanitySyncPanel() {
                   <th className="py-2 font-medium">Failed</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-border">
                 {(Object.keys(LABELS) as (keyof SyncResult["entities"])[]).map((key) => {
                   const e = result.entities[key];
                   return (
                     <tr key={key} className="align-top">
-                      <td className="py-2 font-medium text-slate-900">{LABELS[key]}</td>
+                      <td className="py-2 font-medium text-foreground">{LABELS[key]}</td>
                       <td className="py-2">{e.inSanity}</td>
                       <td className="py-2">{e.alreadyInDashboard}</td>
                       <td className="py-2">{e.deletedInDashboard}</td>
                       <td className="py-2">
                         {(result.dryRun ? e.toImport : e.imported).length}
                         {(result.dryRun ? e.toImport : e.imported).length > 0 && (
-                          <span className="block text-xs text-slate-500">{(result.dryRun ? e.toImport : e.imported).slice(0, 5).join(", ")}</span>
+                          <span className="block text-xs text-muted-foreground">{(result.dryRun ? e.toImport : e.imported).slice(0, 5).join(", ")}</span>
                         )}
                       </td>
-                      <td className="py-2 text-red-700">
+                      <td className="py-2 text-destructive">
                         {e.failed.length}
                         {e.failed.slice(0, 3).map((f) => (
                           <span key={f.key} className="block text-xs">{f.key}: {f.reason}</span>
@@ -101,7 +101,7 @@ export default function SanitySyncPanel() {
             </table>
           </div>
           {!result.dryRun && (
-            <p className="mt-3 text-xs text-slate-500">
+            <p className="mt-3 text-xs text-muted-foreground">
               Images: {result.images.copied} copied to the Media Library, {result.images.reused} already there, {result.images.failed} failed.
             </p>
           )}
