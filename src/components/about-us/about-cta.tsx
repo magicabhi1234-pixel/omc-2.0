@@ -17,7 +17,7 @@ export default function AboutCTA() {
             from our admission experts.
           </p>
 
-          <OpenPopupButton className="mt-8 cursor-pointer rounded-xl bg-[#F47C45] px-8 py-4 font-semibold text-white">
+          <OpenPopupButton className="mt-8 cursor-pointer rounded-xl bg-[#C2410C] px-8 py-4 font-semibold text-white">
             Get Free Counselling
           </OpenPopupButton>
 

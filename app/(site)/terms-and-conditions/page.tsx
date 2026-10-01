@@ -1,13 +1,24 @@
 import { buildMetadata } from "@/lib/metadata";
+import Breadcrumbs from "@/components/common/breadcrumbs";
+import { JsonLd, breadcrumbSchema, webPageSchema } from "@/lib/structured-data";
 
-export const metadata = buildMetadata({
+const CRUMBS = [
+  { name: "Home", path: "/" },
+  { name: "Terms & Conditions", path: "/terms-and-conditions" },
+];
+
+export const generateMetadata = () =>
+  buildMetadata({
   title: "Terms & Conditions",
   description: "Terms and Conditions for using the Online MBA Colleges website and services.",
   path: "/terms-and-conditions",
 });
 
 export default function TermsAndConditionsPage() {
-    return (
+  return (
+    <>
+      <JsonLd data={[webPageSchema({ path: "/terms-and-conditions", name: "Terms & Conditions", hasBreadcrumb: true }), breadcrumbSchema(CRUMBS, "/terms-and-conditions")]} />
+      <Breadcrumbs crumbs={CRUMBS} />
       <section className="bg-white py-16">
         <div className="mx-auto max-w-4xl px-4">
           <h1 className="mb-8 text-4xl font-bold text-slate-900">
@@ -109,5 +120,6 @@ export default function TermsAndConditionsPage() {
           </div>
         </div>
       </section>
+    </>
     );
   }

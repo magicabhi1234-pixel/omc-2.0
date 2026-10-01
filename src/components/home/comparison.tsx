@@ -9,7 +9,7 @@ export default function Comparison() {
             AI Comparison
           </span>
 
-          <h2 className="mt-3 text-4xl font-bold text-slate-900">
+          <h2 className="mt-3 text-3xl font-bold text-slate-900 md:text-4xl">
             Compare Universities Side By Side
           </h2>
 
@@ -19,13 +19,14 @@ export default function Comparison() {
           </p>
         </div>
 
-        <div className="mt-12 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
-          <table className="w-full">
+        <div className="mt-12 overflow-x-auto rounded-3xl border border-slate-200 bg-white shadow-sm">
+          <table className="w-full min-w-[520px]">
+            <caption className="sr-only">Amity Online vs Manipal Online MBA comparison</caption>
             <thead className="bg-[#0B3B68] text-white">
               <tr>
-                <th className="p-5 text-left">Feature</th>
-                <th className="p-5 text-left">Amity Online</th>
-                <th className="p-5 text-left">Manipal Online</th>
+                <th scope="col" className="p-5 text-left">Feature</th>
+                <th scope="col" className="p-5 text-left">Amity Online</th>
+                <th scope="col" className="p-5 text-left">Manipal Online</th>
               </tr>
             </thead>
 

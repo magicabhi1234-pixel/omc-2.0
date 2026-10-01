@@ -1,118 +1,49 @@
-"use client";
+import { ChevronDown } from "lucide-react";
+import type { FAQSection } from "@/types/landing";
 
-import { useState } from "react";
-import { FAQSection } from "@/types/landing";
+type Props = Partial<FAQSection> & { id?: string };
 
-type Props = Partial<FAQSection>;
-
-const defaultFaqs = [
-  {
-    question: "Which is the best Distance MBA University in North India?",
-    answer: "Amity University, Chandigarh University, LPU, NMIMS and UPES are among the most popular Distance MBA universities.",
-  },
-  {
-    question: "Is a Distance MBA degree valid in India?",
-    answer: "Yes. A UGC-approved Distance MBA degree is valid for jobs, higher education and government opportunities.",
-  },
-  {
-    question: "Can working professionals pursue a Distance MBA?",
-    answer: "Yes. Distance MBA programs are specially designed for working professionals and business owners.",
-  },
-  {
-    question: "What is the average fee for a Distance MBA?",
-    answer: "The average fee ranges from ₹60,000 to ₹2,00,000 depending on the university and specialization.",
-  },
-  {
-    question: "Are EMI options available?",
-    answer: "Yes. Most universities provide easy EMI options along with placement support and career guidance.",
-  },
-  {
-    question: "Do universities provide placement assistance?",
-    answer: "Many universities offer placement support, career guidance, resume building and interview preparation.",
-  },
-  {
-    question: "What is the duration of a Distance MBA?",
-    answer: "The standard duration is 2 years, which can be extended as per university regulations.",
-  },
-  {
-    question: "Can I pursue a Distance MBA while doing a job?",
-    answer: "Absolutely. Distance MBA offers flexibility so you can study alongside your job.",
-  },
-];
-
-export default function FAQ(props: Props) {
-  const {
-    heading = "Frequently Asked Questions",
-    description = "Get answers to the most common questions about Distance MBA admissions.",
-    faqs,
-  } = props;
-
-  const [open, setOpen] = useState<number | null>(0);
-
-  const items = faqs && faqs.length > 0 ? faqs : defaultFaqs;
+/**
+ * Native <details> accordion: every answer is in the server-rendered HTML
+ * (so the FAQPage schema matches visible content and crawlers/answer engines
+ * can read all of it), keyboard/screen-reader accessible, and zero JS.
+ */
+export default function FAQ({
+  heading = "Frequently Asked Questions",
+  description,
+  faqs,
+  id = "faq",
+}: Props) {
+  const items = (faqs ?? []).filter((f) => f.question?.trim() && f.answer?.trim());
+  if (items.length === 0) return null;
 
   return (
-    <section className="bg-slate-50 py-20">
-      <div className="mx-auto max-w-5xl px-4">
-
-        <div className="mb-14 text-center">
-
-          <span className="rounded-full bg-orange-100 px-4 py-2 text-sm font-medium text-orange-700">
-            FAQ
-          </span>
-
-          <h2 className="mt-5 text-4xl font-bold text-slate-900 md:text-5xl">
+    <section id={id} aria-labelledby={`${id}-heading`} className="scroll-mt-24 bg-slate-50 py-16 md:py-20">
+      <div className="mx-auto max-w-4xl px-4">
+        <div className="mb-10 text-center md:mb-14">
+          <span className="rounded-full bg-orange-100 px-4 py-2 text-sm font-medium text-orange-800">FAQ</span>
+          <h2 id={`${id}-heading`} className="mt-5 text-3xl font-bold text-slate-900 md:text-5xl">
             {heading}
           </h2>
-
-          {description && (
-            <p className="mt-5 text-lg text-slate-600">
-              {description}
-            </p>
-          )}
-
+          {description && <p className="mt-5 text-lg text-slate-600">{description}</p>}
         </div>
 
         <div className="space-y-4">
-
           {items.map((faq, index) => (
-            <div
-              key={index}
-              className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
+            <details
+              key={`${faq.question}-${index}`}
+              open={index === 0}
+              className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
             >
-
-              <button
-                onClick={() =>
-                  setOpen(
-                    open === index ? null : index
-                  )
-                }
-                className="flex w-full items-center justify-between p-6 text-left font-semibold"
-              >
-
-                <span>
-                  {faq.question}
-                </span>
-
-                <span className="text-2xl">
-                  {open === index ? "−" : "+"}
-                </span>
-
-              </button>
-
-              {open === index && (
-                <div className="border-t px-6 py-5 text-slate-600">
-                  {faq.answer}
-                </div>
-              )}
-
-            </div>
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 text-left md:p-6 [&::-webkit-details-marker]:hidden">
+                <h3 className="text-base font-semibold text-slate-900 md:text-lg">{faq.question}</h3>
+                <ChevronDown size={20} aria-hidden="true" className="shrink-0 text-slate-500 transition group-open:rotate-180" />
+              </summary>
+              <div className="border-t px-5 py-4 leading-7 text-slate-700 md:px-6 md:py-5">{faq.answer}</div>
+            </details>
           ))}
-
         </div>
-
       </div>
     </section>
   );
 }
-

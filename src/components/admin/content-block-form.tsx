@@ -1,5 +1,6 @@
 "use client";
 
+import { submitWithoutReset } from "@/lib/admin/form-submit";
 import { useActionState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -32,12 +33,12 @@ export default function ContentBlockForm({
   const [state, formAction, pending] = useActionState(action, {});
 
   return (
-    <form action={formAction} className="max-w-2xl space-y-6">
+    <form onSubmit={submitWithoutReset(formAction)} className="max-w-2xl space-y-6">
       {state.error && (
         <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">{state.error}</p>
       )}
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="content_type">Content Type</Label>
           <Input id="content_type" name="content_type" defaultValue={initial?.content_type} placeholder="e.g. banner, promo_card" required />
@@ -65,7 +66,7 @@ export default function ContentBlockForm({
         <p className="text-xs text-slate-500">Any shape you need - this content type has no fixed schema.</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="seo_meta_title">Meta Title</Label>
           <Input id="seo_meta_title" name="seo_meta_title" defaultValue={initial?.seo_meta_title ?? ""} maxLength={60} />

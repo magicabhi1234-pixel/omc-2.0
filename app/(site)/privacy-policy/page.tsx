@@ -1,13 +1,24 @@
 import { buildMetadata } from "@/lib/metadata";
+import Breadcrumbs from "@/components/common/breadcrumbs";
+import { JsonLd, breadcrumbSchema, webPageSchema } from "@/lib/structured-data";
 
-export const metadata = buildMetadata({
+const CRUMBS = [
+  { name: "Home", path: "/" },
+  { name: "Privacy Policy", path: "/privacy-policy" },
+];
+
+export const generateMetadata = () =>
+  buildMetadata({
   title: "Privacy Policy",
   description: "Privacy Policy of Online MBA Colleges - how we collect, use and protect your information.",
   path: "/privacy-policy",
 });
 
 export default function PrivacyPolicyPage() {
-    return (
+  return (
+    <>
+      <JsonLd data={[webPageSchema({ path: "/privacy-policy", name: "Privacy Policy", hasBreadcrumb: true }), breadcrumbSchema(CRUMBS, "/privacy-policy")]} />
+      <Breadcrumbs crumbs={CRUMBS} />
       <section className="bg-white py-16">
         <div className="mx-auto max-w-4xl px-4">
           <h1 className="mb-8 text-4xl font-bold text-slate-900">
@@ -93,5 +104,6 @@ export default function PrivacyPolicyPage() {
           </div>
         </div>
       </section>
+    </>
     );
   }

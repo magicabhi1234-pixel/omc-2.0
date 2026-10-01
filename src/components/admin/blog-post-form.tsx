@@ -1,7 +1,9 @@
 "use client";
 
+import { submitWithoutReset } from "@/lib/admin/form-submit";
 import { useActionState, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
+import MediaPickerField from "@/components/admin/media-picker-field";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -58,11 +60,11 @@ export default function BlogPostForm({
 
   return (
     <form
-      action={formAction}
-      onSubmit={() => {
+      onSubmit={(event) => {
         if (contentInputRef.current) {
           contentInputRef.current.value = JSON.stringify(htmlToPortableText(html));
         }
+        submitWithoutReset(formAction)(event);
       }}
       className="max-w-3xl space-y-6"
     >
@@ -70,7 +72,7 @@ export default function BlogPostForm({
         <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">{state.error}</p>
       )}
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="title">Title</Label>
           <Input id="title" name="title" defaultValue={initial?.title} required />
@@ -88,11 +90,9 @@ export default function BlogPostForm({
         <Input id="h1" name="h1" defaultValue={initial?.h1 ?? ""} />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="featured_image_url">Featured Image URL</Label>
-          <Input id="featured_image_url" name="featured_image_url" defaultValue={initial?.featured_image_url} required placeholder="Pick from Media Library" />
-          {errors.featured_image_url && <p className="text-xs text-red-600">{errors.featured_image_url}</p>}
+          <MediaPickerField name="featured_image_url" label="Featured image" folder="blog" required defaultValue={initial?.featured_image_url ?? ""} error={errors.featured_image_url} />
         </div>
         <div className="space-y-2">
           <Label htmlFor="featured_image_alt">Featured Image Alt Text</Label>
@@ -112,7 +112,7 @@ export default function BlogPostForm({
         <RichTextEditor initialHtml={html} onChange={setHtml} />
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid gap-4 sm:grid-cols-3">
         <div className="space-y-2">
           <Label htmlFor="author">Author</Label>
           <Input id="author" name="author" defaultValue={initial?.author ?? "Admin"} required />
@@ -139,7 +139,7 @@ export default function BlogPostForm({
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="category">Category</Label>
           <Input id="category" name="category" defaultValue={initial?.category ?? ""} />
@@ -188,14 +188,13 @@ export default function BlogPostForm({
           <Label htmlFor="seo_meta_description">Meta Description</Label>
           <Textarea id="seo_meta_description" name="seo_meta_description" rows={2} defaultValue={initial?.seo_meta_description ?? ""} maxLength={160} />
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
             <Label htmlFor="seo_canonical_url">Canonical URL</Label>
             <Input id="seo_canonical_url" name="seo_canonical_url" defaultValue={initial?.seo_canonical_url ?? ""} />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="seo_og_image_url">Open Graph Image URL</Label>
-            <Input id="seo_og_image_url" name="seo_og_image_url" defaultValue={initial?.seo_og_image_url ?? ""} />
+            <MediaPickerField name="seo_og_image_url" label="Social share image (1200×630)" folder="blog" defaultValue={initial?.seo_og_image_url ?? ""} />
           </div>
         </div>
         <div className="space-y-2">

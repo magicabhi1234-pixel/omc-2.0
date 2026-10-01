@@ -1,7 +1,8 @@
+import { cache } from "react";
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/db/client";
-import { permissionsFor, type PermissionSet, type Role } from "./permissions";
+import { canAccessContent, permissionsFor, type PermissionSet, type Role } from "./permissions";
 
 export interface CurrentProfile {
   id: string;
@@ -12,8 +13,11 @@ export interface CurrentProfile {
   permissions: PermissionSet;
 }
 
-/** Null if not logged in, or if their profile has been deactivated/deleted. */
-export async function getCurrentProfile(): Promise<CurrentProfile | null> {
+/**
+ * Null if not logged in, or if their profile has been deactivated/deleted.
+ * Memoized per request: layout, page and actions share one lookup.
+ */
+export const getCurrentProfile = cache(async function getCurrentProfile(): Promise<CurrentProfile | null> {
   const supabase = await createSupabaseServerClient();
   const {
     data: { user },
@@ -42,12 +46,12 @@ export async function getCurrentProfile(): Promise<CurrentProfile | null> {
     isActive: data.is_active,
     permissions: permissionsFor(role),
   };
-}
+});
 
-/** Redirects to /admin/login if not authenticated, or to /admin/dashboard with no further access if the account is deactivated. */
+/** Redirects to the login page if not signed in or if the account has no active profile. */
 export async function requireProfile(): Promise<CurrentProfile> {
   const profile = await getCurrentProfile();
-  if (!profile) redirect("/admin/login");
+  if (!profile) redirect("/omc-adminlogin");
   return profile;
 }
 
@@ -58,4 +62,20 @@ export async function requirePermission(
   const profile = await requireProfile();
   if (!check(profile.permissions)) redirect("/admin/dashboard");
   return profile;
+}
+
+/**
+ * Ownership check for "own"-scoped roles (authors): returns an error message
+ * if `profile` may not modify row `id` of `table`, otherwise null.
+ */
+export async function contentAccessError(
+  profile: CurrentProfile,
+  table: "blog_posts" | "landing_pages" | "universities" | "testimonials" | "content_blocks",
+  id: string
+): Promise<string | null> {
+  const { data } = await supabaseAdmin.from(table).select("created_by").eq("id", id).maybeSingle();
+  if (!data) return "This item no longer exists.";
+  return canAccessContent(profile.permissions, profile.id, data.created_by)
+    ? null
+    : "You can only change content you created.";
 }

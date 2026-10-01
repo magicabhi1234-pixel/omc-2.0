@@ -14,6 +14,8 @@ export interface PermissionSet {
   canManageSettings: boolean;
   canManageRoles: boolean;
   canViewActivityLogs: boolean;
+  /** View, update, export and delete form leads (personal data - keep to trusted roles). */
+  canManageLeads: boolean;
 }
 
 export const PERMISSIONS: Record<Role, PermissionSet> = {
@@ -27,6 +29,7 @@ export const PERMISSIONS: Record<Role, PermissionSet> = {
     canManageSettings: true,
     canManageRoles: true,
     canViewActivityLogs: true,
+    canManageLeads: true,
   },
   admin: {
     contentScope: "all",
@@ -38,6 +41,7 @@ export const PERMISSIONS: Record<Role, PermissionSet> = {
     canManageSettings: false,
     canManageRoles: false,
     canViewActivityLogs: true,
+    canManageLeads: true,
   },
   editor: {
     contentScope: "all",
@@ -49,6 +53,7 @@ export const PERMISSIONS: Record<Role, PermissionSet> = {
     canManageSettings: false,
     canManageRoles: false,
     canViewActivityLogs: false,
+    canManageLeads: false,
   },
   author: {
     contentScope: "own",
@@ -60,6 +65,7 @@ export const PERMISSIONS: Record<Role, PermissionSet> = {
     canManageSettings: false,
     canManageRoles: false,
     canViewActivityLogs: false,
+    canManageLeads: false,
   },
 };
 

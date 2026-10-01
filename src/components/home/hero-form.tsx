@@ -24,7 +24,7 @@ export default function HeroForm() {
       </div>
 
       {/* Common Form */}
-      <LeadForm />
+      <LeadForm source="hero" />
 
       {/* Trust Line */}
       <div className="mt-4 text-center text-xs text-slate-500">

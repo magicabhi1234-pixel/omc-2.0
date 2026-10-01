@@ -1,7 +1,9 @@
 "use client";
 
+import { submitWithoutReset } from "@/lib/admin/form-submit";
 import { useActionState, useState } from "react";
 import { Input } from "@/components/ui/input";
+import MediaPickerField from "@/components/admin/media-picker-field";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -115,12 +117,12 @@ export default function LandingPageForm({
   const faqValue = faqMeta.heading || faqItems.length > 0 ? { ...faqMeta, faqs: faqItems } : null;
 
   return (
-    <form action={formAction} className="max-w-4xl space-y-6">
+    <form onSubmit={submitWithoutReset(formAction)} className="max-w-4xl space-y-6">
       {state.error && (
         <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">{state.error}</p>
       )}
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="title">Title</Label>
           <Input id="title" name="title" defaultValue={initial?.title} required />
@@ -133,7 +135,7 @@ export default function LandingPageForm({
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid gap-4 sm:grid-cols-3">
         <div className="space-y-2">
           <Label htmlFor="category">Category</Label>
           <Select name="category" defaultValue={initial?.category ?? CATEGORIES[0]}>
@@ -180,9 +182,9 @@ export default function LandingPageForm({
           <TabsTrigger value="seo">SEO</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="hero" className="space-y-4 pt-4">
+        <TabsContent keepMounted value="hero" className="space-y-4 pt-4">
           <HiddenJson name="hero" value={hero} />
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <Label>Badge</Label>
               <Input value={str(hero, "badge")} onChange={(e) => setHero({ ...hero, badge: e.target.value })} />
@@ -196,13 +198,13 @@ export default function LandingPageForm({
             <Label>Description</Label>
             <Textarea rows={2} value={str(hero, "description")} onChange={(e) => setHero({ ...hero, description: e.target.value })} />
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label>Hero Image URL</Label>
-              <Input
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="sm:col-span-2">
+              <MediaPickerField
+                label="Hero image"
+                folder="landing-pages"
                 value={(hero.image as { src?: string })?.src ?? ""}
-                onChange={(e) => setHero({ ...hero, image: { src: e.target.value, alt: (hero.image as { alt?: string })?.alt ?? "" } })}
-                placeholder="Pick from Media Library"
+                onChange={(src) => setHero({ ...hero, image: { src, alt: (hero.image as { alt?: string })?.alt ?? "" } })}
               />
             </div>
             <div className="space-y-2">
@@ -213,7 +215,7 @@ export default function LandingPageForm({
               />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <Label>Primary Button Text</Label>
               <Input value={str(hero, "primaryButtonText")} onChange={(e) => setHero({ ...hero, primaryButtonText: e.target.value })} placeholder="Apply Now" />
@@ -223,7 +225,7 @@ export default function LandingPageForm({
               <Input value={str(hero, "secondaryButtonText")} onChange={(e) => setHero({ ...hero, secondaryButtonText: e.target.value })} placeholder="Free Counselling" />
             </div>
           </div>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid gap-3 sm:grid-cols-3">
             {[1, 2, 3].map((n) => (
               <div key={n} className="space-y-2 rounded-lg border border-slate-200 p-3">
                 <Label className="text-xs">Stat {n} Value</Label>
@@ -235,9 +237,9 @@ export default function LandingPageForm({
           </div>
         </TabsContent>
 
-        <TabsContent value="universities" className="space-y-4 pt-4">
+        <TabsContent keepMounted value="universities" className="space-y-4 pt-4">
           <HiddenJson name="university_section" value={universitySection} />
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <Label>Section Badge</Label>
               <Input value={str(universitySection, "badge")} onChange={(e) => setUniversitySection({ ...universitySection, badge: e.target.value })} placeholder="Top Online Universities" />
@@ -263,9 +265,9 @@ export default function LandingPageForm({
           </div>
         </TabsContent>
 
-        <TabsContent value="compare" className="space-y-4 pt-4">
+        <TabsContent keepMounted value="compare" className="space-y-4 pt-4">
           <HiddenJson name="compare_section" value={compareSectionValue} />
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <Label>Badge</Label>
               <Input value={compareBadge} onChange={(e) => setCompareBadge(e.target.value)} placeholder="Compare" />
@@ -282,7 +284,7 @@ export default function LandingPageForm({
           <p className="text-xs text-slate-500">Comparison rows (Fees, Duration, Study Mode, Eligibility, Placement Support) use the standard set automatically.</p>
         </TabsContent>
 
-        <TabsContent value="sections" className="space-y-6 pt-4">
+        <TabsContent keepMounted value="sections" className="space-y-6 pt-4">
           <SectionGroup
             title="Why Choose Us"
             fieldName="why_choose"
@@ -345,7 +347,7 @@ export default function LandingPageForm({
           </div>
         </TabsContent>
 
-        <TabsContent value="faq" className="space-y-4 pt-4">
+        <TabsContent keepMounted value="faq" className="space-y-4 pt-4">
           <HiddenJson name="faq" value={faqValue} />
           <div className="space-y-2">
             <Label>Heading</Label>
@@ -358,7 +360,7 @@ export default function LandingPageForm({
           <FaqEditor initial={faqItems} onChange={setFaqItems} />
         </TabsContent>
 
-        <TabsContent value="testimonials" className="space-y-4 pt-4">
+        <TabsContent keepMounted value="testimonials" className="space-y-4 pt-4">
           <div className="space-y-2">
             <Label htmlFor="testimonials_heading">Testimonials Heading</Label>
             <Input id="testimonials_heading" name="testimonials_heading" defaultValue={initial?.testimonials_heading ?? "What Our Students Say"} />
@@ -374,9 +376,9 @@ export default function LandingPageForm({
           </div>
         </TabsContent>
 
-        <TabsContent value="cta" className="space-y-4 pt-4">
+        <TabsContent keepMounted value="cta" className="space-y-4 pt-4">
           <HiddenJson name="cta" value={cta} />
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <Label>Badge</Label>
               <Input value={str(cta, "badge")} onChange={(e) => setCta({ ...cta, badge: e.target.value })} placeholder="Admissions Open 2026-27" />
@@ -390,7 +392,7 @@ export default function LandingPageForm({
             <Label>Description</Label>
             <Textarea rows={3} value={str(cta, "description")} onChange={(e) => setCta({ ...cta, description: e.target.value })} />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <Label>Primary Button Text</Label>
               <Input value={str(cta, "primaryButtonText")} onChange={(e) => setCta({ ...cta, primaryButtonText: e.target.value })} placeholder="Apply Now" />
@@ -402,7 +404,7 @@ export default function LandingPageForm({
           </div>
         </TabsContent>
 
-        <TabsContent value="seo" className="space-y-4 pt-4">
+        <TabsContent keepMounted value="seo" className="space-y-4 pt-4">
           <div className="space-y-2">
             <Label htmlFor="seo_meta_title">Meta Title</Label>
             <Input id="seo_meta_title" name="seo_meta_title" defaultValue={initial?.seo_meta_title ?? ""} maxLength={60} />
@@ -411,14 +413,13 @@ export default function LandingPageForm({
             <Label htmlFor="seo_meta_description">Meta Description</Label>
             <Textarea id="seo_meta_description" name="seo_meta_description" rows={2} defaultValue={initial?.seo_meta_description ?? ""} maxLength={160} />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="seo_canonical_url">Canonical URL</Label>
               <Input id="seo_canonical_url" name="seo_canonical_url" defaultValue={initial?.seo_canonical_url ?? ""} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="seo_og_image_url">Open Graph Image URL</Label>
-              <Input id="seo_og_image_url" name="seo_og_image_url" defaultValue={initial?.seo_og_image_url ?? ""} />
+              <MediaPickerField name="seo_og_image_url" label="Social share image (1200×630)" folder="landing-pages" defaultValue={initial?.seo_og_image_url ?? ""} />
             </div>
           </div>
           <div className="space-y-2">

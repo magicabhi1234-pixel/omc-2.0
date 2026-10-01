@@ -2,6 +2,8 @@ import { createClient } from "@supabase/supabase-js";
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { checkRateLimit } from "@/lib/security/rate-limit";
+import { clientIp, isSameOrigin } from "@/lib/security/request";
 
 const leadSchema = z.object({
   name: z.string().trim().min(2).max(100),
@@ -9,7 +11,15 @@ const leadSchema = z.object({
   email: z.string().trim().email().max(254),
   city: z.string().trim().max(100).optional().or(z.literal("")),
   specialization: z.string().trim().min(2).max(150),
+  source: z.string().trim().max(50).regex(/^[a-z0-9-]*$/).optional(),
+  pagePath: z.string().trim().max(300).startsWith("/").optional(),
+  // Honeypot: hidden from humans, so any value means a bot filled the form.
+  website: z.string().max(500).optional(),
 });
+
+/** 5 submissions per IP per 10 minutes - generous for a real student, useless for a spam run. */
+const LEAD_RATE_LIMIT = 5;
+const LEAD_RATE_WINDOW_SECONDS = 600;
 
 const escapeHtml = (value: string) =>
   value.replace(/[&<>"']/g, (character) =>
@@ -90,6 +100,23 @@ export async function POST(request: Request) {
   console.info("[lead:%s] request received", traceId);
 
   try {
+    if (!isSameOrigin(request.headers)) {
+      console.warn("[lead:%s] rejected cross-origin submission from %s", traceId, request.headers.get("origin"));
+      return NextResponse.json({ success: false, message: "Invalid request origin." }, { status: 403 });
+    }
+    if (!request.headers.get("content-type")?.includes("application/json")) {
+      return NextResponse.json({ success: false, message: "Unsupported content type." }, { status: 415 });
+    }
+
+    const ip = clientIp(request.headers);
+    if (!(await checkRateLimit(`lead:${ip}`, LEAD_RATE_LIMIT, LEAD_RATE_WINDOW_SECONDS))) {
+      console.warn("[lead:%s] rate limited", traceId);
+      return NextResponse.json(
+        { success: false, message: "Too many submissions. Please wait a few minutes and try again." },
+        { status: 429, headers: { "Retry-After": String(LEAD_RATE_WINDOW_SECONDS) } }
+      );
+    }
+
     const parsed = leadSchema.safeParse(await request.json());
     if (!parsed.success) {
       console.warn("[lead:%s] validation failed", traceId);
@@ -97,6 +124,12 @@ export async function POST(request: Request) {
     }
 
     const lead = parsed.data;
+    if (lead.website) {
+      // Report success so the bot has nothing to adapt to, but store/send nothing.
+      console.warn("[lead:%s] honeypot triggered; discarding", traceId);
+      return NextResponse.json({ success: true, saved: false, emailSent: false, traceId });
+    }
+    const leadType = lead.source === "contact" ? "contact" : "inquiry";
     let saved = false;
     let emailSent = false;
     let databaseError: string | undefined;
@@ -110,13 +143,25 @@ export async function POST(request: Request) {
       const supabase = createClient(supabaseConfig.url, supabaseConfig.serviceRoleKey, {
         auth: { autoRefreshToken: false, persistSession: false },
       });
-      const { error } = await supabase.from("leads").insert({
+      const baseRow = {
         name: lead.name,
         mobile: lead.mobile,
         email: lead.email,
         city: lead.city || null,
         specialization: lead.specialization,
+      };
+      let { error } = await supabase.from("leads").insert({
+        ...baseRow,
+        lead_type: leadType,
+        source: lead.source || null,
+        page_path: lead.pagePath || null,
       });
+      // Columns added by migration 0002 - if the code deploys before the
+      // migration is applied, still save the lead with the original columns.
+      if (error && (error.code === "PGRST204" || error.code === "42703")) {
+        console.warn("[lead:%s] lead tracking columns missing (apply migration 0002); saving base row", traceId);
+        ({ error } = await supabase.from("leads").insert(baseRow));
+      }
 
       if (error) {
         databaseError = `${error.code ?? "database_error"}: ${error.message}`;
@@ -139,6 +184,8 @@ export async function POST(request: Request) {
         email: escapeHtml(lead.email),
         city: escapeHtml(lead.city || "N/A"),
         specialization: escapeHtml(lead.specialization),
+        source: escapeHtml(lead.source || "website"),
+        pagePath: escapeHtml(lead.pagePath || "N/A"),
       };
       const adminResult = await sendWithRetry(
         resend,
@@ -146,7 +193,7 @@ export async function POST(request: Request) {
           from: `OMC Leads <${resendConfig.from}>`,
           to: [resendConfig.adminEmail],
           subject: "🎓 New MBA Lead Received",
-          html: `<h2>New MBA lead received</h2><p><strong>Name:</strong> ${safeLead.name}</p><p><strong>Mobile:</strong> ${safeLead.mobile}</p><p><strong>Email:</strong> ${safeLead.email}</p><p><strong>City:</strong> ${safeLead.city}</p><p><strong>Specialization:</strong> ${safeLead.specialization}</p>`,
+          html: `<h2>New MBA lead received</h2><p><strong>Name:</strong> ${safeLead.name}</p><p><strong>Mobile:</strong> ${safeLead.mobile}</p><p><strong>Email:</strong> ${safeLead.email}</p><p><strong>City:</strong> ${safeLead.city}</p><p><strong>Specialization:</strong> ${safeLead.specialization}</p><p><strong>Form:</strong> ${safeLead.source}</p><p><strong>Page:</strong> ${safeLead.pagePath}</p>`,
         },
         "Resend admin email",
         traceId

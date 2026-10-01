@@ -29,8 +29,8 @@ export default function Hero(props: Props) {
     <section className="relative overflow-hidden bg-gradient-to-br from-[#0B3B68] via-[#123f6d] to-[#0F172A] py-20 text-white">
 
       {/* Background Effects */}
-      <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-[#F47C45]/20 blur-3xl" />
-      <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-blue-500/20 blur-3xl" />
+      <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-[#C2410C]/20 soft-glow" />
+      <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-blue-500/20 soft-glow" />
 
       <div className="relative mx-auto max-w-7xl px-4">
 
@@ -39,7 +39,7 @@ export default function Hero(props: Props) {
           {/* Left Content */}
           <div>
 
-            <span className="rounded-full bg-white/10 px-4 py-2 text-sm backdrop-blur">
+            <span className="rounded-full bg-white/10 px-4 py-2 text-sm">
               {badge}
             </span>
 
@@ -55,15 +55,15 @@ export default function Hero(props: Props) {
 
             <div className="mt-8 flex flex-wrap gap-3">
 
-              <div className="rounded-full bg-white/10 px-4 py-2 backdrop-blur">
+              <div className="rounded-full bg-white/10 px-4 py-2">
                 <span aria-hidden="true">✅</span> UGC Approved
               </div>
 
-              <div className="rounded-full bg-white/10 px-4 py-2 backdrop-blur">
+              <div className="rounded-full bg-white/10 px-4 py-2">
                 <span aria-hidden="true">✅</span> EMI Available
               </div>
 
-              <div className="rounded-full bg-white/10 px-4 py-2 backdrop-blur">
+              <div className="rounded-full bg-white/10 px-4 py-2">
                 <span aria-hidden="true">✅</span> Placement Support
               </div>
 
@@ -71,7 +71,7 @@ export default function Hero(props: Props) {
 
             <div className="mt-10 flex flex-wrap gap-4">
 
-              <OpenPopupButton className="cursor-pointer rounded-xl bg-[#F47C45] px-8 py-4 font-semibold text-white transition hover:scale-105">
+              <OpenPopupButton className="cursor-pointer rounded-xl bg-[#C2410C] px-8 py-4 font-semibold text-white transition hover:scale-105">
                 {primaryButton.label}
               </OpenPopupButton>
 
@@ -88,7 +88,7 @@ export default function Hero(props: Props) {
           {/* Right Dashboard Card */}
           <div>
 
-            <div className="rounded-3xl border border-white/10 bg-white/10 p-6 backdrop-blur-xl shadow-2xl">
+            <div className="rounded-3xl border border-white/10 bg-white/10 p-6 shadow-2xl">
 
               <p className="mb-6 text-center text-2xl font-bold">
                 Top MBA Universities
@@ -111,7 +111,7 @@ export default function Hero(props: Props) {
               </div>
 
               {/* Placement Support */}
-              <div className="mt-6 rounded-2xl bg-[#F47C45] p-5 text-center">
+              <div className="mt-6 rounded-2xl bg-[#C2410C] p-5 text-center">
 
                 <p className="text-sm uppercase tracking-wider">
                   Placement Support Included

@@ -29,7 +29,7 @@ export default async function Blogs() {
           {posts.map((post) => (
             <div
               key={post.slug}
-              className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:border-[#F47C45] hover:shadow-xl"
+              className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:border-[#C2410C] hover:shadow-xl"
             >
               <div aria-hidden="true" className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-100 text-2xl">
                 📚
@@ -45,9 +45,9 @@ export default async function Blogs() {
 
               <Link
                 href={blogPostHref(post.slug)}
-                className="mt-6 inline-block font-semibold text-[#0B3B68] transition hover:text-[#F47C45]"
+                className="mt-6 inline-block font-semibold text-[#0B3B68] transition hover:text-[#C2410C]"
               >
-                Read Article →
+                Read article<span className="sr-only">: {post.title}</span> <span aria-hidden="true">→</span>
               </Link>
             </div>
           ))}

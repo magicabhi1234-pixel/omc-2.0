@@ -39,7 +39,7 @@ export default async function ActivityLogsPage() {
                 <TableCell><Badge variant="secondary">{log.action}</Badge></TableCell>
                 <TableCell>{log.content_type}</TableCell>
                 <TableCell className="font-mono text-xs text-slate-500">{log.content_id ?? "—"}</TableCell>
-                <TableCell className="text-slate-500">{new Date(log.created_at).toLocaleString()}</TableCell>
+                <TableCell className="text-slate-500">{new Date(log.created_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}</TableCell>
               </TableRow>
             ))}
           </TableBody>

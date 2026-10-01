@@ -7,8 +7,8 @@ export default function Hero() {
     <section className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-orange-50 pt-[50px] pb-16 lg:pb-20">
 
       {/* Background Effects */}
-      <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-blue-200/20 blur-3xl" />
-      <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-orange-200/20 blur-3xl" />
+      <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-blue-200/20 soft-glow" />
+      <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-orange-200/20 soft-glow" />
 
       <Container>
         <div className="grid items-center gap-12 lg:grid-cols-2">

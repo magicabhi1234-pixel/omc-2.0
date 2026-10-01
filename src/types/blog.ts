@@ -45,6 +45,7 @@ export interface BlogPostSummary {
   category?: string;
   excerpt: string;
   readingTime?: string;
+  lastModifiedDate?: string;
 }
 
 // =============================================

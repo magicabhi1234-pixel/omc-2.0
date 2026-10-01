@@ -3,14 +3,20 @@
 -- Run this once, in full, via the Supabase SQL Editor (Dashboard > SQL Editor
 -- > New query > paste > Run). Safe to re-run: every statement is idempotent
 -- (IF NOT EXISTS / CREATE OR REPLACE / ON CONFLICT DO NOTHING).
+--
+-- Also safe on a database where `media` and/or `activity_logs` already exist
+-- (as in production): those tables are never dropped or rewritten - any
+-- missing column the app needs is added as NULLable, and their foreign keys to
+-- `profiles` are added NOT VALID so pre-existing rows can't block them.
 -- ============================================================================
 
 create extension if not exists "pgcrypto"; -- gen_random_uuid()
 
 -- ----------------------------------------------------------------------------
--- Helper: auto-maintain updated_at on any table that has the column
+-- Helper: auto-maintain updated_at on any table that has the column.
+-- Named omc_* so it never replaces an unrelated pre-existing set_updated_at().
 -- ----------------------------------------------------------------------------
-create or replace function public.set_updated_at()
+create or replace function public.omc_set_updated_at()
 returns trigger as $$
 begin
   new.updated_at = now();
@@ -48,7 +54,7 @@ create table if not exists public.profiles (
 
 drop trigger if exists set_profiles_updated_at on public.profiles;
 create trigger set_profiles_updated_at before update on public.profiles
-  for each row execute function public.set_updated_at();
+  for each row execute function public.omc_set_updated_at();
 
 create index if not exists idx_profiles_role_id on public.profiles(role_id);
 
@@ -101,7 +107,7 @@ create table if not exists public.universities (
 
 drop trigger if exists set_universities_updated_at on public.universities;
 create trigger set_universities_updated_at before update on public.universities
-  for each row execute function public.set_updated_at();
+  for each row execute function public.omc_set_updated_at();
 
 create index if not exists idx_universities_status on public.universities(status);
 create index if not exists idx_universities_featured on public.universities(featured) where featured = true;
@@ -127,7 +133,7 @@ create table if not exists public.testimonials (
 
 drop trigger if exists set_testimonials_updated_at on public.testimonials;
 create trigger set_testimonials_updated_at before update on public.testimonials
-  for each row execute function public.set_updated_at();
+  for each row execute function public.omc_set_updated_at();
 
 create index if not exists idx_testimonials_status on public.testimonials(status);
 
@@ -164,7 +170,7 @@ create table if not exists public.blog_posts (
 
 drop trigger if exists set_blog_posts_updated_at on public.blog_posts;
 create trigger set_blog_posts_updated_at before update on public.blog_posts
-  for each row execute function public.set_updated_at();
+  for each row execute function public.omc_set_updated_at();
 
 create index if not exists idx_blog_posts_status on public.blog_posts(status);
 create index if not exists idx_blog_posts_published_date on public.blog_posts(published_date desc);
@@ -220,7 +226,7 @@ create table if not exists public.landing_pages (
 
 drop trigger if exists set_landing_pages_updated_at on public.landing_pages;
 create trigger set_landing_pages_updated_at before update on public.landing_pages
-  for each row execute function public.set_updated_at();
+  for each row execute function public.omc_set_updated_at();
 
 create index if not exists idx_landing_pages_status on public.landing_pages(status);
 create index if not exists idx_landing_pages_category on public.landing_pages(category);
@@ -261,6 +267,38 @@ create table if not exists public.media (
   created_at timestamptz not null default now()
 );
 
+-- Pre-existing `media` table: add whatever the dashboard needs and is missing.
+-- NULLable on purpose - a NOT NULL add would fail on existing rows.
+alter table public.media add column if not exists file_name text;
+alter table public.media add column if not exists storage_path text;
+alter table public.media add column if not exists url text;
+alter table public.media add column if not exists mime_type text;
+alter table public.media add column if not exists size_bytes bigint;
+alter table public.media add column if not exists alt_text text;
+alter table public.media add column if not exists width integer;
+alter table public.media add column if not exists height integer;
+alter table public.media add column if not exists uploaded_by uuid;
+alter table public.media add column if not exists created_at timestamptz not null default now();
+
+do $$
+begin
+  -- FK only if the existing column is uuid; NOT VALID so old rows (whose
+  -- uploaders have no profile yet) aren't checked - new rows are.
+  if not exists (select 1 from pg_constraint where conrelid = 'public.media'::regclass and contype = 'f'
+                 and conkey = array[(select attnum from pg_attribute where attrelid = 'public.media'::regclass and attname = 'uploaded_by')])
+     and (select data_type from information_schema.columns
+          where table_schema = 'public' and table_name = 'media' and column_name = 'uploaded_by') = 'uuid' then
+    alter table public.media add constraint media_uploaded_by_fkey
+      foreign key (uploaded_by) references public.profiles(id) on delete set null not valid;
+  end if;
+
+  begin
+    create unique index if not exists idx_media_storage_path on public.media(storage_path);
+  exception when unique_violation then
+    raise notice 'media.storage_path has duplicate values - unique index skipped (uploads still work).';
+  end;
+end $$;
+
 create index if not exists idx_media_created_at on public.media(created_at desc);
 create index if not exists idx_media_mime_type on public.media(mime_type);
 
@@ -281,7 +319,7 @@ create table if not exists public.navigation_items (
 
 drop trigger if exists set_navigation_items_updated_at on public.navigation_items;
 create trigger set_navigation_items_updated_at before update on public.navigation_items
-  for each row execute function public.set_updated_at();
+  for each row execute function public.omc_set_updated_at();
 
 create index if not exists idx_navigation_items_menu on public.navigation_items(menu_key, sort_order);
 
@@ -294,7 +332,7 @@ create table if not exists public.site_settings (
 
 drop trigger if exists set_site_settings_updated_at on public.site_settings;
 create trigger set_site_settings_updated_at before update on public.site_settings
-  for each row execute function public.set_updated_at();
+  for each row execute function public.omc_set_updated_at();
 
 -- ----------------------------------------------------------------------------
 -- Generic content blocks - any future content type, no migration required
@@ -320,7 +358,7 @@ create table if not exists public.content_blocks (
 
 drop trigger if exists set_content_blocks_updated_at on public.content_blocks;
 create trigger set_content_blocks_updated_at before update on public.content_blocks
-  for each row execute function public.set_updated_at();
+  for each row execute function public.omc_set_updated_at();
 
 create index if not exists idx_content_blocks_type on public.content_blocks(content_type, status);
 
@@ -338,6 +376,53 @@ create table if not exists public.activity_logs (
   new_value jsonb,
   created_at timestamptz not null default now()
 );
+
+-- Pre-existing `activity_logs` table: same approach as media above.
+alter table public.activity_logs add column if not exists user_id uuid;
+alter table public.activity_logs add column if not exists user_email text;
+alter table public.activity_logs add column if not exists action text;
+alter table public.activity_logs add column if not exists content_type text;
+alter table public.activity_logs add column if not exists content_id text;
+alter table public.activity_logs add column if not exists previous_value jsonb;
+alter table public.activity_logs add column if not exists new_value jsonb;
+alter table public.activity_logs add column if not exists created_at timestamptz not null default now();
+
+do $$
+begin
+  if not exists (select 1 from pg_constraint where conrelid = 'public.activity_logs'::regclass and contype = 'f'
+                 and conkey = array[(select attnum from pg_attribute where attrelid = 'public.activity_logs'::regclass and attname = 'user_id')])
+     and (select data_type from information_schema.columns
+          where table_schema = 'public' and table_name = 'activity_logs' and column_name = 'user_id') = 'uuid' then
+    alter table public.activity_logs add constraint activity_logs_user_id_fkey
+      foreign key (user_id) references public.profiles(id) on delete set null not valid;
+  end if;
+end $$;
+
+-- Pre-existing tables may carry NOT NULL columns (without defaults) that the
+-- dashboard never writes - inserts would then fail. Report them so they can
+-- be given a default or made NULLable; this check changes nothing itself.
+do $$
+declare
+  r record;
+begin
+  for r in
+    select table_name, column_name
+    from information_schema.columns
+    where table_schema = 'public'
+      and is_nullable = 'NO'
+      and column_default is null
+      and is_identity = 'NO'
+      and (
+        (table_name = 'media' and column_name not in
+          ('file_name', 'storage_path', 'url', 'mime_type', 'size_bytes', 'alt_text', 'uploaded_by'))
+        or (table_name = 'activity_logs' and column_name not in
+          ('user_id', 'user_email', 'action', 'content_type', 'content_id', 'previous_value', 'new_value'))
+      )
+  loop
+    raise warning 'public.%.% is NOT NULL with no default and is not written by the dashboard - inserts into % will fail until it gets a default or is made NULLable.',
+      r.table_name, r.column_name, r.table_name;
+  end loop;
+end $$;
 
 create index if not exists idx_activity_logs_created_at on public.activity_logs(created_at desc);
 create index if not exists idx_activity_logs_content on public.activity_logs(content_type, content_id);

@@ -19,8 +19,8 @@ export default function BlogHero({ query = "" }: Props) {
     <section className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-orange-50 py-20">
 
       {/* Background Blur */}
-      <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-blue-200/20 blur-3xl" />
-      <div className="absolute right-0 bottom-0 h-72 w-72 rounded-full bg-orange-200/20 blur-3xl" />
+      <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-blue-200/20 soft-glow" />
+      <div className="absolute right-0 bottom-0 h-72 w-72 rounded-full bg-orange-200/20 soft-glow" />
 
       <Container>
         <div className="relative z-10 mx-auto max-w-4xl text-center">
@@ -29,7 +29,7 @@ export default function BlogHero({ query = "" }: Props) {
             <span aria-hidden="true">📚</span> MBA Resources & Insights
           </span>
 
-          <h1 className="mt-6 text-5xl font-bold leading-tight text-slate-900 md:text-6xl">
+          <h1 className="mt-6 text-4xl font-bold leading-tight text-slate-900 md:text-6xl">
             Learn, Compare &
             <span className="block text-[#0B3B68]">
               Grow Your Career

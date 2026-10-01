@@ -26,7 +26,7 @@ const variantClasses: Record<ButtonVariant, string> = {
     "bg-[#0B3B68] text-white hover:bg-[#082c4d]",
 
   secondary:
-    "bg-[#F47C45] text-white hover:bg-[#e06c35]",
+    "bg-[#C2410C] text-white hover:bg-[#e06c35]",
 
   outline:
     "border border-[#0B3B68] bg-white text-[#0B3B68] hover:bg-[#0B3B68] hover:text-white",

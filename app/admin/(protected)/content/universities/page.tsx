@@ -6,6 +6,7 @@ import LinkButton from "@/components/admin/link-button";
 import PublishToggle from "@/components/admin/publish-toggle";
 import DeleteButton from "@/components/admin/delete-button";
 import { deleteUniversity, toggleUniversityStatus } from "./actions";
+import { runAction } from "@/lib/admin/run-action";
 
 export default async function UniversitiesListPage() {
   const profile = await requireProfile();
@@ -19,7 +20,7 @@ export default async function UniversitiesListPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Universities</h1>
           <p className="mt-1 text-slate-600">{universities.length} total</p>
@@ -51,22 +52,22 @@ export default async function UniversitiesListPage() {
                     status={u.status as "draft" | "published"}
                     action={async (next) => {
                       "use server";
-                      await toggleUniversityStatus(u.id, next);
+                      return runAction(() => toggleUniversityStatus(u.id, next));
                     }}
                   />
                 </TableCell>
-                <TableCell className="flex justify-end gap-1">
+                <TableCell className="text-right"><div className="flex justify-end gap-1">
                   <LinkButton href={`/admin/content/universities/${u.id}`} variant="ghost" size="sm">Edit</LinkButton>
                   {profile.permissions.canDeleteContent && (
                     <DeleteButton
                       action={async () => {
                         "use server";
-                        await deleteUniversity(u.id);
+                        return runAction(() => deleteUniversity(u.id));
                       }}
                       confirmMessage={`Delete "${u.name}"? This cannot be undone.`}
                     />
                   )}
-                </TableCell>
+                </div></TableCell>
               </TableRow>
             ))}
           </TableBody>

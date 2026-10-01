@@ -1,7 +1,9 @@
 "use client";
 
+import { submitWithoutReset } from "@/lib/admin/form-submit";
 import { useActionState } from "react";
 import { Input } from "@/components/ui/input";
+import MediaPickerField from "@/components/admin/media-picker-field";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -50,14 +52,14 @@ export default function UniversityForm({
   const errors = state.fieldErrors ?? {};
 
   return (
-    <form action={formAction} className="max-w-2xl space-y-6">
+    <form onSubmit={submitWithoutReset(formAction)} className="max-w-2xl space-y-6">
       {state.error && (
         <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
           {state.error}
         </p>
       )}
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="name">Name</Label>
           <Input id="name" name="name" defaultValue={initial?.name} required />
@@ -70,10 +72,9 @@ export default function UniversityForm({
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="logo_url">Logo URL</Label>
-          <Input id="logo_url" name="logo_url" defaultValue={initial?.logo_url ?? ""} placeholder="Pick from Media Library" />
+          <MediaPickerField name="logo_url" label="Logo" folder="universities" defaultValue={initial?.logo_url ?? ""} />
         </div>
         <div className="space-y-2">
           <Label htmlFor="logo_alt">Logo Alt Text</Label>
@@ -81,7 +82,7 @@ export default function UniversityForm({
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid gap-4 sm:grid-cols-3">
         <div className="space-y-2">
           <Label htmlFor="study_mode">Study Mode</Label>
           <Select name="study_mode" defaultValue={initial?.study_mode ?? "Online & Distance"}>
@@ -114,7 +115,7 @@ export default function UniversityForm({
         <Textarea id="eligibility" name="eligibility" rows={2} defaultValue={initial?.eligibility} required />
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid gap-4 sm:grid-cols-3">
         <div className="space-y-2">
           <Label htmlFor="starting_fee">Starting Fee</Label>
           <Input id="starting_fee" name="starting_fee" defaultValue={initial?.starting_fee} required placeholder="e.g. 2,25,000" />
@@ -129,7 +130,7 @@ export default function UniversityForm({
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="rating">Rating (0-5)</Label>
           <Input id="rating" name="rating" type="number" step="0.1" min="0" max="5" defaultValue={initial?.rating ?? ""} />
@@ -150,7 +151,7 @@ export default function UniversityForm({
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="brochure_url">Brochure URL</Label>
           <Input id="brochure_url" name="brochure_url" defaultValue={initial?.brochure_url ?? ""} />

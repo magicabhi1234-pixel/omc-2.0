@@ -4,17 +4,25 @@ import FeaturedBlog from "@/components/blog/featured-blog";
 import BlogGrid from "@/components/blog/blog-grid";
 import { getBlogPostsByDate } from "@/data/registry";
 import { buildMetadata } from "@/lib/metadata";
+import Breadcrumbs from "@/components/common/breadcrumbs";
+import { JsonLd, breadcrumbSchema, webPageSchema, type Crumb } from "@/lib/structured-data";
 
-export const metadata = buildMetadata({
-  title: "Blog",
-  description:
-    "MBA admissions guides, university comparisons, career insights and specialization advice from Online MBA Colleges.",
-  path: "/blog",
-});
+const DESCRIPTION =
+  "MBA admissions guides, university comparisons, career insights and specialization advice from Online MBA Colleges.";
+const CRUMBS: Crumb[] = [
+  { name: "Home", path: "/" },
+  { name: "Blog", path: "/blog" },
+];
 
 type PageProps = {
   searchParams: Promise<{ q?: string }>;
 };
+
+export async function generateMetadata({ searchParams }: PageProps) {
+  const { q } = await searchParams;
+  // Internal search result pages are thin/duplicate - keep them out of the index.
+  return buildMetadata({ title: "Blog", description: DESCRIPTION, path: "/blog", noindex: Boolean(q?.trim()) });
+}
 
 export default async function BlogPage({ searchParams }: PageProps) {
   const { q } = await searchParams;
@@ -30,6 +38,8 @@ export default async function BlogPage({ searchParams }: PageProps) {
 
   return (
     <>
+      <JsonLd data={[webPageSchema({ path: "/blog", name: "Online MBA Colleges Blog", description: DESCRIPTION, type: "CollectionPage", hasBreadcrumb: true }), breadcrumbSchema(CRUMBS, "/blog")]} />
+      <Breadcrumbs crumbs={CRUMBS} />
       <BlogHero query={query} />
 
       {posts.length === 0 ? (

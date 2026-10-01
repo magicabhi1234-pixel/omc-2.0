@@ -9,7 +9,7 @@ export default function PublishToggle({
   action,
 }: {
   status: "draft" | "published";
-  action: (nextStatus: "draft" | "published") => Promise<void>;
+  action: (nextStatus: "draft" | "published") => Promise<void | { error?: string }>;
 }) {
   const [pending, startTransition] = useTransition();
   const next = status === "published" ? "draft" : "published";
@@ -21,7 +21,8 @@ export default function PublishToggle({
       onClick={() =>
         startTransition(async () => {
           try {
-            await action(next);
+            const result = await action(next);
+            if (result?.error) throw new Error(result.error);
             toast.success(next === "published" ? "Published." : "Unpublished.");
           } catch (error) {
             toast.error(error instanceof Error ? error.message : "Failed to update status.");

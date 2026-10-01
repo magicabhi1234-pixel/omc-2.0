@@ -9,7 +9,7 @@ export default function DeleteButton({
   action,
   confirmMessage = "Delete this item? This cannot be undone.",
 }: {
-  action: () => Promise<void>;
+  action: () => Promise<void | { error?: string }>;
   confirmMessage?: string;
 }) {
   const [pending, startTransition] = useTransition();
@@ -24,7 +24,8 @@ export default function DeleteButton({
         if (!window.confirm(confirmMessage)) return;
         startTransition(async () => {
           try {
-            await action();
+            const result = await action();
+            if (result?.error) throw new Error(result.error);
             toast.success("Deleted successfully.");
           } catch (error) {
             toast.error(error instanceof Error ? error.message : "Delete failed.");

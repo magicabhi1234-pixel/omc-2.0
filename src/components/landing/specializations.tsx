@@ -94,10 +94,10 @@ export default function Specializations(props: Props) {
           {specializations.map((item) => (
             <div
               key={item.title}
-              className="group rounded-3xl border border-slate-200 bg-white p-7 shadow-sm transition duration-300 hover:-translate-y-2 hover:border-[#F47C45] hover:shadow-2xl"
+              className="group rounded-3xl border border-slate-200 bg-white p-7 shadow-sm transition duration-300 hover:-translate-y-2 hover:border-[#C2410C] hover:shadow-2xl"
             >
 
-              <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-100 text-[#F47C45] transition duration-300 group-hover:scale-105 group-hover:bg-[#F47C45] group-hover:text-white">
+              <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-100 text-[#C2410C] transition duration-300 group-hover:scale-105 group-hover:bg-[#C2410C] group-hover:text-white">
                 <FeatureIcon icon={item.icon} title={item.title} />
               </div>
 
@@ -111,7 +111,7 @@ export default function Specializations(props: Props) {
 
               <button
                 onClick={openPopup}
-                className="mt-6 w-full cursor-pointer rounded-xl bg-[#F47C45] py-3 font-semibold text-white transition hover:opacity-90"
+                className="mt-6 w-full cursor-pointer rounded-xl bg-[#C2410C] py-3 font-semibold text-white transition hover:opacity-90"
               >
                 Apply Now
               </button>

@@ -9,7 +9,7 @@ export default function BlogCTAButton() {
     <button
       type="button"
       onClick={openPopup}
-      className="mt-6 cursor-pointer rounded-xl bg-[#F47C45] px-6 py-3 font-semibold text-white"
+      className="mt-6 cursor-pointer rounded-xl bg-[#C2410C] px-6 py-3 font-semibold text-white"
     >
       Get Free Counselling
     </button>

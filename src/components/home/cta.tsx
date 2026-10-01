@@ -8,8 +8,8 @@ export default function CTA() {
         <div className="relative overflow-hidden rounded-[32px] bg-[#0B3B68]">
 
           {/* Background Effects */}
-          <div className="absolute -left-20 -top-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
-          <div className="absolute -bottom-20 -right-20 h-64 w-64 rounded-full bg-[#F47C45]/20 blur-3xl" />
+          <div className="absolute -left-20 -top-20 h-64 w-64 rounded-full bg-white/10 soft-glow" />
+          <div className="absolute -bottom-20 -right-20 h-64 w-64 rounded-full bg-[#F47C45]/20 soft-glow" />
 
           <div className="relative z-10 px-8 py-16 md:px-16">
             <div className="grid items-center gap-12 lg:grid-cols-2">
@@ -72,7 +72,7 @@ export default function CTA() {
                 </p>
 
                 <div className="mt-8 space-y-4">
-                  <OpenPopupButton className="w-full cursor-pointer rounded-xl bg-[#F47C45] py-4 font-semibold text-white transition hover:opacity-90">
+                  <OpenPopupButton className="w-full cursor-pointer rounded-xl bg-[#C2410C] py-4 font-semibold text-white transition hover:opacity-90">
                     Get Free Counselling
                   </OpenPopupButton>
 

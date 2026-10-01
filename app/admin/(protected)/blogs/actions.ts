@@ -3,9 +3,11 @@
 import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { urlOrPath } from "@/lib/admin/validators";
 import { supabaseAdmin } from "@/lib/db/client";
-import { requirePermission } from "@/lib/auth/session";
+import { contentAccessError, requirePermission } from "@/lib/auth/session";
 import { logActivity } from "@/lib/auth/activity-log";
+import { clearTombstone, recordTombstone } from "@/lib/sanity/tombstones";
 import { canAccessContent } from "@/lib/auth/permissions";
 
 const blogPostSchema = z.object({
@@ -16,12 +18,12 @@ const blogPostSchema = z.object({
     .trim()
     .toLowerCase()
     .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Slug must be lowercase letters, numbers and hyphens only"),
-  featured_image_url: z.string().trim().url(),
+  featured_image_url: urlOrPath,
   featured_image_alt: z.string().trim().min(1).max(200),
   excerpt: z.string().trim().min(1).max(300),
   content: z.string(), // JSON-stringified Portable Text block array
   author: z.string().trim().min(1).max(100),
-  published_date: z.string().trim().min(1),
+  published_date: z.string().trim().min(1).refine((v) => !Number.isNaN(Date.parse(v)), "Enter a valid date"),
   category: z.string().trim().max(100).optional().or(z.literal("")),
   tags: z.string().optional(), // comma-separated
   faqs: z.string(), // JSON-stringified [{question, answer}]
@@ -30,7 +32,7 @@ const blogPostSchema = z.object({
   seo_meta_description: z.string().trim().max(160).optional().or(z.literal("")),
   seo_keywords: z.string().optional(),
   seo_canonical_url: z.string().trim().url().optional().or(z.literal("")),
-  seo_og_image_url: z.string().trim().url().optional().or(z.literal("")),
+  seo_og_image_url: urlOrPath.optional().or(z.literal("")),
   seo_no_index: z.coerce.boolean().optional(),
   status: z.enum(["draft", "published"]),
 });
@@ -128,6 +130,8 @@ export async function createBlogPost(
 
   await syncRelatedPosts(data.id, parsed.relatedIds);
 
+  await clearTombstone("blog_post", parsed.row.slug);
+
   await logActivity({
     userId: profile.id,
     userEmail: profile.email,
@@ -190,6 +194,8 @@ export async function deleteBlogPost(id: string): Promise<void> {
   const { error } = await supabaseAdmin.from("blog_posts").delete().eq("id", id);
   if (error) throw new Error(error.message);
 
+  await recordTombstone("blog_post", previous?.slug, profile.id);
+
   await logActivity({
     userId: profile.id,
     userEmail: profile.email,
@@ -208,6 +214,8 @@ export async function toggleBlogPostStatus(
   nextStatus: "draft" | "published"
 ): Promise<void> {
   const profile = await requirePermission((p) => p.canPublish);
+  const accessError = await contentAccessError(profile, "blog_posts", id);
+  if (accessError) throw new Error(accessError);
   const { error } = await supabaseAdmin
     .from("blog_posts")
     .update({ status: nextStatus, updated_by: profile.id })

@@ -30,13 +30,39 @@ export default function LeadPopup() {
       return () => clearTimeout(closeTimer);
     }
 
-    const timer = setTimeout(() => {
+    // Auto-open at most once per browser session, and never for someone
+    // who already submitted a lead: after 12s on a page or 50% scroll,
+    // whichever comes first. (Opening 2s into every page view is an
+    // intrusive interstitial that Google's page-experience guidance penalises.)
+    let alreadyShown = false;
+    try {
+      alreadyShown = sessionStorage.getItem("omc_popup_shown") === "1" || localStorage.getItem("omc_lead_submitted") === "1";
+    } catch {
+      // Storage blocked (private mode etc.) - fall back to showing it once per page load.
+    }
+    if (alreadyShown) return () => clearTimeout(closeTimer);
+
+    const show = () => {
+      cleanup();
+      try {
+        sessionStorage.setItem("omc_popup_shown", "1");
+      } catch {}
       setOpen(true);
-    }, 2000);
+    };
+    const onScroll = () => {
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      if (scrollable > 0 && window.scrollY / scrollable >= 0.5) show();
+    };
+    const timer = setTimeout(show, 12000);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    function cleanup() {
+      clearTimeout(timer);
+      window.removeEventListener("scroll", onScroll);
+    }
 
     return () => {
       clearTimeout(closeTimer);
-      clearTimeout(timer);
+      cleanup();
     };
   }, [pathname]);
 
@@ -143,7 +169,7 @@ export default function LeadPopup() {
         </div>
 
         {/* Form */}
-        <LeadForm />
+        <LeadForm source="popup" />
       </div>
     </div>
   );

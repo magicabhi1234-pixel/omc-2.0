@@ -69,12 +69,12 @@ export default function Specializations() {
                 transition-all
                 duration-300
                 hover:-translate-y-2
-                hover:border-[#F47C45]
+                hover:border-[#C2410C]
                 hover:shadow-xl
               "
             >
               {/* Icon */}
-              <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-100 text-[#F47C45] transition-all duration-300 group-hover:scale-105 group-hover:bg-[#F47C45] group-hover:text-white">
+              <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-100 text-[#C2410C] transition-all duration-300 group-hover:scale-105 group-hover:bg-[#C2410C] group-hover:text-white">
                 <FeatureIcon icon={item.icon} title={item.title} />
               </div>
 
@@ -89,7 +89,7 @@ export default function Specializations() {
               </p>
 
               {/* CTA */}
-              <OpenPopupButton className="mt-5 cursor-pointer font-medium text-[#0B3B68] transition hover:text-[#F47C45]">
+              <OpenPopupButton className="mt-5 cursor-pointer font-medium text-[#0B3B68] transition hover:text-[#C2410C]">
                 Learn More →
               </OpenPopupButton>
             </div>

@@ -159,7 +159,7 @@ export default function UniversityGrid(props: Props) {
 
                     <button
                       onClick={openPopup}
-                      className="w-full cursor-pointer rounded-xl bg-[#F47C45] py-3 font-semibold text-white transition hover:opacity-90"
+                      className="w-full cursor-pointer rounded-xl bg-[#C2410C] py-3 font-semibold text-white transition hover:opacity-90"
                     >
                       Apply Now
                     </button>

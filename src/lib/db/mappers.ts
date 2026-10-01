@@ -119,6 +119,7 @@ export interface LandingPageRow extends SeoRowFields {
   slug: string;
   title: string;
   category: string;
+  updated_at?: string | null;
   hero: Partial<HeroSection> & {
     image?: { src: string; alt: string };
     primaryButtonText?: string;
@@ -163,8 +164,11 @@ export function mapLandingPageRow(
 
   return {
     slug: row.slug,
+    title: row.title,
     category: row.category,
-    seo: mapSeo(row, row.title, ""),
+    updatedAt: row.updated_at ?? undefined,
+    // No meta description set: the hero intro is the page's own summary.
+    seo: mapSeo(row, row.title, (row.hero?.description ?? "").slice(0, 300)),
     hero: {
       badge: hero.badge,
       heading: hero.heading ?? "",
@@ -237,10 +241,25 @@ export interface BlogPostRow extends SeoRowFields {
 }
 
 /** ~200 wpm reading-time estimate from the same rough word-count heuristic the old GROQ query used. */
+/** Visible words in a Portable Text block array (span text and table cells - not JSON keys/markup). */
+export function countWords(content: unknown[]): number {
+  let words = 0;
+  const walk = (node: unknown) => {
+    if (Array.isArray(node)) return node.forEach(walk);
+    if (!node || typeof node !== "object") return;
+    const n = node as Record<string, unknown>;
+    if (n._type === "span" && typeof n.text === "string") words += n.text.split(/\s+/).filter(Boolean).length;
+    else if (typeof n.cells === "object" && Array.isArray(n.cells)) {
+      for (const cell of n.cells) if (typeof cell === "string") words += cell.split(/\s+/).filter(Boolean).length;
+    }
+    for (const value of Object.values(n)) if (typeof value === "object") walk(value);
+  };
+  walk(content);
+  return words;
+}
+
 function estimateReadingTime(content: unknown[]): string {
-  const text = JSON.stringify(content);
-  const words = Math.max(1, Math.round(text.length / 5));
-  return `${Math.max(1, Math.round(words / 200))} min`;
+  return `${Math.max(1, Math.round(countWords(content) / 200))} min`;
 }
 
 export function mapBlogPostSummary(row: BlogPostRow): BlogPostSummary {
@@ -254,19 +273,19 @@ export function mapBlogPostSummary(row: BlogPostRow): BlogPostSummary {
     category: row.category ?? undefined,
     excerpt: row.excerpt,
     readingTime: estimateReadingTime(row.content ?? []),
+    lastModifiedDate: row.updated_at ?? undefined,
   };
 }
 
 export function mapBlogPost(row: BlogPostRow, relatedPosts: BlogPostSummary[]): BlogPost {
   const summary = mapBlogPostSummary(row);
-  const text = JSON.stringify(row.content ?? []);
   return {
     ...summary,
     seo: mapSeo(row, row.title, row.excerpt),
     lastModifiedDate: row.updated_at,
     tags: row.tags ?? undefined,
     content: (row.content ?? []) as BlogPost["content"],
-    wordCount: Math.max(1, Math.round(text.length / 5)),
+    wordCount: Math.max(1, countWords(row.content ?? [])),
     faqs: row.faqs && row.faqs.length > 0 ? row.faqs : undefined,
     relatedPosts: relatedPosts.length > 0 ? relatedPosts : undefined,
   };

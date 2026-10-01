@@ -1,46 +1,32 @@
 import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
+import { safeEqual } from "@/lib/security/request";
 
+const TAGS = ["landing-page", "blog", "testimonial", "settings", "navigation", "faq"] as const;
+
+/**
+ * Manual cache flush. Accepts the secret as `Authorization: Bearer <secret>`
+ * (preferred - kept out of access logs) or the legacy `?secret=` param.
+ */
 export async function POST(req: NextRequest) {
+  const bearer = req.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
+  const secret = bearer || req.nextUrl.searchParams.get("secret");
+
+  if (!safeEqual(secret, process.env.REVALIDATE_SECRET)) {
+    return NextResponse.json({ success: false, message: "Invalid secret" }, { status: 401 });
+  }
+
   try {
-    // Secret validation
-    const secret = req.nextUrl.searchParams.get("secret");
-
-    if (secret !== process.env.REVALIDATE_SECRET) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Invalid secret",
-        },
-        { status: 401 }
-      );
-    }
-
-    // Read webhook payload (optional)
-    const body = await req.json().catch(() => ({}));
-
-    console.log("Revalidate webhook:", body);
-
-    // Revalidate tags immediately - this is a CMS webhook, so editors expect
-    // published changes to be live on next request, not eventually-consistent.
-    revalidateTag("landing-page", { expire: 0 });
-    revalidateTag("blog", { expire: 0 });
-    revalidateTag("testimonial", { expire: 0 });
+    // Expire immediately - editors expect published changes on the next request.
+    for (const tag of TAGS) revalidateTag(tag, { expire: 0 });
 
     return NextResponse.json({
       success: true,
-      revalidated: ["landing-page", "blog", "testimonial"],
+      revalidated: TAGS,
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
     console.error("Revalidation Error:", error);
-
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Revalidation failed",
-      },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, message: "Revalidation failed" }, { status: 500 });
   }
 }

@@ -1,10 +1,13 @@
 "use client";
 
-import React, { useId, useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useId, useRef, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
-export default function LeadForm() {
+/** `source` identifies which form a lead came from in the admin Lead Manager ("contact" leads are typed as Contact, the rest as Inquiry). */
+export default function LeadForm({ source }: { source: "hero" | "contact" | "popup" }) {
   const router = useRouter();
+  const pathname = usePathname();
+  const honeypotRef = useRef<HTMLInputElement>(null);
   const formId = useId();
   const fieldId = (name: string) => `${formId}-${name}`;
 
@@ -109,7 +112,12 @@ export default function LeadForm() {
           "Content-Type":
             "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          source,
+          pagePath: pathname,
+          website: honeypotRef.current?.value ?? "",
+        }),
       });
 
       const result = await response.json() as { success?: boolean; message?: string; traceId?: string };
@@ -118,6 +126,9 @@ export default function LeadForm() {
         throw new Error(result.message ?? "We couldn't submit your enquiry. Please try again.");
       }
 
+      try {
+        localStorage.setItem("omc_lead_submitted", "1");
+      } catch {}
       router.push("/thank-you");
     } catch (error) {
       console.error("Lead submission request failed", error);
@@ -133,6 +144,12 @@ export default function LeadForm() {
       onSubmit={handleSubmit}
       className="space-y-4"
     >
+      {/* Honeypot - off-screen and skipped by keyboard/screen readers, so only bots fill it */}
+      <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
+        <label htmlFor={fieldId("website")}>Website</label>
+        <input ref={honeypotRef} id={fieldId("website")} type="text" name="website" tabIndex={-1} autoComplete="off" defaultValue="" />
+      </div>
+
       {/* Name */}
       <div>
         <label className="sr-only" htmlFor={fieldId("name")}>Full name</label>
@@ -286,7 +303,7 @@ export default function LeadForm() {
       <button
         type="submit"
         disabled={loading}
-        className="w-full cursor-pointer rounded-xl bg-[#F47C45] py-3 font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70"
+        className="w-full cursor-pointer rounded-xl bg-[#C2410C] py-3 font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70"
       >
         {loading
           ? "Submitting..."

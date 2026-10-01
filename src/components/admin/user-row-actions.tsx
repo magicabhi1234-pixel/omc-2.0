@@ -6,114 +6,136 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogFooter,
-} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { ROLES, ROLE_LABELS, type Role } from "@/lib/auth/permissions";
-import { updateUserRole, toggleUserActive, deleteUser, resetUserPassword } from "../../../app/admin/(protected)/users/actions";
+import { updateUserRole, toggleUserActive, deleteUser, resetUserPassword, updateUsername } from "../../../app/admin/(protected)/users/actions";
 import DeleteButton from "@/components/admin/delete-button";
 
 export default function UserRowActions({
   userId,
   role,
+  username,
   isActive,
   isSelf,
+  canManageRoles,
 }: {
   userId: string;
   role: Role;
+  username: string | null;
   isActive: boolean;
   isSelf: boolean;
+  canManageRoles: boolean;
 }) {
   const [pending, startTransition] = useTransition();
+  const [currentRole, setCurrentRole] = useState<Role>(role);
+  const [active, setActive] = useState(isActive);
   const [newPassword, setNewPassword] = useState("");
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [usernameDraft, setUsernameDraft] = useState(username ?? "");
+  const [passwordOpen, setPasswordOpen] = useState(false);
+  const [usernameOpen, setUsernameOpen] = useState(false);
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex flex-wrap items-center justify-end gap-2">
       <Select
-        defaultValue={role}
-        disabled={isSelf || pending}
-        onValueChange={(value: string | null) =>
+        value={currentRole}
+        disabled={isSelf || pending || !canManageRoles}
+        onValueChange={(value: string | null) => {
+          if (!value || value === currentRole) return;
+          const previous = currentRole;
+          setCurrentRole(value as Role);
           startTransition(async () => {
-            if (!value) return;
-            try {
-              await updateUserRole(userId, value as Role);
-              toast.success("Role updated.");
-            } catch (error) {
-              toast.error(error instanceof Error ? error.message : "Failed to update role.");
-            }
-          })
-        }
+            const result = await updateUserRole(userId, value as Role);
+            if (result.error) {
+              setCurrentRole(previous);
+              toast.error(result.error);
+            } else toast.success("Role updated.");
+          });
+        }}
       >
-        <SelectTrigger className="w-36"><SelectValue /></SelectTrigger>
+        <SelectTrigger className="w-36" aria-label="Role"><SelectValue /></SelectTrigger>
         <SelectContent>
           {ROLES.map((r) => <SelectItem key={r} value={r}>{ROLE_LABELS[r]}</SelectItem>)}
         </SelectContent>
       </Select>
 
       <Switch
-        checked={isActive}
+        checked={active}
+        aria-label={active ? "Account active - click to deactivate" : "Account inactive - click to activate"}
         disabled={isSelf || pending}
-        onCheckedChange={(checked: boolean) =>
+        onCheckedChange={(checked: boolean) => {
+          setActive(checked);
           startTransition(async () => {
-            try {
-              await toggleUserActive(userId, checked);
-              toast.success(checked ? "Account enabled." : "Account disabled.");
-            } catch (error) {
-              toast.error(error instanceof Error ? error.message : "Failed to update account.");
-            }
-          })
-        }
+            const result = await toggleUserActive(userId, checked);
+            if (result.error) {
+              setActive(!checked);
+              toast.error(result.error);
+            } else toast.success(checked ? "Account enabled." : "Account disabled and signed out.");
+          });
+        }}
       />
 
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogTrigger render={<Button type="button" variant="outline" size="sm" />}>
-          Reset Password
-        </DialogTrigger>
+      <Dialog open={usernameOpen} onOpenChange={setUsernameOpen}>
+        <DialogTrigger render={<Button type="button" variant="outline" size="sm" />}>Username</DialogTrigger>
         <DialogContent>
-          <DialogHeader><DialogTitle>Reset Password</DialogTitle></DialogHeader>
-          <Input
-            type="password"
-            placeholder="New password (min 8 characters)"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-          />
+          <DialogHeader>
+            <DialogTitle>Login username</DialogTitle>
+            <DialogDescription>Lets this person sign in at /omc-adminlogin with a username instead of their email.</DialogDescription>
+          </DialogHeader>
+          <Label htmlFor={`username-${userId}`}>Username</Label>
+          <Input id={`username-${userId}`} value={usernameDraft} onChange={(e) => setUsernameDraft(e.target.value)} placeholder="e.g. priya.sharma" autoCapitalize="none" />
           <DialogFooter>
             <Button
               type="button"
-              disabled={pending || newPassword.length < 8}
+              disabled={pending}
               onClick={() =>
                 startTransition(async () => {
-                  try {
-                    await resetUserPassword(userId, newPassword);
-                    toast.success("Password reset.");
-                    setNewPassword("");
-                    setDialogOpen(false);
-                  } catch (error) {
-                    toast.error(error instanceof Error ? error.message : "Failed to reset password.");
+                  const result = await updateUsername(userId, usernameDraft);
+                  if (result.error) toast.error(result.error);
+                  else {
+                    toast.success(usernameDraft ? "Username saved." : "Username removed.");
+                    setUsernameOpen(false);
                   }
                 })
               }
             >
-              Reset Password
+              Save
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      {!isSelf && (
-        <DeleteButton
-          action={async () => {
-            await deleteUser(userId);
-          }}
-          confirmMessage="Delete this user? This cannot be undone."
-        />
-      )}
+      <Dialog open={passwordOpen} onOpenChange={setPasswordOpen}>
+        <DialogTrigger render={<Button type="button" variant="outline" size="sm" />}>Reset password</DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Reset password</DialogTitle>
+            <DialogDescription>At least 12 characters, mixing upper-case, lower-case and digits. Share it with the user securely.</DialogDescription>
+          </DialogHeader>
+          <Input type="password" aria-label="New password" autoComplete="new-password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
+          <DialogFooter>
+            <Button
+              type="button"
+              disabled={pending || newPassword.length < 12}
+              onClick={() =>
+                startTransition(async () => {
+                  const result = await resetUserPassword(userId, newPassword);
+                  if (result.error) toast.error(result.error);
+                  else {
+                    toast.success("Password reset.");
+                    setNewPassword("");
+                    setPasswordOpen(false);
+                  }
+                })
+              }
+            >
+              Reset password
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {!isSelf && <DeleteButton action={() => deleteUser(userId)} confirmMessage="Delete this user? This cannot be undone." />}
     </div>
   );
 }

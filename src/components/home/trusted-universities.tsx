@@ -59,7 +59,7 @@ export default function TrustedUniversities() {
                 transition-all
                 duration-300
                 hover:-translate-y-2
-                hover:border-[#F47C45]
+                hover:border-[#C2410C]
                 hover:shadow-xl
               "
             >

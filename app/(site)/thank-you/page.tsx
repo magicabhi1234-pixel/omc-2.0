@@ -1,6 +1,7 @@
 import { buildMetadata } from "@/lib/metadata";
 
-export const metadata = buildMetadata({
+export const generateMetadata = () =>
+  buildMetadata({
   title: "Thank You",
   description: "Thank you for submitting your enquiry. Our MBA admission experts will contact you shortly.",
   path: "/thank-you",

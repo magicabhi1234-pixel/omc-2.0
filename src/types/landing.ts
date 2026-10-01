@@ -312,6 +312,11 @@ export interface CTASection {
 export interface LandingPageData {
   slug: string;
 
+  title?: string;
+
+  /** Last edit in the CMS (ISO) - shown as "Last updated" and used in schema/sitemap. */
+  updatedAt?: string;
+
   category: string;
 
   seo: SEOData;

@@ -9,7 +9,7 @@ export default function ContactHero() {
             Contact Us
           </span>
 
-          <h1 className="mt-6 text-5xl font-bold text-slate-900">
+          <h1 className="mt-6 text-4xl font-bold text-slate-900 md:text-5xl">
             Get Free MBA Guidance
           </h1>
 
