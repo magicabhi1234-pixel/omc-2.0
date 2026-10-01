@@ -1,0 +1,8 @@
+---
+deployment:
+  tasks:
+    - export APP=/home/mwventurebuilder/repositories/omc-2.0
+    - cd $APP && /opt/cpanel/ea-nodejs22/bin/npm ci
+    - cd $APP && /opt/cpanel/ea-nodejs22/bin/npm run build
+    - /bin/mkdir -p $APP/tmp
+    - /bin/touch $APP/tmp/restart.txt
