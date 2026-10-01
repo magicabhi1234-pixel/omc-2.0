@@ -80,7 +80,7 @@ export default function Header({
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white">
       <Container>
         <div className="flex h-20 items-center justify-between">
 

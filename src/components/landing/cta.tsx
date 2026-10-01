@@ -16,13 +16,13 @@ export default function CTA(props: Props) {
     <section className="relative overflow-hidden bg-gradient-to-r from-[#0B3B68] via-[#123f6d] to-[#0F172A] py-24 text-white">
 
       {/* Background Effects */}
-      <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-[#C2410C]/20 blur-3xl" />
-      <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-blue-500/20 blur-3xl" />
+      <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-[#C2410C]/20 soft-glow" />
+      <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-blue-500/20 soft-glow" />
 
       <div className="relative mx-auto max-w-5xl px-4 text-center">
 
         {badge && (
-          <span className="rounded-full bg-white/10 px-5 py-2 text-sm backdrop-blur">
+          <span className="rounded-full bg-white/10 px-5 py-2 text-sm">
             {badge}
           </span>
         )}
@@ -40,19 +40,19 @@ export default function CTA(props: Props) {
         {/* Benefits */}
         <div className="mt-10 flex flex-wrap justify-center gap-4">
 
-          <div className="rounded-full bg-white/10 px-5 py-3 backdrop-blur">
+          <div className="rounded-full bg-white/10 px-5 py-3">
             <span aria-hidden="true">✅</span> Free Counselling
           </div>
 
-          <div className="rounded-full bg-white/10 px-5 py-3 backdrop-blur">
+          <div className="rounded-full bg-white/10 px-5 py-3">
             <span aria-hidden="true">✅</span> Placement Assistance
           </div>
 
-          <div className="rounded-full bg-white/10 px-5 py-3 backdrop-blur">
+          <div className="rounded-full bg-white/10 px-5 py-3">
             <span aria-hidden="true">✅</span> Admission Support
           </div>
 
-          <div className="rounded-full bg-white/10 px-5 py-3 backdrop-blur">
+          <div className="rounded-full bg-white/10 px-5 py-3">
             <span aria-hidden="true">✅</span> Career Guidance
           </div>
 

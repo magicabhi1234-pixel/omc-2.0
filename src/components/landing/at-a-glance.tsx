@@ -1,10 +1,5 @@
 import type { University } from "@/types/landing";
-
-/** "₹1,20,000" -> 120000; anything without digits ("Contact for fee") -> null. */
-export function parseFee(fee: string | undefined): number | null {
-  const digits = fee?.replace(/[^\d]/g, "");
-  return digits ? Number(digits) : null;
-}
+import { parseTotalFee as parseFee } from "@/lib/fees";
 
 const inr = (n: number) => `₹${n.toLocaleString("en-IN")}`;
 
@@ -54,7 +49,7 @@ export default function AtAGlance({
             <strong>{universities.length} universities</strong> are compared on this page for {programme} programmes.
             {minFee !== null && maxFee !== null && (
               <>
-                {" "}Listed fees range from <strong>{inr(minFee)}</strong> to <strong>{inr(maxFee)}</strong> for the full programme
+                {" "}Listed full-programme fees range from <strong>{inr(minFee)}</strong> to <strong>{inr(maxFee)}</strong> for the full programme
                 {cheapest ? <> ({cheapest.name} has the lowest listed fee)</> : null}.
               </>
             )}

@@ -17,15 +17,15 @@ export default function HighlightBanner(props: Props) {
         <div className="relative overflow-hidden rounded-[40px] bg-gradient-to-r from-[#0B3B68] via-[#123f6d] to-[#0F172A] px-8 py-16 text-white md:px-16">
 
           {/* Background Effects */}
-          <div className="absolute -left-10 -top-10 h-40 w-40 rounded-full bg-[#C2410C]/20 blur-3xl" />
-          <div className="absolute -bottom-10 -right-10 h-40 w-40 rounded-full bg-blue-500/20 blur-3xl" />
+          <div className="absolute -left-10 -top-10 h-40 w-40 rounded-full bg-[#C2410C]/20 soft-glow" />
+          <div className="absolute -bottom-10 -right-10 h-40 w-40 rounded-full bg-blue-500/20 soft-glow" />
 
           <div className="relative grid items-center gap-10 lg:grid-cols-2">
 
             {/* Left */}
             <div>
 
-              <span className="rounded-full bg-white/10 px-4 py-2 text-sm backdrop-blur">
+              <span className="rounded-full bg-white/10 px-4 py-2 text-sm">
                 <span aria-hidden="true">🎯</span> Career-Focused Support
               </span>
 
@@ -41,15 +41,15 @@ export default function HighlightBanner(props: Props) {
 
               <div className="mt-8 flex flex-wrap gap-4">
 
-                <div className="rounded-full bg-white/10 px-4 py-3 backdrop-blur">
+                <div className="rounded-full bg-white/10 px-4 py-3">
                   <span aria-hidden="true">✅</span> Placement Support
                 </div>
 
-                <div className="rounded-full bg-white/10 px-4 py-3 backdrop-blur">
+                <div className="rounded-full bg-white/10 px-4 py-3">
                   <span aria-hidden="true">✅</span> Career Guidance
                 </div>
 
-                <div className="rounded-full bg-white/10 px-4 py-3 backdrop-blur">
+                <div className="rounded-full bg-white/10 px-4 py-3">
                   <span aria-hidden="true">✅</span> Free Counselling
                 </div>
 

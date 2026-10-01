@@ -15,6 +15,7 @@ import type { LandingPageData, Testimonial, University } from "@/types/landing";
 import type { BlogPost, BlogPostSummary } from "@/types/blog";
 import { parseSettings, type FaqPlacement, type SettingsGroup } from "@/lib/site-settings";
 import { sanityBlogFallback, sanityLandingFallback } from "@/lib/sanity/fallback";
+import { parseTotalFee } from "@/lib/fees";
 
 /**
  * Time-based safety net on top of the primary on-demand path (Server Actions
@@ -350,8 +351,8 @@ export const getFinderUniversities = unstable_cache(
         .select("name, starting_fee, approvals, study_mode, duration")
         .eq("status", "published");
       return (data ?? []).flatMap((u: { name: string; starting_fee: string; approvals: string[] | null; study_mode: string; duration: string }) => {
-        const fee = Number((u.starting_fee ?? "").replace(/[^\d]/g, ""));
-        return fee > 0
+        const fee = parseTotalFee(u.starting_fee);
+        return fee !== null
           ? [{ name: u.name, fee, feeLabel: u.starting_fee, approvals: u.approvals ?? [], studyMode: u.study_mode, duration: u.duration }]
           : [];
       });

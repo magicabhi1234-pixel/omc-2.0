@@ -22,6 +22,22 @@ The site works before 0002 is applied, with reduced functionality:
 - username login doesn't work (email login still does)
 - the Leads page shows a "please apply migration 0002" notice
 
+Then run `supabase/migrations/0003_fix_legacy_not_null.sql`. It makes two legacy columns optional:
+- `leads.city`: it was required, but City is optional on the form, so leads without a city were never saved
+- `media.public_url`: it was required, but the dashboard writes `url`, so Media Library uploads failed
+
+It also keeps `url` and `public_url` in sync with a trigger. **Required before using the Media Library.**
+
+Then run `supabase/migrations/0004_dashboard_modules.sql`. It adds:
+- the `faqs` table, seeded with the current homepage FAQs, for the FAQ Manager
+- the `media.folder` column, used for Media Library categories
+- `cms_sync_runs`, the Sanity import history
+- `cms_tombstones`, which stops the Sanity fallback from reviving content deleted in the dashboard
+
+Until 0004 is applied, the homepage shows its built-in FAQs and the FAQ Manager shows a notice.
+
+The admin Dashboard's **System Health** card shows which of these are applied.
+
 ## 2. Create the Storage bucket
 
 Already done from this session (bucket `media`, public, 10MB file size limit) — confirm it still exists under **Storage** in the dashboard. If it's ever missing, recreate it:
@@ -51,12 +67,24 @@ Requires step 1 to have run first (needs the `roles` table seeded).
 
 ## 5. Configure navigation & site settings (optional, has safe fallbacks)
 
-Log in at `/omc-adminlogin`, go to **Settings**, and fill in:
-- Site Information (name, tagline, contact email/phone, footer about text, footer hours)
-- Header Navigation
-- Footer Quick Links
+Log in at `/omc-adminlogin` and open:
+- **Global Settings**, which has four tabs:
+  - **General:** name, contact details, WhatsApp, address, hours
+  - **Branding:** logo, favicon, default share image
+  - **Social Links**
+  - **Analytics & Verification:** GA4, GTM, Meta Pixel and Clarity IDs, plus the Google, Bing and Meta verification codes
+- **Menus:** Header, Mobile and Footer menus
+- **FAQs:** homepage, contact and about FAQs
 
-Until these are configured, the header/footer render their original hardcoded content exactly as before — nothing breaks if you skip this step.
+Until these are configured, the site renders its current built-in content exactly as before, so nothing breaks if you skip this step. Analytics is configured by ID only, and the site renders the official snippets itself.
+
+## 5b. Sanity (hybrid CMS)
+
+Sanity stays connected, read-only, as a fallback and import source. The dashboard is the primary CMS.
+- **Fallback:** if Supabase is unreachable, or a slug has never existed in the dashboard, the page is served from the published Sanity document.
+- **What the fallback never does:** it never revives anything that is a draft, or was deleted, in the dashboard.
+- **Import:** **Sanity Sync** (`/admin/sync`) previews and imports *new* Sanity documents. It is insert-only, matched on slug, so it can't create duplicates and never overwrites dashboard edits. Imported images are copied into the Media Library.
+- **Automatic import:** in Sanity, go to **API → Webhooks**. Create a webhook to `https://<domain>/api/sanity-sync`, method `POST`, triggered on create and update. Add the header `Authorization: Bearer <SANITY_WEBHOOK_SECRET>`.
 
 ## 6. Environment variables
 
@@ -68,7 +96,13 @@ All of these already exist in `.env.local` (already used by the pre-existing lea
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Auth (login/session, both `proxy.ts` and `src/lib/supabase/server.ts`) |
 | `SUPABASE_SERVICE_ROLE_KEY` | All CMS reads/writes (`src/lib/db/client.ts`), migration script, super-admin script |
 
-Ensure all three are set in Vercel's Project Settings → Environment Variables (they should already be, since `SUPABASE_SERVICE_ROLE_KEY` was already required by `/api/leads`).
+| `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET` | Sanity fallback + Sanity Sync |
+| `SANITY_API_TOKEN` | Optional, Viewer token: only needed if the dataset is private |
+| `SANITY_WEBHOOK_SECRET` | **New**. Authenticates `POST /api/sanity-sync`. Generate it with `openssl rand -hex 32` |
+| `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `ADMIN_NOTIFICATION_EMAIL` | Lead emails |
+| `REVALIDATE_SECRET` | `POST /api/revalidate` (send it as a Bearer token) |
+
+Ensure all of these are set in Vercel's Project Settings → Environment Variables.
 
 ## 7. Removed dependencies
 
@@ -80,7 +114,9 @@ No longer installed: `sanity`, `next-sanity`, `@sanity/client`, `@sanity/icons`,
 - Login: `/omc-adminlogin`
 - Leads (super admin and admin only): `/admin/leads`, with CSV and Excel export.
 - The legacy `/admin/login` permanently redirects to `/omc-adminlogin`.
-- All other routes are unchanged: `/admin/pages`, `/admin/blogs`, `/admin/content` (+ `/universities`, `/testimonials`, `/blocks`), `/admin/media`, `/admin/seo`, `/admin/users`, `/admin/settings`, `/admin/activity-logs`.
+- New: `/admin/faqs`, `/admin/menus`, `/admin/sync`. `/admin/settings` is now **Global Settings**.
+- All other routes are unchanged: `/admin/pages`, `/admin/blogs`, `/admin/content` (+ `/universities`, `/testimonials`, `/blocks`), `/admin/media`, `/admin/seo`, `/admin/users`, `/admin/activity-logs`.
+- Public: `/llms.txt` gives AI answer engines a map of the site. `/top-colleges-university-in-north-zone` now 308-redirects to `/top-10-distance-mba-universities-colleges-north-zone`.
 
 ## 9. What happens if you skip straight to deploying without steps 1-4
 

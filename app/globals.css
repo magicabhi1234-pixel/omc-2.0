@@ -168,3 +168,14 @@
 .university-card-highlight {
   animation: university-card-highlight-pulse 2s ease-in-out;
 }
+
+/*
+ * Decorative background glows. A radial mask gives the same soft edge as
+ * filter: blur(64px) without forcing an expensive offscreen blur pass on
+ * every paint - the blur filters were a large share of mobile style/paint
+ * time (Lighthouse "style & layout") on hero and CTA sections.
+ */
+@utility soft-glow {
+  mask-image: radial-gradient(closest-side, #000 0%, rgb(0 0 0 / 0.55) 45%, transparent 100%);
+}
+
