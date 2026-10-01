@@ -72,7 +72,7 @@ export default function CTA() {
                 </p>
 
                 <div className="mt-8 space-y-4">
-                  <OpenPopupButton className="w-full cursor-pointer rounded-xl bg-[#F47C45] py-4 font-semibold text-white transition hover:opacity-90">
+                  <OpenPopupButton className="w-full cursor-pointer rounded-xl bg-[#C2410C] py-4 font-semibold text-white transition hover:opacity-90">
                     Get Free Counselling
                   </OpenPopupButton>
 

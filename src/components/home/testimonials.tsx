@@ -40,36 +40,36 @@ export default async function Testimonials() {
         {/* Bottom Stats */}
         <div className="mt-16 grid gap-6 rounded-3xl bg-slate-50 p-8 text-center md:grid-cols-4">
           <div>
-            <h3 className="text-3xl font-bold text-[#0B3B68]">
+            <p className="text-3xl font-bold text-[#0B3B68]">
               5000+
-            </h3>
+            </p>
             <p className="mt-1 text-slate-600">
               Students Guided
             </p>
           </div>
 
           <div>
-            <h3 className="text-3xl font-bold text-[#0B3B68]">
+            <p className="text-3xl font-bold text-[#0B3B68]">
               50+
-            </h3>
+            </p>
             <p className="mt-1 text-slate-600">
               Universities
             </p>
           </div>
 
           <div>
-            <h3 className="text-3xl font-bold text-[#0B3B68]">
+            <p className="text-3xl font-bold text-[#0B3B68]">
               100+
-            </h3>
+            </p>
             <p className="mt-1 text-slate-600">
               Programs
             </p>
           </div>
 
           <div>
-            <h3 className="text-3xl font-bold text-[#0B3B68]">
+            <p className="text-3xl font-bold text-[#0B3B68]">
               98%
-            </h3>
+            </p>
             <p className="mt-1 text-slate-600">
               Satisfaction Rate
             </p>

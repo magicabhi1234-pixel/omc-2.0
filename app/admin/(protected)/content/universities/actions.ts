@@ -7,6 +7,7 @@ import { urlOrPath } from "@/lib/admin/validators";
 import { supabaseAdmin } from "@/lib/db/client";
 import { contentAccessError, requirePermission } from "@/lib/auth/session";
 import { logActivity } from "@/lib/auth/activity-log";
+import { clearTombstone, recordTombstone } from "@/lib/sanity/tombstones";
 
 const universitySchema = z.object({
   name: z.string().trim().min(2).max(150),
@@ -101,6 +102,8 @@ export async function createUniversity(
     return { error: error.code === "23505" ? "That slug is already in use." : error.message };
   }
 
+  await clearTombstone("university", parsed.row.slug);
+
   await logActivity({
     userId: profile.id,
     userEmail: profile.email,
@@ -156,6 +159,8 @@ export async function deleteUniversity(id: string): Promise<void> {
 
   const { error } = await supabaseAdmin.from("universities").delete().eq("id", id);
   if (error) throw new Error(error.message);
+
+  await recordTombstone("university", previous?.slug, profile.id);
 
   await logActivity({
     userId: profile.id,

@@ -7,6 +7,7 @@ import { urlOrPath } from "@/lib/admin/validators";
 import { supabaseAdmin } from "@/lib/db/client";
 import { contentAccessError, requirePermission } from "@/lib/auth/session";
 import { logActivity } from "@/lib/auth/activity-log";
+import { clearTombstone, recordTombstone } from "@/lib/sanity/tombstones";
 
 const CATEGORIES = [
   "Online MBA",
@@ -158,6 +159,8 @@ export async function createLandingPage(
 
   await syncLinks(data.id, parsed.universityIds, parsed.testimonialIds);
 
+  await clearTombstone("landing_page", parsed.row.slug);
+
   await logActivity({
     userId: profile.id,
     userEmail: profile.email,
@@ -216,6 +219,8 @@ export async function deleteLandingPage(id: string): Promise<void> {
 
   const { error } = await supabaseAdmin.from("landing_pages").delete().eq("id", id);
   if (error) throw new Error(error.message);
+
+  await recordTombstone("landing_page", previous?.slug, profile.id);
 
   await logActivity({
     userId: profile.id,

@@ -8,36 +8,36 @@ export default function AboutStats() {
         <div className="grid gap-6 md:grid-cols-4">
 
           <div className="rounded-3xl border p-8 text-center">
-            <h3 className="text-4xl font-bold text-[#0B3B68]">
+            <p className="text-4xl font-bold text-[#0B3B68]">
               50+
-            </h3>
+            </p>
             <p className="mt-2 text-slate-600">
               Universities
             </p>
           </div>
 
           <div className="rounded-3xl border p-8 text-center">
-            <h3 className="text-4xl font-bold text-[#0B3B68]">
+            <p className="text-4xl font-bold text-[#0B3B68]">
               100+
-            </h3>
+            </p>
             <p className="mt-2 text-slate-600">
               Programs
             </p>
           </div>
 
           <div className="rounded-3xl border p-8 text-center">
-            <h3 className="text-4xl font-bold text-[#0B3B68]">
+            <p className="text-4xl font-bold text-[#0B3B68]">
               5000+
-            </h3>
+            </p>
             <p className="mt-2 text-slate-600">
               Students Helped
             </p>
           </div>
 
           <div className="rounded-3xl border p-8 text-center">
-            <h3 className="text-4xl font-bold text-[#0B3B68]">
+            <p className="text-4xl font-bold text-[#0B3B68]">
               98%
-            </h3>
+            </p>
             <p className="mt-2 text-slate-600">
               Satisfaction
             </p>

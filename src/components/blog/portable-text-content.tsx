@@ -17,8 +17,10 @@ const components: PortableTextComponents = {
   block: {
     normal: ({ children }) => <p className="mt-5 leading-8 text-slate-700">{children}</p>,
     blockquote: ({ children }) => (
-      <blockquote className="mt-6 border-l-4 border-[#F47C45] pl-5 italic text-slate-600">{children}</blockquote>
+      <blockquote className="mt-6 border-l-4 border-[#C2410C] pl-5 italic text-slate-600">{children}</blockquote>
     ),
+    // The page already has its h1 (the post title); demote any CMS h1.
+    h1: ({ children }) => <h2 className={HEADING_CLASSES.h2}>{children}</h2>,
     h2: ({ children }) => <h2 className={HEADING_CLASSES.h2}>{children}</h2>,
     h3: ({ children }) => <h3 className={HEADING_CLASSES.h3}>{children}</h3>,
     h4: ({ children }) => <h4 className={HEADING_CLASSES.h4}>{children}</h4>,
@@ -41,7 +43,7 @@ const components: PortableTextComponents = {
         href={value?.href}
         target={value?.openInNewTab === false ? undefined : "_blank"}
         rel="noopener noreferrer"
-        className="text-[#0B3B68] underline underline-offset-2 hover:text-[#F47C45]"
+        className="text-[#0B3B68] underline underline-offset-2 hover:text-[#C2410C]"
       >
         {children}
       </a>
@@ -53,7 +55,7 @@ const components: PortableTextComponents = {
       if (!url) return null;
       return (
         <span className="relative mt-6 block h-80 w-full overflow-hidden rounded-2xl">
-          <Image src={url} alt={value?.alt || ""} fill className="object-cover" />
+          <Image src={url} alt={value?.alt || ""} fill sizes="(max-width: 896px) 100vw, 896px" className="object-cover" />
         </span>
       );
     },
@@ -64,16 +66,18 @@ const components: PortableTextComponents = {
       return (
         <div className="mt-6 overflow-x-auto rounded-2xl border border-slate-200">
           <table className="w-full text-left">
-            <tbody>
-              {headerRow && (
+            {headerRow && (
+              <thead>
                 <tr className="border-b border-slate-200 bg-slate-50">
                   {headerRow.cells.map((cell, cellIndex) => (
-                    <td key={cellIndex} className="p-4 font-semibold text-slate-900">
+                    <th key={cellIndex} scope="col" className="p-4 font-semibold text-slate-900">
                       {cell}
-                    </td>
+                    </th>
                   ))}
                 </tr>
-              )}
+              </thead>
+            )}
+            <tbody>
               {bodyRows.map(
                 (row, rowIndex) =>
                   row && (
@@ -97,10 +101,24 @@ const components: PortableTextComponents = {
   },
 };
 
+const HEADING_LEVEL: Record<string, number> = { h1: 2, h2: 2, h3: 3, h4: 4, h5: 5, h6: 6 };
+
+/** Clamps CMS heading levels so they never skip (page h1 -> content starts at h2). */
+function normalizeHeadings(blocks: PortableTextBlock[]): PortableTextBlock[] {
+  let previous = 1;
+  return blocks.map((block) => {
+    const style = (block as { style?: string }).style;
+    if (block._type !== "block" || !style || !(style in HEADING_LEVEL)) return block;
+    const level = Math.min(HEADING_LEVEL[style], previous + 1);
+    previous = level;
+    return level === HEADING_LEVEL[style] && style !== "h1" ? block : ({ ...block, style: `h${level}` } as PortableTextBlock);
+  });
+}
+
 export default function PortableTextContent({ content }: Props) {
   return (
     <div>
-      <PortableText value={content} components={components} />
+      <PortableText value={normalizeHeadings(content)} components={components} />
     </div>
   );
 }

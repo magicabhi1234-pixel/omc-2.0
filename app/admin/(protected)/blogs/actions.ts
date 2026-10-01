@@ -7,6 +7,7 @@ import { urlOrPath } from "@/lib/admin/validators";
 import { supabaseAdmin } from "@/lib/db/client";
 import { contentAccessError, requirePermission } from "@/lib/auth/session";
 import { logActivity } from "@/lib/auth/activity-log";
+import { clearTombstone, recordTombstone } from "@/lib/sanity/tombstones";
 import { canAccessContent } from "@/lib/auth/permissions";
 
 const blogPostSchema = z.object({
@@ -129,6 +130,8 @@ export async function createBlogPost(
 
   await syncRelatedPosts(data.id, parsed.relatedIds);
 
+  await clearTombstone("blog_post", parsed.row.slug);
+
   await logActivity({
     userId: profile.id,
     userEmail: profile.email,
@@ -190,6 +193,8 @@ export async function deleteBlogPost(id: string): Promise<void> {
 
   const { error } = await supabaseAdmin.from("blog_posts").delete().eq("id", id);
   if (error) throw new Error(error.message);
+
+  await recordTombstone("blog_post", previous?.slug, profile.id);
 
   await logActivity({
     userId: profile.id,

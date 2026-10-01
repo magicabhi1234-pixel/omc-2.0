@@ -29,7 +29,7 @@ export default function Hero(props: Props) {
     <section className="relative overflow-hidden bg-gradient-to-br from-[#0B3B68] via-[#123f6d] to-[#0F172A] py-20 text-white">
 
       {/* Background Effects */}
-      <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-[#F47C45]/20 blur-3xl" />
+      <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-[#C2410C]/20 blur-3xl" />
       <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-blue-500/20 blur-3xl" />
 
       <div className="relative mx-auto max-w-7xl px-4">
@@ -71,7 +71,7 @@ export default function Hero(props: Props) {
 
             <div className="mt-10 flex flex-wrap gap-4">
 
-              <OpenPopupButton className="cursor-pointer rounded-xl bg-[#F47C45] px-8 py-4 font-semibold text-white transition hover:scale-105">
+              <OpenPopupButton className="cursor-pointer rounded-xl bg-[#C2410C] px-8 py-4 font-semibold text-white transition hover:scale-105">
                 {primaryButton.label}
               </OpenPopupButton>
 
@@ -111,7 +111,7 @@ export default function Hero(props: Props) {
               </div>
 
               {/* Placement Support */}
-              <div className="mt-6 rounded-2xl bg-[#F47C45] p-5 text-center">
+              <div className="mt-6 rounded-2xl bg-[#C2410C] p-5 text-center">
 
                 <p className="text-sm uppercase tracking-wider">
                   Placement Support Included

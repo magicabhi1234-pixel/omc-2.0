@@ -14,6 +14,7 @@ import {
 import type { LandingPageData, Testimonial, University } from "@/types/landing";
 import type { BlogPost, BlogPostSummary } from "@/types/blog";
 import { parseSettings, type FaqPlacement, type SettingsGroup } from "@/lib/site-settings";
+import { sanityBlogFallback, sanityLandingFallback } from "@/lib/sanity/fallback";
 
 /**
  * Time-based safety net on top of the primary on-demand path (Server Actions
@@ -79,7 +80,7 @@ async function fetchLandingPageBySlug(slug: string): Promise<LandingPageData | n
   const { data: page } = await supabaseAdmin
     .from("landing_pages")
     .select(
-      "id, slug, title, category, hero, university_section, compare_section, why_choose, stats, specializations, benefits, career_scope, highlight_banner, faq, testimonials_heading, cta, seo_meta_title, seo_meta_description, seo_keywords, seo_canonical_url, seo_og_image_url, seo_no_index"
+      "id, slug, title, category, hero, university_section, compare_section, why_choose, stats, specializations, benefits, career_scope, highlight_banner, faq, testimonials_heading, cta, seo_meta_title, seo_meta_description, seo_keywords, seo_canonical_url, seo_og_image_url, seo_no_index, updated_at"
     )
     .eq("slug", slug)
     .eq("status", "published")
@@ -125,7 +126,8 @@ export async function getLandingPageBySlug(slug: string): Promise<LandingPageDat
     ["landing-page", slug],
     { tags: ["landing-page", `landing-page:${slug}`], revalidate: FALLBACK_REVALIDATE_SECONDS }
   );
-  return cached();
+  // Dashboard first; Sanity only if Supabase is down or never had this slug.
+  return (await cached()) ?? sanityLandingFallback(slug);
 }
 
 export interface LandingPageHubEntry {
@@ -133,6 +135,7 @@ export interface LandingPageHubEntry {
   category: string;
   seoTitle: string;
   seoDescription: string;
+  updatedAt: string | null;
 }
 
 export const getLandingPagesForHub = unstable_cache(
@@ -140,7 +143,7 @@ export const getLandingPagesForHub = unstable_cache(
     dbFetch(async () => {
       const { data } = await supabaseAdmin
         .from("landing_pages")
-        .select("slug, title, category, seo_meta_title, seo_meta_description")
+        .select("slug, title, category, seo_meta_title, seo_meta_description, updated_at")
         .eq("status", "published")
         .order("title", { ascending: true });
       return (data ?? []).map(
@@ -150,11 +153,13 @@ export const getLandingPagesForHub = unstable_cache(
           category: string;
           seo_meta_title: string | null;
           seo_meta_description: string | null;
+          updated_at: string | null;
         }) => ({
           slug: r.slug,
           category: r.category,
           seoTitle: r.seo_meta_title || r.title,
           seoDescription: r.seo_meta_description || "",
+          updatedAt: r.updated_at,
         })
       );
     }, []),
@@ -231,7 +236,8 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
     ["blog-post", slug],
     { tags: ["blog", `blog:${slug}`], revalidate: FALLBACK_REVALIDATE_SECONDS }
   );
-  return cached();
+  // Dashboard first; Sanity only if Supabase is down or never had this slug.
+  return (await cached()) ?? sanityBlogFallback(slug);
 }
 
 export const getBlogPostsByDate = unstable_cache(
@@ -314,6 +320,8 @@ export async function getFaqs(placement: FaqPlacement, fallback: FaqItem[] = [])
           .eq("placement", placement)
           .eq("status", "published")
           .order("sort_order", { ascending: true });
+        // Table not created yet (migration 0004 pending): use the fallback quietly.
+        if (error?.code === "PGRST205" || error?.code === "42P01") return [] as FaqItem[];
         if (error) throw new Error(error.message);
         return (data ?? []) as FaqItem[];
       }, [] as FaqItem[]),
@@ -323,3 +331,31 @@ export async function getFaqs(placement: FaqPlacement, fallback: FaqItem[] = [])
   const faqs = await cached();
   return faqs.length > 0 ? faqs : fallback;
 }
+
+export interface FinderUniversity {
+  name: string;
+  fee: number;
+  feeLabel: string;
+  approvals: string[];
+  studyMode: string;
+  duration: string;
+}
+
+/** Published universities with a listed numeric fee, for the homepage university finder. */
+export const getFinderUniversities = unstable_cache(
+  async (): Promise<FinderUniversity[]> =>
+    dbFetch(async () => {
+      const { data } = await supabaseAdmin
+        .from("universities")
+        .select("name, starting_fee, approvals, study_mode, duration")
+        .eq("status", "published");
+      return (data ?? []).flatMap((u: { name: string; starting_fee: string; approvals: string[] | null; study_mode: string; duration: string }) => {
+        const fee = Number((u.starting_fee ?? "").replace(/[^\d]/g, ""));
+        return fee > 0
+          ? [{ name: u.name, fee, feeLabel: u.starting_fee, approvals: u.approvals ?? [], studyMode: u.study_mode, duration: u.duration }]
+          : [];
+      });
+    }, []),
+  ["finder-universities"],
+  { tags: ["landing-page"], revalidate: FALLBACK_REVALIDATE_SECONDS }
+);

@@ -17,7 +17,7 @@ export default function HighlightBanner(props: Props) {
         <div className="relative overflow-hidden rounded-[40px] bg-gradient-to-r from-[#0B3B68] via-[#123f6d] to-[#0F172A] px-8 py-16 text-white md:px-16">
 
           {/* Background Effects */}
-          <div className="absolute -left-10 -top-10 h-40 w-40 rounded-full bg-[#F47C45]/20 blur-3xl" />
+          <div className="absolute -left-10 -top-10 h-40 w-40 rounded-full bg-[#C2410C]/20 blur-3xl" />
           <div className="absolute -bottom-10 -right-10 h-40 w-40 rounded-full bg-blue-500/20 blur-3xl" />
 
           <div className="relative grid items-center gap-10 lg:grid-cols-2">
@@ -70,7 +70,7 @@ export default function HighlightBanner(props: Props) {
                   Placement Support
                 </p>
 
-                <OpenPopupButton className="mt-6 cursor-pointer rounded-xl bg-[#F47C45] px-8 py-4 font-semibold text-white transition hover:scale-105">
+                <OpenPopupButton className="mt-6 cursor-pointer rounded-xl bg-[#C2410C] px-8 py-4 font-semibold text-white transition hover:scale-105">
                   {button.label}
                 </OpenPopupButton>
 

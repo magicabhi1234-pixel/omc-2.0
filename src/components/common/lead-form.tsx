@@ -126,6 +126,9 @@ export default function LeadForm({ source }: { source: "hero" | "contact" | "pop
         throw new Error(result.message ?? "We couldn't submit your enquiry. Please try again.");
       }
 
+      try {
+        localStorage.setItem("omc_lead_submitted", "1");
+      } catch {}
       router.push("/thank-you");
     } catch (error) {
       console.error("Lead submission request failed", error);
@@ -300,7 +303,7 @@ export default function LeadForm({ source }: { source: "hero" | "contact" | "pop
       <button
         type="submit"
         disabled={loading}
-        className="w-full cursor-pointer rounded-xl bg-[#F47C45] py-3 font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70"
+        className="w-full cursor-pointer rounded-xl bg-[#C2410C] py-3 font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70"
       >
         {loading
           ? "Submitting..."

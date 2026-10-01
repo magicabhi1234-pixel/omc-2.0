@@ -6,7 +6,7 @@ export default function NotFound() {
     <section className="flex min-h-[calc(100vh-80px)] items-center justify-center bg-slate-50 py-16">
       <Container>
         <div className="mx-auto max-w-xl rounded-3xl bg-white p-10 text-center shadow-xl">
-          <p className="text-sm font-semibold uppercase tracking-wider text-[#F47C45]">
+          <p className="text-sm font-semibold uppercase tracking-wider text-[#C2410C]">
             404 Error
           </p>
 

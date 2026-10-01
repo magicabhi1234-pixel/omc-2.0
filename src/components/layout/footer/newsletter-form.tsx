@@ -59,12 +59,12 @@ export default function NewsletterForm() {
           autoComplete="email"
           aria-invalid={status.kind === "error"}
           aria-describedby={status.message ? `${id}-status` : undefined}
-          className="min-w-0 flex-1 rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-white placeholder:text-slate-400 outline-none focus:border-[#F47C45]"
+          className="min-w-0 flex-1 rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-white placeholder:text-slate-400 outline-none focus:border-[#C2410C]"
         />
         <button
           type="submit"
           disabled={status.kind === "loading"}
-          className="cursor-pointer rounded-xl bg-[#F47C45] px-5 py-3 font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70"
+          className="cursor-pointer rounded-xl bg-[#C2410C] px-5 py-3 font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70"
         >
           {status.kind === "loading" ? "Subscribing..." : "Subscribe"}
         </button>

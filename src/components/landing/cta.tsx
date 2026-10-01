@@ -16,7 +16,7 @@ export default function CTA(props: Props) {
     <section className="relative overflow-hidden bg-gradient-to-r from-[#0B3B68] via-[#123f6d] to-[#0F172A] py-24 text-white">
 
       {/* Background Effects */}
-      <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-[#F47C45]/20 blur-3xl" />
+      <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-[#C2410C]/20 blur-3xl" />
       <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-blue-500/20 blur-3xl" />
 
       <div className="relative mx-auto max-w-5xl px-4 text-center">
@@ -61,7 +61,7 @@ export default function CTA(props: Props) {
         {/* CTA Buttons */}
         <div className="mt-12 flex flex-wrap justify-center gap-5">
 
-          <OpenPopupButton className="cursor-pointer rounded-xl bg-[#F47C45] px-10 py-4 text-lg font-semibold text-white transition hover:scale-105">
+          <OpenPopupButton className="cursor-pointer rounded-xl bg-[#C2410C] px-10 py-4 text-lg font-semibold text-white transition hover:scale-105">
             {primaryButton.label}
           </OpenPopupButton>
 
@@ -77,22 +77,22 @@ export default function CTA(props: Props) {
         <div className="mt-14 grid gap-6 md:grid-cols-4">
 
           <div>
-            <h3 className="text-3xl font-bold">50+</h3>
+            <p className="text-3xl font-bold">50+</p>
             <p className="text-slate-300">Universities</p>
           </div>
 
           <div>
-            <h3 className="text-3xl font-bold">100+</h3>
+            <p className="text-3xl font-bold">100+</p>
             <p className="text-slate-300">MBA Courses</p>
           </div>
 
           <div>
-            <h3 className="text-3xl font-bold">10,000+</h3>
+            <p className="text-3xl font-bold">10,000+</p>
             <p className="text-slate-300">Students Guided</p>
           </div>
 
           <div>
-            <h3 className="text-3xl font-bold">98%</h3>
+            <p className="text-3xl font-bold">98%</p>
             <p className="text-slate-300">Satisfaction Rate</p>
           </div>
 

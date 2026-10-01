@@ -1,98 +1,41 @@
-import type { Metadata } from "next";
 import Link from "next/link";
-import { SITE } from "@/constants/site";
 import { getLandingPagesForHub, type LandingPageHubEntry } from "@/data/registry";
+import { buildMetadata } from "@/lib/metadata";
+import Breadcrumbs from "@/components/common/breadcrumbs";
+import { JsonLd, absoluteUrl, breadcrumbSchema, webPageSchema, type Crumb } from "@/lib/structured-data";
 
-// ---------------------------------------------------------------------------
-// Metadata
-// ---------------------------------------------------------------------------
+const TITLE = "All Online & Distance MBA Comparisons";
+const DESCRIPTION =
+  "Browse every Online MBA, Distance MBA, MBA specialization, Executive MBA, university and bachelor program comparison on Online MBA Colleges, grouped by category.";
+const PATH = "/landing-pages";
+const CRUMBS: Crumb[] = [
+  { name: "Home", path: "/" },
+  { name: "Programs", path: PATH },
+];
 
-export const metadata: Metadata = {
-  title: "All Landing Pages | Browse Online MBA Programs",
-  description:
-    "Browse all landing pages for Online MBA, Distance MBA, MBA Specializations, University Pages, and Bachelor Programs.",
-  alternates: {
-    canonical: `${SITE.url}/landing-pages`,
-  },
-  openGraph: {
-    title: "All Landing Pages | Browse Online MBA Programs",
-    description:
-      "Browse all landing pages for Online MBA, Distance MBA, MBA Specializations, University Pages, and Bachelor Programs.",
-    url: `${SITE.url}/landing-pages`,
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "All Landing Pages | Browse Online MBA Programs",
-    description:
-      "Browse all landing pages for Online MBA, Distance MBA, MBA Specializations, University Pages, and Bachelor Programs.",
-  },
-};
+export const generateMetadata = () => buildMetadata({ title: TITLE, description: DESCRIPTION, path: PATH });
 
-// ---------------------------------------------------------------------------
-// Structured Data
-// ---------------------------------------------------------------------------
-
-function LandingPagesJsonLd({ entries }: { entries: LandingPageHubEntry[] }) {
-  const itemList = entries.map((entry, index) => ({
-    "@type": "ListItem",
-    position: index + 1,
-    url: `${SITE.url}/${entry.slug}`,
-    name: entry.seoTitle,
-  }));
-
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "CollectionPage",
-        "@id": `${SITE.url}/landing-pages`,
-        url: `${SITE.url}/landing-pages`,
-        name: "All Landing Pages | Browse Online MBA Programs",
-        description:
-          "Browse all landing pages for Online MBA, Distance MBA, MBA Specializations, University Pages, and Bachelor Programs.",
-        isPartOf: {
-          "@type": "WebSite",
-          "@id": `${SITE.url}/`,
-          name: SITE.name,
-        },
-      },
-      {
-        "@type": "ItemList",
-        itemListElement: itemList,
-      },
-      {
-        "@type": "WebPage",
-        "@id": `${SITE.url}/landing-pages`,
-        url: `${SITE.url}/landing-pages`,
-        name: "All Landing Pages | Browse Online MBA Programs",
-        description:
-          "Browse all landing pages for Online MBA, Distance MBA, MBA Specializations, University Pages, and Bachelor Programs.",
-        breadcrumb: {
-          "@type": "BreadcrumbList",
-          itemListElement: [
-            {
-              "@type": "ListItem",
-              position: 1,
-              name: "Home",
-              item: SITE.url,
-            },
-            {
-              "@type": "ListItem",
-              position: 2,
-              name: "All Landing Pages",
-              item: `${SITE.url}/landing-pages`,
-            },
-          ],
-        },
-      },
-    ],
-  };
-
+function LandingPagesJsonLd({ entries, lastUpdated }: { entries: LandingPageHubEntry[]; lastUpdated?: string }) {
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    <JsonLd
+      data={[
+        {
+          ...webPageSchema({ path: PATH, name: TITLE, description: DESCRIPTION, type: "CollectionPage", dateModified: lastUpdated, hasBreadcrumb: true }),
+          mainEntity: { "@id": `${absoluteUrl(PATH)}#list` },
+        },
+        {
+          "@type": "ItemList",
+          "@id": `${absoluteUrl(PATH)}#list`,
+          numberOfItems: entries.length,
+          itemListElement: entries.map((entry, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            url: absoluteUrl(`/${entry.slug}`),
+            name: entry.seoTitle,
+          })),
+        },
+        breadcrumbSchema(CRUMBS, PATH),
+      ]}
     />
   );
 }
@@ -119,23 +62,28 @@ export default async function LandingPagesPage() {
   );
 
   const totalCount = entries.length;
-  const lastUpdated = new Date().toLocaleDateString("en-IN", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  // Real last edit across the listed pages - not "today" on every render.
+  const lastUpdatedIso = entries
+    .map((e) => e.updatedAt)
+    .filter((d): d is string => Boolean(d))
+    .sort()
+    .at(-1);
+  const lastUpdated = lastUpdatedIso
+    ? new Date(lastUpdatedIso).toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric", timeZone: "Asia/Kolkata" })
+    : null;
 
   return (
     <>
-      <LandingPagesJsonLd entries={entries} />
+      <LandingPagesJsonLd entries={entries} lastUpdated={lastUpdatedIso} />
+      <Breadcrumbs crumbs={CRUMBS} />
 
-      <main className="min-h-screen bg-white">
+      <div className="min-h-screen bg-white">
         {/* Hero */}
         <section className="bg-gradient-to-br from-slate-50 to-white py-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-3xl text-center">
               <h1 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
-                Browse All Landing Pages
+                Browse All Program Comparisons
               </h1>
               <p className="mt-5 text-lg leading-7 text-slate-600">
                 Explore our complete collection of landing pages covering Online MBA,
@@ -143,12 +91,14 @@ export default async function LandingPagesPage() {
                 and Bachelor Programs across India.
               </p>
               <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-sm text-slate-500">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F47C45]/10 px-3 py-1 font-medium text-[#F47C45]">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-[#C2410C]/10 px-3 py-1 font-medium text-[#C2410C]">
                   {totalCount} Pages
                 </span>
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 font-medium text-slate-600">
-                  Last Updated: {lastUpdated}
-                </span>
+                {lastUpdated && (
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 font-medium text-slate-600">
+                    Last updated: {lastUpdated}
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -165,7 +115,7 @@ export default async function LandingPagesPage() {
                     <h2 className="text-2xl font-bold text-slate-900">
                       {category}
                     </h2>
-                    <span className="rounded-full bg-[#F47C45]/10 px-3 py-1 text-sm font-medium text-[#F47C45]">
+                    <span className="rounded-full bg-[#C2410C]/10 px-3 py-1 text-sm font-medium text-[#C2410C]">
                       {pages.length} Page{pages.length !== 1 ? "s" : ""}
                     </span>
                   </div>
@@ -181,7 +131,7 @@ export default async function LandingPagesPage() {
                       aria-label={`View ${page.seoTitle}`}
                     >
                       <div className="flex-1">
-                        <span className="inline-flex rounded-full bg-[#F47C45]/10 px-2.5 py-0.5 text-xs font-semibold text-[#F47C45]">
+                        <span className="inline-flex rounded-full bg-[#C2410C]/10 px-2.5 py-0.5 text-xs font-semibold text-[#C2410C]">
                           {category}
                         </span>
                         <h3 className="mt-3 text-base font-semibold leading-snug text-slate-900 group-hover:text-[#0B3B68] transition-colors">
@@ -191,7 +141,7 @@ export default async function LandingPagesPage() {
                           {page.seoDescription}
                         </p>
                       </div>
-                      <div className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-[#F47C45]">
+                      <div className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-[#C2410C]">
                         Explore
                         <svg
                           className="h-4 w-4 transition-transform group-hover:translate-x-1"
@@ -214,7 +164,7 @@ export default async function LandingPagesPage() {
             ))}
           </div>
         </section>
-      </main>
+      </div>
     </>
   );
 }

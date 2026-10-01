@@ -3,7 +3,7 @@ export const SITE = {
 
   tagline: "Find Your Perfect Online MBA Program",
 
-  email: "magicabhi1234@gmail.com",
+  email: "info@onlinembacolleges.com",
 
   phone: "+91 8421903846",
 

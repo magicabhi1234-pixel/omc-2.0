@@ -1,71 +1,52 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "@/constants/site";
-import { staticPages, getAllLandingSlugs, getBlogPostsByDate } from "@/data/registry";
+import { staticPages, getLandingPagesForHub, getBlogPostsByDate } from "@/data/registry";
 import { blogPostHref } from "@/lib/blog-links";
 
 /**
- * Dynamically generates sitemap.xml.
- *
- * Automatically includes:
- * - All static pages (Home, About, Contact, Blog, Privacy, Terms)
- * - All landing pages currently published
- * - All blog posts currently published
- *
- * No hardcoded URLs. Uses SITE.url from constants.
+ * sitemap.xml - canonical, indexable URLs only (no /about alias, no
+ * /category/learning duplicate, no noindex pages), each with its real
+ * last-modified date so crawlers can prioritise what actually changed.
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = SITE.url.replace(/\/+$/, "");
+  const [landingPages, blogPosts] = await Promise.all([getLandingPagesForHub(), getBlogPostsByDate()]);
 
-  const entries: MetadataRoute.Sitemap = [];
+  const latest = (dates: (string | null | undefined)[]) => {
+    const times = dates.map((d) => (d ? Date.parse(d) : NaN)).filter((t) => !Number.isNaN(t));
+    return times.length ? new Date(Math.max(...times)) : undefined;
+  };
+  const latestLanding = latest(landingPages.map((p) => p.updatedAt));
+  const latestBlog = latest(blogPosts.map((p) => p.lastModifiedDate ?? p.publishedDate));
 
-  // -----------------------------------------------------------------------
-  // 1. Static pages
-  // -----------------------------------------------------------------------
-  for (const page of staticPages) {
-    const url =
-      page.slug === ""
-        ? baseUrl
-        : `${baseUrl}/${page.slug}`;
+  const entries: MetadataRoute.Sitemap = staticPages.map((page) => ({
+    url: page.slug === "" ? `${baseUrl}/` : `${baseUrl}/${page.slug}`,
+    // Listing pages change whenever their content does; others have no CMS date.
+    lastModified: page.slug === "" ? latest([latestLanding?.toISOString(), latestBlog?.toISOString()]) : page.slug === "blog" ? latestBlog : undefined,
+    changeFrequency: page.changeFrequency,
+    priority: page.priority,
+  }));
 
+  entries.push({
+    url: `${baseUrl}/landing-pages`,
+    lastModified: latestLanding,
+    changeFrequency: "weekly",
+    priority: 0.8,
+  });
+
+  for (const page of landingPages) {
     entries.push({
-      url,
-      lastModified: new Date(),
-      changeFrequency: page.changeFrequency,
-      priority: page.priority,
-    });
-  }
-
-  // -----------------------------------------------------------------------
-  // 2. Landing pages
-  // -----------------------------------------------------------------------
-  const landingSlugs = await getAllLandingSlugs();
-  for (const slug of landingSlugs) {
-    entries.push({
-      url: `${baseUrl}/${slug}`,
-      lastModified: new Date(),
+      url: `${baseUrl}/${page.slug}`,
+      lastModified: page.updatedAt ? new Date(page.updatedAt) : undefined,
       changeFrequency: "weekly",
       priority: 0.9,
     });
   }
 
-  // -----------------------------------------------------------------------
-  // 3. Landing Pages Hub
-  // -----------------------------------------------------------------------
-  entries.push({
-    url: `${baseUrl}/landing-pages`,
-    lastModified: new Date(),
-    changeFrequency: "weekly",
-    priority: 0.9,
-  });
-
-  // -----------------------------------------------------------------------
-  // 4. Blog posts
-  // -----------------------------------------------------------------------
-  const blogPosts = await getBlogPostsByDate();
   for (const post of blogPosts) {
     entries.push({
       url: `${baseUrl}${blogPostHref(post.slug)}`,
-      lastModified: new Date(),
+      lastModified: new Date(post.lastModifiedDate ?? post.publishedDate),
       changeFrequency: "monthly",
       priority: 0.7,
     });

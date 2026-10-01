@@ -41,7 +41,7 @@ export default function BlogGrid({ posts }: Props) {
               <div className="relative h-56 w-full">
                 <Image
                   src={post.featuredImage.src}
-                  alt={post.featuredImage.alt}
+                  alt="" // decorative: the card's link text is the post title
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                   className="object-cover"

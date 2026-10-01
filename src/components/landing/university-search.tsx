@@ -75,7 +75,7 @@ export default function UniversitySearch({ universities }: Props) {
 
   return (
     <div ref={containerRef} className="relative mt-6 w-full max-w-xl">
-      <div className="flex items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow-lg ring-1 ring-black/5 transition focus-within:ring-2 focus-within:ring-[#F47C45]">
+      <div className="flex items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow-lg ring-1 ring-black/5 transition focus-within:ring-2 focus-within:ring-[#C2410C]">
         <Search className="h-5 w-5 shrink-0 text-slate-400" aria-hidden="true" />
 
         <label htmlFor="university-page-search" className="sr-only">

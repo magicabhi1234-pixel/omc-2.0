@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 
 import Hero from "@/components/home/hero";
@@ -7,10 +6,12 @@ import Specializations from "@/components/home/specializations";
 import WhyOMC from "@/components/home/why-omc";
 import Comparison from "@/components/home/comparison";
 import Blogs from "@/components/home/blogs";
-import FAQ from "@/components/home/faq";
+import FAQ, { DEFAULT_HOME_FAQS } from "@/components/home/faq";
 import CTA from "@/components/home/cta";
 import Testimonials from "@/components/home/testimonials";
 import { buildMetadata } from "@/lib/metadata";
+import { getFaqs, getFinderUniversities } from "@/lib/db/queries";
+import { JsonLd, faqSchema, webPageSchema } from "@/lib/structured-data";
 
 // Code-split: this is the only "use client" boundary above the fold on the
 // homepage. SSR stays on (default) so the form/selects are in the initial
@@ -18,24 +19,36 @@ import { buildMetadata } from "@/lib/metadata";
 // instead of the shared main bundle.
 const AIMatchFinder = dynamic(() => import("@/components/home/ai-match-finder"));
 
-export const metadata: Metadata = buildMetadata({
-  title: "Online MBA Colleges in India 2026 | Compare Top Universities & Fees",
-  description:
-    "Find and compare the best Online MBA colleges in India. Check university fees, NAAC grades, placements, specializations, scholarships and admission process. Get free MBA counselling.",
-  path: "/",
-});
+const DESCRIPTION =
+  "Compare the best online MBA colleges in India by fees, UGC/NAAC approvals, placements and specializations. Get free, unbiased MBA admission counselling.";
 
-export default function HomePage() {
+export const generateMetadata = () =>
+  buildMetadata({
+    title: `Online MBA Colleges in India ${new Date().getFullYear()} | Compare Fees & Universities`,
+    absoluteTitle: true,
+    description: DESCRIPTION,
+    path: "/",
+  });
+
+export default async function HomePage() {
+  const [faqs, finderUniversities] = await Promise.all([getFaqs("home", DEFAULT_HOME_FAQS), getFinderUniversities()]);
+
   return (
     <>
+      <JsonLd
+        data={[
+          webPageSchema({ path: "/", name: "Online MBA Colleges in India - compare fees and universities", description: DESCRIPTION }),
+          faqSchema(faqs, "/"),
+        ].filter((node): node is Record<string, unknown> => node !== null)}
+      />
       <Hero />
-      <AIMatchFinder />
+      <AIMatchFinder universities={finderUniversities} />
       <TrustedUniversities />
       <Specializations />
       <WhyOMC />
       <Comparison />
       <Blogs />
-      <FAQ />
+      <FAQ faqs={faqs} />
       <CTA />
       <Testimonials />
     </>

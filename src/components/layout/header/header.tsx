@@ -7,17 +7,48 @@ import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import Container from "@/components/common/container";
 import { navigationLinks } from "@/constants/navigation";
+import { isOptimizableImage } from "@/lib/image-host";
 
 export interface HeaderNavItem {
   label: string;
   href: string;
+  is_external?: boolean;
+  opens_new_tab?: boolean;
 }
 
-export default function Header({ navItems }: { navItems?: HeaderNavItem[] }) {
+/** Internal links use next/link; external or new-tab links are plain anchors with a safe rel. */
+function NavLink({ item, className, onClick, current }: { item: HeaderNavItem; className: string; onClick?: () => void; current: boolean }) {
+  if (item.is_external || item.opens_new_tab || /^(https?:|mailto:|tel:)/.test(item.href)) {
+    return (
+      <a href={item.href} className={className} onClick={onClick} {...(item.opens_new_tab ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
+        {item.label}
+        {item.opens_new_tab && <span className="sr-only"> (opens in a new tab)</span>}
+      </a>
+    );
+  }
+  return (
+    <Link href={item.href} className={className} onClick={onClick} aria-current={current ? "page" : undefined}>
+      {item.label}
+    </Link>
+  );
+}
+
+export default function Header({
+  navItems,
+  mobileNavItems,
+  logo,
+}: {
+  navItems?: HeaderNavItem[];
+  mobileNavItems?: HeaderNavItem[];
+  logo?: { src: string; alt: string };
+}) {
   const pathname = usePathname();
   // Falls back to the hardcoded list if the CMS-managed nav table is empty
   // (e.g. before it's ever been configured) - same content either way.
   const links = navItems && navItems.length > 0 ? navItems : navigationLinks;
+  const mobileLinks = mobileNavItems && mobileNavItems.length > 0 ? mobileNavItems : links;
+  const logoSrc = logo?.src || "/universities/omc_logo.avif";
+  const logoAlt = logo?.alt || "Online MBA Colleges";
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [lastPathname, setLastPathname] = useState(pathname);
 
@@ -60,34 +91,33 @@ export default function Header({ navItems }: { navItems?: HeaderNavItem[] }) {
             aria-label="Online MBA Colleges home"
           >
             <Image
-              src="/universities/omc_logo.avif"
-              alt="Online MBA Colleges"
+              src={logoSrc}
+              alt={logoAlt}
               width={220}
               height={80}
               className="h-16 w-auto object-contain"
+              unoptimized={!isOptimizableImage(logoSrc)}
               priority
             />
           </Link>
 
           {/* Navigation */}
           {!isThankYouPage && (
-            <nav className="hidden items-center gap-8 md:flex">
-              {links.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  aria-current={pathname === item.href ? "page" : undefined}
+            <nav aria-label="Main navigation" className="hidden items-center gap-8 md:flex">
+              {links.map((item, index) => (
+                <NavLink
+                  key={`${item.href}-${index}`}
+                  item={item}
+                  current={pathname === item.href}
                   className={`text-sm font-medium transition hover:text-[#0B3B68] ${pathname === item.href ? "text-[#0B3B68]" : "text-slate-700"}`}
-                >
-                  {item.label}
-                </Link>
+                />
               ))}
             </nav>
           )}
 
           <div className="flex items-center gap-2">
             {!isThankYouPage ? (
-              <button type="button" onClick={openPopup} className="hidden cursor-pointer rounded-xl bg-[#F47C45] px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90 sm:inline-flex">Free Counseling</button>
+              <button type="button" onClick={openPopup} className="hidden cursor-pointer rounded-xl bg-[#C2410C] px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90 sm:inline-flex">Free Counseling</button>
             ) : (
               <Link href="/" className="rounded-xl bg-[#0B3B68] px-4 py-2.5 text-sm font-semibold text-white transition hover:opacity-90 sm:px-5">Back To Home</Link>
             )}
@@ -104,10 +134,10 @@ export default function Header({ navItems }: { navItems?: HeaderNavItem[] }) {
         <div className="border-t border-slate-200 bg-white md:hidden">
           <Container>
             <nav aria-label="Mobile navigation" className="flex flex-col py-3">
-              {links.map((item) => (
-                <Link key={item.href} href={item.href} onClick={() => setMobileMenuOpen(false)} aria-current={pathname === item.href ? "page" : undefined} className={`rounded-lg px-3 py-3 text-sm font-medium transition hover:bg-slate-50 hover:text-[#0B3B68] ${pathname === item.href ? "bg-slate-50 text-[#0B3B68]" : "text-slate-700"}`}>{item.label}</Link>
+              {mobileLinks.map((item, index) => (
+                <NavLink key={`${item.href}-${index}`} item={item} current={pathname === item.href} onClick={() => setMobileMenuOpen(false)} className={`rounded-lg px-3 py-3 text-sm font-medium transition hover:bg-slate-50 hover:text-[#0B3B68] ${pathname === item.href ? "bg-slate-50 text-[#0B3B68]" : "text-slate-700"}`} />
               ))}
-              <button type="button" onClick={openPopup} className="mt-2 cursor-pointer rounded-xl bg-[#F47C45] px-4 py-3 text-sm font-semibold text-white">Free Counseling</button>
+              <button type="button" onClick={openPopup} className="mt-2 cursor-pointer rounded-xl bg-[#C2410C] px-4 py-3 text-sm font-semibold text-white">Free Counseling</button>
             </nav>
           </Container>
         </div>

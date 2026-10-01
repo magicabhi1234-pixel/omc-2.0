@@ -4,11 +4,12 @@ import BlogGrid from "@/components/blog/blog-grid";
 import { getBlogPostsByDate } from "@/data/registry";
 import { buildMetadata } from "@/lib/metadata";
 
-export const metadata = buildMetadata({
+export const generateMetadata = () =>
+  buildMetadata({
   title: "Learning",
   description:
     "MBA admissions guides, university comparisons, career insights and specialization advice from Online MBA Colleges.",
-  path: "/category/learning",
+  path: "/blog",
 });
 
 export default async function LearningCategoryPage() {
@@ -19,7 +20,7 @@ export default async function LearningCategoryPage() {
       <section className="bg-gradient-to-br from-slate-50 via-blue-50 to-orange-50 py-16">
         <Container>
           <div className="mx-auto max-w-3xl text-center">
-            <span className="text-sm font-semibold uppercase tracking-wider text-[#F47C45]">
+            <span className="text-sm font-semibold uppercase tracking-wider text-[#C2410C]">
               Category
             </span>
 

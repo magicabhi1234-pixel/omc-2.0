@@ -77,3 +77,17 @@ create table if not exists public.cms_sync_runs (
 
 create index if not exists idx_cms_sync_runs_created on public.cms_sync_runs(created_at desc);
 alter table public.cms_sync_runs enable row level security;
+
+-- ----------------------------------------------------------------------------
+-- Deleted-content tombstones (hybrid CMS): when an editor deletes a page in
+-- the dashboard, the read-only Sanity fallback must not resurrect it.
+-- ----------------------------------------------------------------------------
+create table if not exists public.cms_tombstones (
+  content_type text not null check (content_type in ('landing_page', 'blog_post', 'university', 'testimonial')),
+  natural_key text not null, -- slug (or name+review for testimonials)
+  deleted_by uuid references public.profiles(id) on delete set null,
+  deleted_at timestamptz not null default now(),
+  primary key (content_type, natural_key)
+);
+
+alter table public.cms_tombstones enable row level security;
