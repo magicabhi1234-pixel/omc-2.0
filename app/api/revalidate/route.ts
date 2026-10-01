@@ -2,7 +2,7 @@ import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 import { safeEqual } from "@/lib/security/request";
 
-const TAGS = ["landing-page", "blog", "testimonial", "settings", "navigation"] as const;
+const TAGS = ["landing-page", "blog", "testimonial", "settings", "navigation", "faq"] as const;
 
 /**
  * Manual cache flush. Accepts the secret as `Authorization: Bearer <secret>`

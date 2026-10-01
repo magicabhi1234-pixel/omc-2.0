@@ -7,6 +7,7 @@ import LinkButton from "@/components/admin/link-button";
 import PublishToggle from "@/components/admin/publish-toggle";
 import DeleteButton from "@/components/admin/delete-button";
 import { deleteBlogPost, toggleBlogPostStatus } from "./actions";
+import { runAction } from "@/lib/admin/run-action";
 
 export default async function BlogsListPage() {
   const profile = await requireProfile();
@@ -20,7 +21,7 @@ export default async function BlogsListPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Blog Posts</h1>
           <p className="mt-1 text-slate-600">{posts.length} total</p>
@@ -48,17 +49,17 @@ export default async function BlogsListPage() {
                   <TableCell className="font-medium">{p.title}</TableCell>
                   <TableCell className="text-slate-500">/blog/{p.slug}</TableCell>
                   <TableCell>{p.author}</TableCell>
-                  <TableCell>{new Date(p.published_date).toLocaleDateString()}</TableCell>
+                  <TableCell>{new Date(p.published_date).toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata" })}</TableCell>
                   <TableCell>
                     <PublishToggle
                       status={p.status as "draft" | "published"}
                       action={async (next) => {
                         "use server";
-                        await toggleBlogPostStatus(p.id, p.slug, next);
+                        return runAction(() => toggleBlogPostStatus(p.id, p.slug, next));
                       }}
                     />
                   </TableCell>
-                  <TableCell className="flex justify-end gap-1">
+                  <TableCell className="text-right"><div className="flex justify-end gap-1">
                     {canEdit && (
                       <LinkButton href={`/admin/blogs/${p.id}`} variant="ghost" size="sm">Edit</LinkButton>
                     )}
@@ -66,12 +67,12 @@ export default async function BlogsListPage() {
                       <DeleteButton
                         action={async () => {
                           "use server";
-                          await deleteBlogPost(p.id);
+                          return runAction(() => deleteBlogPost(p.id));
                         }}
                         confirmMessage={`Delete "${p.title}"? This cannot be undone.`}
                       />
                     )}
-                  </TableCell>
+                  </div></TableCell>
                 </TableRow>
               );
             })}

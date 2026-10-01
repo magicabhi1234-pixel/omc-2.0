@@ -21,7 +21,7 @@ export function LeadStatusSelect({
 }: {
   status: string;
   statuses: readonly string[];
-  action: (next: string) => Promise<void>;
+  action: (next: string) => Promise<void | { error?: string }>;
 }) {
   const [value, setValue] = useState(status);
   const [pending, startTransition] = useTransition();
@@ -37,7 +37,8 @@ export function LeadStatusSelect({
         setValue(next);
         startTransition(async () => {
           try {
-            await action(next);
+            const result = await action(next);
+            if (result?.error) throw new Error(result.error);
             toast.success(`Marked as ${next}.`);
           } catch (error) {
             setValue(previous);
@@ -56,7 +57,7 @@ export function LeadStatusSelect({
   );
 }
 
-export function LeadNotes({ notes, action }: { notes: string | null; action: (next: string) => Promise<void> }) {
+export function LeadNotes({ notes, action }: { notes: string | null; action: (next: string) => Promise<void | { error?: string }> }) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(notes ?? "");
   const [pending, startTransition] = useTransition();
@@ -93,7 +94,8 @@ export function LeadNotes({ notes, action }: { notes: string | null; action: (ne
           onClick={() =>
             startTransition(async () => {
               try {
-                await action(value);
+                const result = await action(value);
+                if (result?.error) throw new Error(result.error);
                 toast.success("Note saved.");
                 setOpen(false);
               } catch (error) {

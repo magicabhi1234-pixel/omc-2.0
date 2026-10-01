@@ -13,6 +13,7 @@ import {
 } from "./mappers";
 import type { LandingPageData, Testimonial, University } from "@/types/landing";
 import type { BlogPost, BlogPostSummary } from "@/types/blog";
+import { parseSettings, type FaqPlacement, type SettingsGroup } from "@/lib/site-settings";
 
 /**
  * Time-based safety net on top of the primary on-demand path (Server Actions
@@ -290,4 +291,35 @@ export async function getSiteSetting<T>(key: string, fallback: T): Promise<T> {
     { tags: ["settings"], revalidate: FALLBACK_REVALIDATE_SECONDS }
   );
   return cached();
+}
+
+/** A validated global-settings group, with defaults for anything unset. */
+export async function getSettings<G extends SettingsGroup>(group: G) {
+  return parseSettings(group, await getSiteSetting<unknown>(group, {}));
+}
+
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+/** Published FAQs for a page placement, in editor-defined order; `fallback` if the table is unavailable or empty. */
+export async function getFaqs(placement: FaqPlacement, fallback: FaqItem[] = []): Promise<FaqItem[]> {
+  const cached = unstable_cache(
+    () =>
+      dbFetch(async () => {
+        const { data, error } = await supabaseAdmin
+          .from("faqs")
+          .select("question, answer")
+          .eq("placement", placement)
+          .eq("status", "published")
+          .order("sort_order", { ascending: true });
+        if (error) throw new Error(error.message);
+        return (data ?? []) as FaqItem[];
+      }, [] as FaqItem[]),
+    ["faqs", placement],
+    { tags: ["faq"], revalidate: FALLBACK_REVALIDATE_SECONDS }
+  );
+  const faqs = await cached();
+  return faqs.length > 0 ? faqs : fallback;
 }

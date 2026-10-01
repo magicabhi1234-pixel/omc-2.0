@@ -4,7 +4,7 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { supabaseAdmin } from "@/lib/db/client";
-import { requirePermission } from "@/lib/auth/session";
+import { contentAccessError, requirePermission } from "@/lib/auth/session";
 import { logActivity } from "@/lib/auth/activity-log";
 
 const schema = z.object({
@@ -96,6 +96,8 @@ export async function updateContentBlock(
   formData: FormData
 ): Promise<ContentBlockFormState> {
   const profile = await requirePermission(() => true);
+  const accessError = await contentAccessError(profile, "content_blocks", id);
+  if (accessError) return { error: accessError };
   const parsed = parseForm(formData);
   if (!parsed.ok) return parsed;
 
@@ -140,6 +142,8 @@ export async function deleteContentBlock(id: string): Promise<void> {
 
 export async function toggleContentBlockStatus(id: string, nextStatus: "draft" | "published"): Promise<void> {
   const profile = await requirePermission((p) => p.canPublish);
+  const accessError = await contentAccessError(profile, "content_blocks", id);
+  if (accessError) throw new Error(accessError);
   const { error } = await supabaseAdmin
     .from("content_blocks")
     .update({ status: nextStatus, updated_by: profile.id })

@@ -26,7 +26,9 @@ export type ActivityContentType =
   | "navigation"
   | "content_block"
   | "lead"
-  | "newsletter_subscriber";
+  | "newsletter_subscriber"
+  | "faq"
+  | "cms_sync";
 
 interface LogActivityArgs {
   userId: string | null;
@@ -49,7 +51,7 @@ export async function logActivity({
   newValue,
 }: LogActivityArgs): Promise<void> {
   try {
-    await supabaseAdmin.from("activity_logs").insert({
+    const { error } = await supabaseAdmin.from("activity_logs").insert({
       user_id: userId,
       user_email: userEmail,
       action,
@@ -58,6 +60,8 @@ export async function logActivity({
       previous_value: previousValue ?? null,
       new_value: newValue ?? null,
     });
+    // Supabase reports failures in the result rather than throwing.
+    if (error) console.error("[activity-log] insert rejected:", error.code, error.message, { action, contentType, contentId });
   } catch (error) {
     console.error("[activity-log] failed to record activity:", error);
   }

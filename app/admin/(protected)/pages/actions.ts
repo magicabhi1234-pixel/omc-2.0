@@ -3,8 +3,9 @@
 import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { urlOrPath } from "@/lib/admin/validators";
 import { supabaseAdmin } from "@/lib/db/client";
-import { requirePermission } from "@/lib/auth/session";
+import { contentAccessError, requirePermission } from "@/lib/auth/session";
 import { logActivity } from "@/lib/auth/activity-log";
 
 const CATEGORIES = [
@@ -44,7 +45,7 @@ const landingPageSchema = z.object({
   seo_meta_description: z.string().trim().max(160).optional().or(z.literal("")),
   seo_keywords: z.string().optional(),
   seo_canonical_url: z.string().trim().url().optional().or(z.literal("")),
-  seo_og_image_url: z.string().trim().url().optional().or(z.literal("")),
+  seo_og_image_url: urlOrPath.optional().or(z.literal("")),
   seo_no_index: z.coerce.boolean().optional(),
 });
 
@@ -176,6 +177,8 @@ export async function updateLandingPage(
   formData: FormData
 ): Promise<LandingPageFormState> {
   const profile = await requirePermission(() => true);
+  const accessError = await contentAccessError(profile, "landing_pages", id);
+  if (accessError) return { error: accessError };
   const parsed = parseForm(formData);
   if (!parsed.ok) return parsed;
 
@@ -232,6 +235,8 @@ export async function toggleLandingPageStatus(
   nextStatus: "draft" | "published"
 ): Promise<void> {
   const profile = await requirePermission((p) => p.canPublish);
+  const accessError = await contentAccessError(profile, "landing_pages", id);
+  if (accessError) throw new Error(accessError);
   const { error } = await supabaseAdmin
     .from("landing_pages")
     .update({ status: nextStatus, updated_by: profile.id })

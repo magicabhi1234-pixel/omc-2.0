@@ -3,15 +3,16 @@
 import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { urlOrPath } from "@/lib/admin/validators";
 import { supabaseAdmin } from "@/lib/db/client";
-import { requirePermission } from "@/lib/auth/session";
+import { contentAccessError, requirePermission } from "@/lib/auth/session";
 import { logActivity } from "@/lib/auth/activity-log";
 
 const testimonialSchema = z.object({
   name: z.string().trim().min(2).max(150),
   designation: z.string().trim().max(150).optional().or(z.literal("")),
   university: z.string().trim().max(150).optional().or(z.literal("")),
-  image_url: z.string().trim().url().optional().or(z.literal("")),
+  image_url: urlOrPath.optional().or(z.literal("")),
   review: z.string().trim().min(10).max(2000),
   rating: z.coerce.number().int().min(1).max(5),
   status: z.enum(["draft", "published"]),
@@ -84,6 +85,8 @@ export async function updateTestimonial(
   formData: FormData
 ): Promise<TestimonialFormState> {
   const profile = await requirePermission(() => true);
+  const accessError = await contentAccessError(profile, "testimonials", id);
+  if (accessError) return { error: accessError };
   const parsed = parseForm(formData);
   if (!parsed.ok) return parsed;
 
@@ -128,6 +131,8 @@ export async function deleteTestimonial(id: string): Promise<void> {
 
 export async function toggleTestimonialStatus(id: string, nextStatus: "draft" | "published"): Promise<void> {
   const profile = await requirePermission((p) => p.canPublish);
+  const accessError = await contentAccessError(profile, "testimonials", id);
+  if (accessError) throw new Error(accessError);
   const { error } = await supabaseAdmin
     .from("testimonials")
     .update({ status: nextStatus, updated_by: profile.id })

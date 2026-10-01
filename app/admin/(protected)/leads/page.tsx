@@ -9,6 +9,7 @@ import LinkButton from "@/components/admin/link-button";
 import DeleteButton from "@/components/admin/delete-button";
 import { LeadNotes, LeadStatusSelect } from "@/components/admin/lead-row-controls";
 import { cn } from "@/lib/utils";
+import { runAction } from "@/lib/admin/run-action";
 import {
   LEAD_STATUSES,
   LEAD_TABS,
@@ -159,7 +160,7 @@ export default async function LeadsPage({ searchParams }: { searchParams: Promis
                       <DeleteButton
                         action={async () => {
                           "use server";
-                          await deleteSubscriber(s.id);
+                          return runAction(() => deleteSubscriber(s.id));
                         }}
                         confirmMessage={`Remove subscriber ${s.email}?`}
                       />
@@ -205,7 +206,7 @@ export default async function LeadsPage({ searchParams }: { searchParams: Promis
                       statuses={LEAD_STATUSES}
                       action={async (next) => {
                         "use server";
-                        await updateLeadStatus(lead.id, next);
+                        return runAction(() => updateLeadStatus(lead.id, next));
                       }}
                     />
                   </TableCell>
@@ -214,7 +215,7 @@ export default async function LeadsPage({ searchParams }: { searchParams: Promis
                       notes={lead.notes}
                       action={async (next) => {
                         "use server";
-                        await updateLeadNotes(lead.id, next);
+                        return runAction(() => updateLeadNotes(lead.id, next));
                       }}
                     />
                   </TableCell>
@@ -224,7 +225,7 @@ export default async function LeadsPage({ searchParams }: { searchParams: Promis
                       <DeleteButton
                         action={async () => {
                           "use server";
-                          await deleteLead(lead.id);
+                          return runAction(() => deleteLead(lead.id));
                         }}
                         confirmMessage={`Delete the lead from "${lead.name}"? This cannot be undone.`}
                       />

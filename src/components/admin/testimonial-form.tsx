@@ -1,7 +1,9 @@
 "use client";
 
+import { submitWithoutReset } from "@/lib/admin/form-submit";
 import { useActionState } from "react";
 import { Input } from "@/components/ui/input";
+import MediaPickerField from "@/components/admin/media-picker-field";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -33,12 +35,12 @@ export default function TestimonialForm({
   const errors = state.fieldErrors ?? {};
 
   return (
-    <form action={formAction} className="max-w-2xl space-y-6">
+    <form onSubmit={submitWithoutReset(formAction)} className="max-w-2xl space-y-6">
       {state.error && (
         <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">{state.error}</p>
       )}
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="name">Student Name</Label>
           <Input id="name" name="name" defaultValue={initial?.name} required />
@@ -50,14 +52,13 @@ export default function TestimonialForm({
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="university">University Attended</Label>
           <Input id="university" name="university" defaultValue={initial?.university ?? ""} />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="image_url">Photo URL</Label>
-          <Input id="image_url" name="image_url" defaultValue={initial?.image_url ?? ""} placeholder="Pick from Media Library" />
+          <MediaPickerField name="image_url" label="Photo" folder="testimonials" defaultValue={initial?.image_url ?? ""} />
         </div>
       </div>
 
@@ -67,7 +68,7 @@ export default function TestimonialForm({
         {errors.review && <p className="text-xs text-red-600">{errors.review}</p>}
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="rating">Rating</Label>
           <Select name="rating" defaultValue={String(initial?.rating ?? 5)}>

@@ -3,8 +3,9 @@
 import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { urlOrPath } from "@/lib/admin/validators";
 import { supabaseAdmin } from "@/lib/db/client";
-import { requirePermission } from "@/lib/auth/session";
+import { contentAccessError, requirePermission } from "@/lib/auth/session";
 import { logActivity } from "@/lib/auth/activity-log";
 
 const universitySchema = z.object({
@@ -14,7 +15,7 @@ const universitySchema = z.object({
     .trim()
     .toLowerCase()
     .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Slug must be lowercase letters, numbers and hyphens only"),
-  logo_url: z.string().trim().url().optional().or(z.literal("")),
+  logo_url: urlOrPath.optional().or(z.literal("")),
   logo_alt: z.string().trim().max(200).optional().or(z.literal("")),
   featured: z.coerce.boolean().optional(),
   study_mode: z.enum(["Online", "Distance", "Online & Distance"]),
@@ -23,8 +24,8 @@ const universitySchema = z.object({
   starting_fee: z.string().trim().min(1).max(50),
   emi: z.string().trim().max(50).optional().or(z.literal("")),
   placement_support: z.string().trim().max(50).optional().or(z.literal("")),
-  rating: z.coerce.number().min(0).max(5).optional(),
-  review_count: z.coerce.number().int().min(0).optional(),
+  rating: z.preprocess((v) => (v === "" || v == null ? undefined : v), z.coerce.number().min(0).max(5).optional()),
+  review_count: z.preprocess((v) => (v === "" || v == null ? undefined : v), z.coerce.number().int().min(0).optional()),
   approvals: z.string().optional(), // comma-separated
   brochure_url: z.string().trim().url().optional().or(z.literal("")),
   website_url: z.string().trim().url().optional().or(z.literal("")),
@@ -86,7 +87,7 @@ export async function createUniversity(
   _prevState: UniversityFormState,
   formData: FormData
 ): Promise<UniversityFormState> {
-  const profile = await requirePermission((p) => p.contentScope === "all" || true);
+  const profile = await requirePermission(() => true);
   const parsed = parseUniversityForm(formData);
   if (!parsed.ok) return parsed;
 
@@ -119,6 +120,8 @@ export async function updateUniversity(
   formData: FormData
 ): Promise<UniversityFormState> {
   const profile = await requirePermission(() => true);
+  const accessError = await contentAccessError(profile, "universities", id);
+  if (accessError) return { error: accessError };
   const parsed = parseUniversityForm(formData);
   if (!parsed.ok) return parsed;
 
@@ -169,6 +172,8 @@ export async function deleteUniversity(id: string): Promise<void> {
 
 export async function toggleUniversityStatus(id: string, nextStatus: "draft" | "published"): Promise<void> {
   const profile = await requirePermission((p) => p.canPublish);
+  const accessError = await contentAccessError(profile, "universities", id);
+  if (accessError) throw new Error(accessError);
   const { error } = await supabaseAdmin
     .from("universities")
     .update({ status: nextStatus, updated_by: profile.id })
